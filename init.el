@@ -1,4 +1,4 @@
-`>;; disable start-up
+;; disable start-up
 (setq inhibit-startup-message t)
 (load-theme 'wheatgrass)
 
