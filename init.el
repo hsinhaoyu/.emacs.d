@@ -1,0 +1,51 @@
+(setq inhibit-startup-message t)
+(load-theme 'wheatgrass)
+
+;; do not use `init.el` for `custom-*` code. Use `cusetom-file.el`
+(setq custom-file "~/.emacs.d/custom-file.el")
+(load-file custom-file)
+
+;; Add MLPA to package-archives
+(require 'package)
+(package-initialize)
+(add-to-list 'package-archives
+             '("melpa" . "http://melpa.org/packages/"))
+
+;; make sure that use-package is loaded
+(when (not (package-installed-p 'use-package))
+  (package-refresh-contents)
+  (package-install 'use-package))
+
+(use-package company
+  :config
+  (setq company-idle-delay 0.3)
+  (global-company-mode t))
+
+;; Enhance M-x
+(use-package smex
+  :ensure t
+  :disabled t
+  :config
+  (setq smex-save-file (concat user-emacs-directory ".smex-items"))
+  (smex initialize)
+  :bind ("M-x" . smex))
+
+;; Git integration for Emacs
+(use-package magit
+  :ensure t
+  :bind ("C-x g" . magit-status))
+
+;; Display possible completions at all places
+(use-package ido-completing-read+
+  :ensure t
+  :config
+  ;; This enables ido in all contexts where it could be useful, not just
+  ;; for selecting buffer and file names
+  (ido-mode t)
+  (ido-everywhere t)
+  ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
+  (setq ido-enable-flex-matching t)
+  (setq ido-use-filename-at-point nil)
+  ;; Includes buffer names of recently opened files, even if they're not open now.
+  (setq ido-use-virtual-buffers t)
+  :diminish nil)
