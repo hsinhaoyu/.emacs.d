@@ -1,4 +1,4 @@
-;; disable start-up
+`>;; disable start-up
 (setq inhibit-startup-message t)
 (load-theme 'wheatgrass)
 
@@ -50,3 +50,11 @@
   ;; Includes buffer names of recently opened files, even if they're not open now.
   (setq ido-use-virtual-buffers t)
   :diminish nil)
+
+;; python mode
+(use-package elpy
+  :ensure t
+  :config
+  (setq elpy-rpc-virtualenv-path 'current)
+  :init
+  (elpy-enable))
