@@ -9,7 +9,7 @@
 (setq custom-file "~/.emacs.d/custom-file.el")
 (load-file custom-file)
 
-;; Add MLPA to package-archives
+;; Add MELPA to package-archives
 (require 'package)
 (package-initialize)
 (add-to-list 'package-archives
