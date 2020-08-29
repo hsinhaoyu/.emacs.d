@@ -61,3 +61,8 @@
   (setq elpy-rpc-virtualenv-path 'current)
   :init
   (elpy-enable))
+
+;; taskpaper
+(use-package taskpaper-mode
+  :ensure t
+  :bind ("M-z" . taskpaper-cycle))
