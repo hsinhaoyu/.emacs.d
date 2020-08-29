@@ -2,6 +2,9 @@
 (setq inhibit-startup-message t)
 (load-theme 'wheatgrass)
 
+;; replaces list-buffers with ibuffer
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+
 ;; do not use `init.el` for `custom-*` code. Use `cusetom-file.el`
 (setq custom-file "~/.emacs.d/custom-file.el")
 (load-file custom-file)
