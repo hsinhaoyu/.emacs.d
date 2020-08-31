@@ -3,6 +3,9 @@
 - [Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS](https://tuhdo.github.io/emacs-tutor3.html)
 - [Configure Emacs from scratch](https://medium.com/@suvratapte/configuring-emacs-from-scratch-packages-220bbc5e55b7)
 
+## iTerms2 setting
+- Under Session/Keys, set Left Option Key to ESC+
+
 ## magit notes
 - after entering commit message, C-c C-c
 
