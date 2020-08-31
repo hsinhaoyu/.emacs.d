@@ -55,14 +55,14 @@
   :diminish nil)
 
 ;; python mode
-(use-package elpy
-  :ensure t
-  :config
-  (setq elpy-rpc-virtualenv-path 'current)
-  :init
-  (elpy-enable))
+;;(use-package elpy
+;;  :ensure t
+;;  :config
+;;  (setq elpy-rpc-virtualenv-path 'current)
+;;  :init
+;;  (elpy-enable))
 
-;; taskpaper
+;; Taskpaper
 (use-package taskpaper-mode
   :ensure t
   :bind ("M-z" . taskpaper-cycle))
