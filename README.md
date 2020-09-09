@@ -13,6 +13,7 @@
 - use /m to add filter by a major mode, after that, use /g to give it a name
 
 ## markdown notes
+- [more info](https://leanpub.com/markdown-mode/)
 - C-c C-c o: preview
 
 ## how to

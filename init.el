@@ -61,11 +61,26 @@
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
-  :init (setq markdown-command "multimarkdown"))
+  :init (setq markdown-command "multimarkdown")
+  :config
+  (setq markdown-open-command "/usr/local/bin/mark"))
 
-(setq markdown-open-command "/usr/local/bin/mark")
 (add-hook 'markdown-mode-hook 'flyspell-mode)
 
+;; Deft
+(use-package deft
+  :ensure t
+  :bind (("<f8>" . deft))
+  :commands (deft)
+  :config
+  (setq deft-extensions '("txt" "tex" "md" "org")
+	deft-recursive t
+	deft-use-filter-string-for-filename nil
+        deft-use-filename-as-title nil
+        deft-markdown-mode-title-level 1
+        deft-file-naming-rules '((noslash . "-")
+                                 (nospace . "-")
+				 (case-fn . downcase))))
 
 ;; python mode
 ;;(use-package elpy
