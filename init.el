@@ -62,10 +62,9 @@
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown")
-  :config
-  (setq markdown-open-command "/usr/local/bin/mark"))
-
-(add-hook 'markdown-mode-hook 'flyspell-mode)
+  :config (setq markdown-open-command "/usr/local/bin/mark")
+  :hook ((markdown-mode . flyspell-mode)
+	 (gfm-mode . flyspell-mode)))
 
 ;; Deft
 (use-package deft
