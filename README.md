@@ -12,5 +12,8 @@
 ## ibuffer notes
 - use /m to add filter by a major mode, after that, use /g to give it a name
 
+## markdown notes
+- C-c C-c o: preview
+
 ## how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name

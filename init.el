@@ -54,6 +54,19 @@
   (setq ido-use-virtual-buffers t)
   :diminish nil)
 
+;; markdown
+(use-package markdown-mode
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+(setq markdown-open-command "/usr/local/bin/mark")
+(add-hook 'markdown-mode-hook 'flyspell-mode)
+
+
 ;; python mode
 ;;(use-package elpy
 ;;  :ensure t
@@ -63,6 +76,7 @@
 ;;  (elpy-enable))
 
 ;; Taskpaper
-(use-package taskpaper-mode
-  :ensure t
-  :bind ("M-z" . taskpaper-cycle))
+;; (use-package taskpaper-mode
+;;   :ensure t
+;;   :bind ("M-z" . taskpaper-cycle))
+
