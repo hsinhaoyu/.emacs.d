@@ -66,6 +66,29 @@
   :hook ((markdown-mode . flyspell-mode)
 	 (gfm-mode . flyspell-mode)))
 
+;; ORG
+
+(add-hook 'org-mode-hook 'flyspell-mode)
+
+(define-key global-map "\C-ca" 'org-agenda)
+
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "CANCELED")))
+
+(setq org-agenda-files '("~/.deft"))
+
+;; incomplete
+;; based on this article https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
+(setq org-agenda-custom-commands
+      '(("c" "Simple agenda view"
+	 ((tags "PRIORITY=\"A\""
+		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+		 (org-agenda-overriding-header "High-priority unfinished tasks:")))
+	 (agenda "")
+	 (alltodo "")))))
+
+(setq org-agenda-include-diary t)
+
 ;; Deft
 (use-package deft
   :ensure t
@@ -73,6 +96,8 @@
   :commands (deft)
   :config
   (setq deft-extensions '("txt" "tex" "md" "org")
+	deft-directory "~/.deft"
+	deft-default-extension "md"
 	deft-recursive t
 	deft-use-filter-string-for-filename nil
         deft-use-filename-as-title nil
@@ -88,9 +113,4 @@
 ;;  (setq elpy-rpc-virtualenv-path 'current)
 ;;  :init
 ;;  (elpy-enable))
-
-;; Taskpaper
-;; (use-package taskpaper-mode
-;;   :ensure t
-;;   :bind ("M-z" . taskpaper-cycle))
 
