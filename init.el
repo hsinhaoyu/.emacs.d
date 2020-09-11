@@ -77,6 +77,8 @@
 
 (setq org-agenda-files '("~/.deft"))
 
+(setq org-startup-indented t)
+
 ;; incomplete
 ;; based on this article https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
 (setq org-agenda-custom-commands
@@ -97,7 +99,7 @@
   :config
   (setq deft-extensions '("txt" "tex" "md" "org")
 	deft-directory "~/.deft"
-	deft-default-extension "md"
+	deft-default-extension "org"
 	deft-recursive t
 	deft-use-filter-string-for-filename nil
         deft-use-filename-as-title nil
