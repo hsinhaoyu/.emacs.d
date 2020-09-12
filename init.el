@@ -111,6 +111,14 @@
 ;; imenu - jump to definition
 (global-set-key (kbd "M-i") 'imenu)
 
+;; snippets
+(use-package yasnippet
+  :ensure t
+  :init
+  (yas-global-mode 1)
+  :config
+  (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+
 ;; python mode
 ;;(use-package elpy
 ;;  :ensure t
