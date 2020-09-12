@@ -1,0 +1,64 @@
+Emacs ORG
+
+* Tutorials and resources
+
+| keys          | function        |
+|---------------+-----------------|
+| C-c C-o       | open the link   |
+| [[link][text] | syntax for link |
+
+- [[https://orgmode.org/worg/org-tutorials/org4beginners.html][A basic tutorial]]
+- [[https://www.linuxjournal.com/article/9116][Linux Journal tutorial]]
+- [[https://orgmode.org/worg/org-tutorials/][A collection of resorces]]
+- [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html][A very useful tutorial about customizing Agenda]]
+- [[https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html][Dig into ORG mode]]
+  
+* Outline
+
+| key     | function            |
+|---------+---------------------|
+| M-left  | promote             |
+| M-right | demote              |
+| M-RET   | next item           |
+| TAB     | collapse one branch |
+| S-TAB   | collapse entire do  |
+
+* Styles
+You can make words *bold*, /italic/, _underlined_, =code= and ~verbatim~, and, if you must, +strike-through+.
+
+* To-do
+Use S-left/right to cycle through work flow
+Use C-c C-x C-A to archive to the end of the file
+* Tags
+
+| key     | function      |
+|---------+---------------|
+| C-c C-c | insert a tag  |
+| C-c \   | search by tag |
+
+* Table
+
+| key     | function                  |
+|---------|---------------------------|
+| Tab     | move to the next cell     |
+| S-Table | move to the previous cell |
+
+* Agenda                                                              
+
+| key | function             |
+|-----+----------------------|
+| v d | day view             |
+| v w | week view            |
+| v m | month view           |
+| f   | forward              |
+| b   | backward             |
+| .   | go to today          |
+| D   | toggle diary display |
+| i   | insert dairy entry   |
+* Calendar
+[[https://www.gnu.org/software/emacs/manual/html_node/emacs/Adding-to-Diary.html#Adding-to-Diary][Document]]
+
+| key | function                    |
+|-----+-----------------------------|
+| i d | add diary entry for the day |
+
