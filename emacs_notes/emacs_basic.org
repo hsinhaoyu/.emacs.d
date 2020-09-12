@@ -1,0 +1,22 @@
+Emacs basics
+* Resources
+Use C-c C-o to open links
+- [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
+- [[https://tuhdo.github.io/emacs-tutor3.html][Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS]]
+- [[https://medium.com/@suvratapte/configuring-emacs-from-scratch-packages-220bbc5e55b7][Configure Emacs from scratch]]
+- [[http://cachestocaches.com/series/emacs-productivity/)][Emacs for Productivity]]
+- [[https://blog.aaronbieber.com/2015/07/05/a-gentle-introduction-to-emacs-configuration.html][A gentle introduction to Emacs configuration]]
+
+* jumping around
+| keys    | function         |
+|---------+------------------|
+| C-x r m | set a book mark  |
+| C-x r l | list bookmakrs   |
+| C-x r b | jump to bookmark |
+
+* Lisp
+- [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
+* iTerms2 setting
+- Under Session/Keys, set Left Option Key to ESC+
+* how to
+- get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
