@@ -119,11 +119,5 @@
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
-;; python mode
-;;(use-package elpy
-;;  :ensure t
-;;  :config
-;;  (setq elpy-rpc-virtualenv-path 'current)
-;;  :init
-;;  (elpy-enable))
+
 
