@@ -1,6 +1,46 @@
-Emacs ORG
+Emacs notes
+* Resources
+Use C-c C-o to open links
+- [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
+- [[https://tuhdo.github.io/emacs-tutor3.html][Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS]]
+- [[https://medium.com/@suvratapte/configuring-emacs-from-scratch-packages-220bbc5e55b7][Configure Emacs from scratch]]
+- [[http://cachestocaches.com/series/emacs-productivity/)][Emacs for Productivity]]
+- [[https://blog.aaronbieber.com/2015/07/05/a-gentle-introduction-to-emacs-configuration.html][A gentle introduction to Emacs configuration]]
 
-* Tutorials and resources
+* jumping around
+| keys    | function         |
+|---------+------------------|
+| C-x r m | set bookmark     |
+| C-x r l | list bookmakrs   |
+| C-x r b | jump to bookmark |
+
+* Lisp
+- [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
+
+* iTerms2 setting
+- Under Session/Keys, set Left Option Key to ESC
+
+* magit 
+- after entering commit message, C-c C-c
+
+* ibuffer notes
+- use /m to add filter by a major mode, after that, use /g to give it a name
+
+* markdown 
+- [more info](https://leanpub.com/markdown-mode/)
+- C-c C-c o: preview
+
+* Deft notes
+- [more info](https://jblevins.org/projects/deft/)
+
+| key     | function                      |
+|---------+-------------------------------|
+| C-c C-q | quit                          |
+| C-c C-n | create new file               |
+| C-c C-m | create new file with filename |
+
+* ORG 
+** Tutorials and resources
 
 | keys          | function        |
 |---------------+-----------------|
@@ -13,7 +53,7 @@ Emacs ORG
 - [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html][A very useful tutorial about customizing Agenda]]
 - [[https://blog.aaronbieber.com/2016/01/30/dig-into-org-mode.html][Dig into ORG mode]]
   
-* Outline
+** Outline
 
 | key     | function            |
 |---------+---------------------|
@@ -23,27 +63,28 @@ Emacs ORG
 | TAB     | collapse one branch |
 | S-TAB   | collapse entire do  |
 
-* Styles
+** Styles
 You can make words *bold*, /italic/, _underlined_, =code= and ~verbatim~, and, if you must, +strike-through+.
 
-* To-do
+** To-do
 Use S-left/right to cycle through work flow
 Use C-c C-x C-A to archive to the end of the file
-* Tags
+
+** Tags
 
 | key     | function      |
 |---------+---------------|
 | C-c C-c | insert a tag  |
 | C-c \   | search by tag |
 
-* Table
+** Table
 
 | key     | function                  |
 |---------|---------------------------|
 | Tab     | move to the next cell     |
 | S-Table | move to the previous cell |
 
-* Agenda                                                              
+** Agenda                                                              
 
 | key | function             |
 |-----+----------------------|
@@ -55,10 +96,13 @@ Use C-c C-x C-A to archive to the end of the file
 | .   | go to today          |
 | D   | toggle diary display |
 | i   | insert dairy entry   |
-* Calendar
+
+** Calendar
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Adding-to-Diary.html#Adding-to-Diary][Document]]
 
 | key | function                    |
 |-----+-----------------------------|
 | i d | add diary entry for the day |
 
+* how to
+- get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
