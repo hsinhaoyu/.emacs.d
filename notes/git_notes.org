@@ -1,0 +1,13 @@
+Git
+
+* Undo committed changes
+
+After making some changes and having committed those changes, we want to undo the committed changes.
+
+git revert <commit>
+
+* Undo uncommitted changes
+
+This reset all files to the previous commit
+
+git reset --hard
