@@ -7,6 +7,11 @@ Use C-c C-o to open links
 - [[http://cachestocaches.com/series/emacs-productivity/)][Emacs for Productivity]]
 - [[https://blog.aaronbieber.com/2015/07/05/a-gentle-introduction-to-emacs-configuration.html][A gentle introduction to Emacs configuration]]
 
+* Movement
+| keys | function                                                |
+|------+---------------------------------------------------------|
+| M-m  | Jump to first non-whitespace character in line in emacs |
+
 * jumping around
 | keys    | function         |
 |---------+------------------|
@@ -16,6 +21,11 @@ Use C-c C-o to open links
 
 * iTerms2 setting
 - Under Session/Keys, set Left Option Key to ESC
+
+* delete
+| keys | function    |
+|------+-------------|
+| M-d  | kill a word |
 
 * magit 
 - after entering commit message, C-c C-c
