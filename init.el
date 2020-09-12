@@ -108,6 +108,9 @@
                                  (nospace . "-")
 				 (case-fn . downcase))))
 
+;; imenu - jump to definition
+(global-set-key (kbd "M-i") 'imenu)
+
 ;; python mode
 ;;(use-package elpy
 ;;  :ensure t
