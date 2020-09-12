@@ -14,9 +14,6 @@ Use C-c C-o to open links
 | C-x r l | list bookmakrs   |
 | C-x r b | jump to bookmark |
 
-* Lisp
-- [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
-
 * iTerms2 setting
 - Under Session/Keys, set Left Option Key to ESC
 
@@ -104,7 +101,15 @@ Use C-c C-x C-A to archive to the end of the file
 |-----+-----------------------------|
 | i d | add diary entry for the day |
 
+* Programming
+| keys     | function                            |
+|----------+-------------------------------------|
+| M-x ffap | find file at point                  |
+| M-;      | write a comment, or comment a block |
+
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
-* test
+* Lisp
+- [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
+
 
