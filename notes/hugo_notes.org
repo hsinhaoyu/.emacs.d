@@ -1,0 +1,2 @@
+* Resources
+- [[https://www.mikedane.com/static-site-generators/hugo/][good lesson]]
