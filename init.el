@@ -72,24 +72,33 @@
 
 (define-key global-map "\C-ca" 'org-agenda)
 
-(setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "CANCELED")))
+;; (setq org-todo-keywords
+;;       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "CANCELED")))
 
 (setq org-agenda-files '("~/.deft"))
 
 (setq org-startup-indented t)
 
+(setq org-agenda-timegrid-use-ampm 1)
+
 ;; incomplete
 ;; based on this article https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
+;; org-agenda-prefix-format: https://emacs.stackexchange.com/questions/15309/is-there-a-way-to-show-an-agenda-with-just-a-time-grid
 (setq org-agenda-custom-commands
       '(("c" "Simple agenda view"
 	 ((tags "PRIORITY=\"A\""
 		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
 		 (org-agenda-overriding-header "High-priority unfinished tasks:")))
-	 (agenda "")
-	 (alltodo "")))))
+	  (agenda ""
+		  ((org-agenda-use-time-grid nil)))
+	  (alltodo "")))))
 
 (setq org-agenda-include-diary t)
+
+;; This changes how timestamps are displayed, but not how agenda time grid is displayed
+;; see https://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
+;; (setq-default org-display-custom-times t)
+;; (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
 
 ;; Deft
 (use-package deft
