@@ -1,4 +1,5 @@
 Emacs notes
+
 * Resources
 Use C-c C-o to open links
 - [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
@@ -69,6 +70,8 @@ Use C-c C-o to open links
 | M-RET   | next item           |
 | TAB     | collapse one branch |
 | S-TAB   | collapse entire do  |
+| C-x n s | narrow to sub tree  |
+| C-x n w | widen               |
 
 ** Styles
 You can make words *bold*, /italic/, _underlined_, =code= and ~verbatim~, and, if you must, +strike-through+.
@@ -93,6 +96,8 @@ Use C-c C-x C-A to archive to the end of the file
 
 ** Agenda                                                              
 
+- [[https://blog.aaronbieber.com/2016/09/25/agenda-interactions-primer.html][useful tutorial]]
+
 | key | function             |
 |-----+----------------------|
 | v d | day view             |
@@ -103,6 +108,7 @@ Use C-c C-x C-A to archive to the end of the file
 | .   | go to today          |
 | D   | toggle diary display |
 | i   | insert dairy entry   |
+| t   | toggle TODO state    |
 
 ** Calendar
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Adding-to-Diary.html#Adding-to-Diary][Document]]
@@ -128,5 +134,4 @@ Use C-c C-x C-A to archive to the end of the file
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
 * Lisp
 - [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
-
-
+  

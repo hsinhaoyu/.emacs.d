@@ -79,6 +79,8 @@
 
 (setq org-startup-indented t)
 
+(setq org-startup-truncated nil)
+
 (setq org-agenda-timegrid-use-ampm 1)
 
 ;; incomplete
@@ -99,6 +101,13 @@
 ;; see https://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
 ;; (setq-default org-display-custom-times t)
 ;; (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
+
+;; ORG capture
+(setq org-capture-templates
+      '(("a" "My TODO task format." entry
+         (file "todo.org")
+         "* TODO %?
+SCHEDULED: %t")))
 
 ;; Deft
 (use-package deft
@@ -128,5 +137,23 @@
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
+;; customize menu bar
 
+;; create a new menu item after Buffers
+(define-key-after
+  global-map
+  [menu-bar bookmarks]
+  (cons "Bookmarks" (make-sparse-keymap "Bookmarks"))
+  'buffers)
+
+
+(define-key
+  global-map
+  [menu-bar bookmarks bookmarksList]
+  '("List bookmarks" . bookmark-bmenu-list))
+
+(define-key
+  global-map
+  [menu-bar bookmarks bookmarksSet]
+  '("Set a bookmark" . bookmark-set))
 
