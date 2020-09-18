@@ -66,61 +66,87 @@
   :hook ((markdown-mode . flyspell-mode)
 	 (gfm-mode . flyspell-mode)))
 
-;; ORG
+;; ========== ORG
 
 (add-hook 'org-mode-hook 'flyspell-mode)
 
 (define-key global-map "\C-ca" 'org-agenda)
 
-;; (setq org-todo-keywords
-;;       '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE" "CANCELED")))
+(setq org-todo-keywords
+      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
 
 (setq org-agenda-files '("~/.deft"))
 
+;; used identation to indicate the hierarchy of headings
 (setq org-startup-indented t)
 
+;; wrap around
 (setq org-startup-truncated nil)
 
+;; use 12 hour clock
 (setq org-agenda-timegrid-use-ampm 1)
 
-(setq org-agenda-include-diary t)
+;; time grid takes too much space
+(setq org-agenda-use-time-grid nil)
 
+;; Customize agenda
+
+;; based on https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
+
+(defun air-org-skip-subtree-if-priority (priority)
+  "Skip an agenda subtree if it has a priority of PRIORITY.
+   PRIORITY may be one of the characters ?A, ?B, or ?C."
+  (let ((subtree-end (save-excursion (org-end-of-subtree t)))
+        (pri-value (* 1000 (- org-lowest-priority priority)))
+        (pri-current (org-get-priority (thing-at-point 'line t))))
+    (if (= pri-value pri-current)
+        subtree-end
+      nil)))
+
+(defun air-org-skip-subtree-if-habit ()
+  "Skip an agenda entry if it has a STYLE property equal to \"habit\"."
+  (let ((subtree-end (save-excursion (org-end-of-subtree t))))
+    (if (string= (org-entry-get nil "STYLE") "habit")
+        subtree-end
+      nil)))
+
+(setq org-agenda-custom-commands
+      '(("d" "Daily agenda and all TODOs"
+         ((tags "PRIORITY=\"A\""
+                ((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
+                 (org-agenda-overriding-header "High-priority unfinished tasks:")))
+
+          (agenda "")
+
+	  (alltodo ""
+                   ((org-agenda-skip-function '(or (air-org-skip-subtree-if-habit)
+                                                   (air-org-skip-subtree-if-priority ?A)
+                                                   (org-agenda-skip-if nil '(scheduled deadline))))
+                    (org-agenda-overriding-header "ALL normal priority tasks:"))))
+         ((org-agenda-compact-blocks nil)))))
+
+;; display timestamps in 12hour
 ;; This changes how timestamps are displayed, but not how agenda time grid is displayed
 ;; see https://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org
-;; (setq-default org-display-custom-times t)
-;; (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %H:%M>"))
+;; %l is hours in 12 clock
+;; %p is AM/PM
+(setq-default org-display-custom-times t)
+(setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
 
-;; ORG capture
+;; ========== ORG capture
 (setq org-capture-templates
       '(("a" "My TODO task format." entry
          (file "todo.org")
          "* TODO %?
 SCHEDULED: %t")))
 
-;; super-org
-(use-package org-super-agenda
-  :ensure t
-  :config (org-super-agenda-mode))
-
-(setq org-agenda-custom-commands
-      '(("c" "Super Agenda" agenda
-         (org-super-agenda-mode)
-         ((org-super-agenda-groups
-           '(
-             (:name "Important")
-             (:name "Today XX"
-                    :time-grid t
-                    :scheduled today)
-             )))
-         (org-agenda nil "a"))))
-
-;; org journal
+;; ========== org journal
 (use-package org-journal
   :ensure t
   :custom
     (org-journal-dir "~/.deft/journal/"))
 
-;; Deft
+;; ========== Deft
 (use-package deft
   :ensure t
   :bind (("<f8>" . deft))
@@ -137,10 +163,10 @@ SCHEDULED: %t")))
                                  (nospace . "-")
 				 (case-fn . downcase))))
 
-;; imenu - jump to definition
+;; ========== imenu - jump to definition
 (global-set-key (kbd "M-i") 'imenu)
 
-;; snippets
+;; ========== snippets
 (use-package yasnippet
   :ensure t
   :init
@@ -148,15 +174,13 @@ SCHEDULED: %t")))
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
-;; customize menu bar
-
+;; ========== customize menu bar
 ;; create a new menu item after Buffers
 (define-key-after
   global-map
   [menu-bar hhyu]
   (cons "HHYU" (make-sparse-keymap "HHYU"))
   'buffers)
-
 
 (define-key
   global-map
@@ -167,4 +191,9 @@ SCHEDULED: %t")))
   global-map
   [menu-bar hhyu  bookmarksSet]
   '("Set a bookmark" . bookmark-set))
+
+(define-key
+  global-map
+  [menu-bar hhyu  newJournalEntry]
+  '("New journal entry" . org-journal-new-entry))
 
