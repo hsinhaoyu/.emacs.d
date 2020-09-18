@@ -174,26 +174,3 @@ SCHEDULED: %t")))
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
-;; ========== customize menu bar
-;; create a new menu item after Buffers
-(define-key-after
-  global-map
-  [menu-bar hhyu]
-  (cons "HHYU" (make-sparse-keymap "HHYU"))
-  'buffers)
-
-(define-key
-  global-map
-  [menu-bar hhyu bookmarksList]
-  '("List bookmarks" . bookmark-bmenu-list))
-
-(define-key
-  global-map
-  [menu-bar hhyu  bookmarksSet]
-  '("Set a bookmark" . bookmark-set))
-
-(define-key
-  global-map
-  [menu-bar hhyu  newJournalEntry]
-  '("New journal entry" . org-journal-new-entry))
-
