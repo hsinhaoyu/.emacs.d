@@ -117,6 +117,12 @@ Use C-c C-x C-A to archive to the end of the file
 |-----+-----------------------------|
 | i d | add diary entry for the day |
 
+* Journal
+| keys        | function          |
+|-------------+-------------------|
+| C-u C-c C-j | new journal entry |
+
+
 * Programming
 | keys     | function                            |
 |----------+-------------------------------------|

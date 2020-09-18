@@ -83,18 +83,6 @@
 
 (setq org-agenda-timegrid-use-ampm 1)
 
-;; incomplete
-;; based on this article https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
-;; org-agenda-prefix-format: https://emacs.stackexchange.com/questions/15309/is-there-a-way-to-show-an-agenda-with-just-a-time-grid
-(setq org-agenda-custom-commands
-      '(("c" "Simple agenda view"
-	 ((tags "PRIORITY=\"A\""
-		((org-agenda-skip-function '(org-agenda-skip-entry-if 'todo 'done))
-		 (org-agenda-overriding-header "High-priority unfinished tasks:")))
-	  (agenda ""
-		  ((org-agenda-use-time-grid nil)))
-	  (alltodo "")))))
-
 (setq org-agenda-include-diary t)
 
 ;; This changes how timestamps are displayed, but not how agenda time grid is displayed
@@ -108,6 +96,29 @@
          (file "todo.org")
          "* TODO %?
 SCHEDULED: %t")))
+
+;; super-org
+(use-package org-super-agenda
+  :ensure t
+  :config (org-super-agenda-mode))
+
+(setq org-agenda-custom-commands
+      '(("c" "Super Agenda" agenda
+         (org-super-agenda-mode)
+         ((org-super-agenda-groups
+           '(
+             (:name "Important")
+             (:name "Today XX"
+                    :time-grid t
+                    :scheduled today)
+             )))
+         (org-agenda nil "a"))))
+
+;; org journal
+(use-package org-journal
+  :ensure t
+  :custom
+    (org-journal-dir "~/.deft/journal/"))
 
 ;; Deft
 (use-package deft
@@ -142,18 +153,18 @@ SCHEDULED: %t")))
 ;; create a new menu item after Buffers
 (define-key-after
   global-map
-  [menu-bar bookmarks]
-  (cons "Bookmarks" (make-sparse-keymap "Bookmarks"))
+  [menu-bar hhyu]
+  (cons "HHYU" (make-sparse-keymap "HHYU"))
   'buffers)
 
 
 (define-key
   global-map
-  [menu-bar bookmarks bookmarksList]
+  [menu-bar hhyu bookmarksList]
   '("List bookmarks" . bookmark-bmenu-list))
 
 (define-key
   global-map
-  [menu-bar bookmarks bookmarksSet]
+  [menu-bar hhyu  bookmarksSet]
   '("Set a bookmark" . bookmark-set))
 
