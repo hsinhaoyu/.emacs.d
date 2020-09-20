@@ -174,3 +174,12 @@ SCHEDULED: %t")))
   :config
   (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
+;; ========== interactive functions
+
+(defun hhyu-init ()
+  (interactive)
+  (find-file "~/.emacs.d/init.el"))
+
+(defun hhyu-cheatsheet ()
+  (interactive)
+  (dired "~/.emacs.d/notes"))
