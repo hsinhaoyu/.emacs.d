@@ -3,8 +3,8 @@
 
 This is my Emacs configuration file, in literate programming style (based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]]).
 
-* package management
-** Use MELPA for package archive
+* Package management
+** Use [[https://melpa.org/#/][MELPA]] for package archive
 
     #+begin_src emacs-lisp
     (package-initialize)
@@ -12,7 +12,7 @@ This is my Emacs configuration file, in literate programming style (based on [[h
 	         '("melpa" . "http://melpa.org/packages/"))
     #+end_src
 
-** Make sure that use-package is loaded
+** Make sure that ~use-package~ is loaded
 
     #+begin_src emacs-lisp
     (when (not (package-installed-p 'use-package))
@@ -20,24 +20,30 @@ This is my Emacs configuration file, in literate programming style (based on [[h
     (package-install 'use-package))
     #+end_src
 
-
 * Basic UX settings
-** Custom files
+** Move custom files outside ~init.el~
 Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
+
 #+begin_src emacs-lisp
 (setq custom-file "~/.emacs.d/custom-file.el")
 (load-file custom-file)
 #+end_src
 
-** Theme
+** General settings
 
     #+begin_src emacs-lisp
     (setq inhibit-startup-message t)
-    (load-theme 'wheatgrass)
-    (display-time-mode t)
     #+end_src
+
+** Theme
+
+#+begin_src emacs-lisp
+(use-package monokai-theme
+    :ensure t)
+(load-theme 'monokai t)
+#+end_src
     
-** Enhance M-x with smex
+** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
 
   #+begin_src emacs-lisp
   (use-package smex
@@ -50,7 +56,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
           ("M-x" . smex))
   #+end_src
 
-** company mode for completion 
+** [[https://company-mode.github.io][company]] mode for completion 
 
   #+begin_src emacs-lisp
   (use-package company
@@ -59,7 +65,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
           (global-company-mode t))
   #+end_src
 
-** ido: Display possible completions at all places
+** [[https://github.com/DarwinAwardWinner/ido-completing-read-plus][ido]]: Display possible completions at all places
 
   #+begin_src emacs-lisp
   (use-package ido-completing-read+
@@ -76,13 +82,17 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 	  (setq ido-use-virtual-buffers t)
 	  :diminish nil)
   #+end_src
-** Replace list-buffer with ~ibuffer~
+** Replace ~list-buffer~ with [[https://www.emacswiki.org/emacs/IbufferMode#Ibuffer][ibuffer]]
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
 
+
 * Document preparation
-** markdown
+** Markdown mode
+Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ files. A ~marked~ script has to be created, so that markdown files can be viewed with Marked 2 on macOS (see [[https://leanpub.com/markdown-mode/read][this document]]).
+
+
   #+begin_src emacs-lisp
   (use-package markdown-mode
       :ensure t
@@ -98,7 +108,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 
 
 * ~Deft~ for searching documents 
-
+[[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 
   #+begin_src emacs-lisp
   (use-package deft
@@ -107,19 +117,19 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
       :commands (deft)
       :config
       (setq deft-extensions '("txt" "tex" "md" "org")
-          deft-directory "~/.deft"
-	  deft-default-extension "org"
-	  deft-recursive t
-	  deft-use-filter-string-for-filename nil
-	  deft-use-filename-as-title nil
-	  deft-markdown-mode-title-level 1
-	  deft-file-naming-rules '((noslash . "-")
-                                   (nospace . "-")
-				   (case-fn . downcase))))
+            deft-directory "~/.deft"
+	      deft-default-extension "org"
+	      deft-recursive t
+	      deft-use-filter-string-for-filename nil
+	      deft-use-filename-as-title nil
+	      deft-markdown-mode-title-level 1
+	      deft-file-naming-rules '((noslash . "-")
+                                     (nospace . "-")
+				       (case-fn . downcase))))
   #+end_src
 
 
-* Org
+* Org mode
 ** Basics
 Some basic UX settings
   #+begin_src emacs-lisp
@@ -147,7 +157,7 @@ Use bullets rather than stars
           (setq org-ellipsis " ▾"))
   #+end_src
 
-Display timestamps in 12hour. This changes how timestamps are displayed, but not how agenda time grid is displayed. For more information, see [[https://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org][this link]].
+Display timestamps in 12 hour format. This changes how timestamps are displayed, but not how agenda time grid is displayed. For more information, see [[https://emacs.stackexchange.com/questions/19863/how-to-set-my-own-date-format-for-org][this link]].
   #+begin_src emacs-lisp
   ;; %l is hours in 12 clock
   ;; %p is AM/PM
@@ -238,11 +248,8 @@ I don't actually use these functions (stolen from [[https://blog.thomasheartman.
       (find-file (get-journal-file-today)))
   #+end_src
 
-
-
 ** Org capture
 Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
-
 The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
 
   #+begin_src emacs-lisp
@@ -280,7 +287,7 @@ The syntax of the template is explained in the documentation for the variable ~o
   (global-set-key (kbd "M-i") 'imenu)
   #+end_src 
 
-** code snippets
+** code snippets using [[https://github.com/joaotavora/yasnippet][yasnippet]]
   #+begin_src emacs-lisp
   (use-package yasnippet
       :ensure t
@@ -288,6 +295,7 @@ The syntax of the template is explained in the documentation for the variable ~o
       :config
           (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
   #+end_src
+
 
 * Interactive functions for personal use
   +begin_src emacs-lisp
@@ -299,3 +307,6 @@ The syntax of the template is explained in the documentation for the variable ~o
       (interactive)
       (dired "~/.emacs.d/notes"))
   +end_src
+
+* References
+- [[https://github.com/dileban/.emacs.d][Dileban's config]]
