@@ -1,9 +1,7 @@
-#+TITLE: Emacs configuration
+#+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 
-* Hsin-Hao's emacs config
-This is my Emacs configuration file, in  literate programming style. Based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]].
-
+This is my Emacs configuration file, in literate programming style (based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]]).
 
 * package management
 ** Use MELPA for package archive
@@ -24,6 +22,13 @@ This is my Emacs configuration file, in  literate programming style. Based on [[
 
 
 * Basic UX settings
+** Custom files
+Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
+#+begin_src emacs-lisp
+(setq custom-file "~/.emacs.d/custom-file.el")
+(load-file custom-file)
+#+end_src
+
 ** Theme
 
     #+begin_src emacs-lisp
@@ -46,6 +51,7 @@ This is my Emacs configuration file, in  literate programming style. Based on [[
   #+end_src
 
 ** company mode for completion 
+
   #+begin_src emacs-lisp
   (use-package company
       :config
@@ -54,6 +60,7 @@ This is my Emacs configuration file, in  literate programming style. Based on [[
   #+end_src
 
 ** ido: Display possible completions at all places
+
   #+begin_src emacs-lisp
   (use-package ido-completing-read+
       :ensure t
@@ -68,8 +75,11 @@ This is my Emacs configuration file, in  literate programming style. Based on [[
 	  ;; Includes buffer names of recently opened files, even if they're not open now.
 	  (setq ido-use-virtual-buffers t)
 	  :diminish nil)
-  #+end_src 
-
+  #+end_src
+** Replace list-buffer with ~ibuffer~
+#+begin_src emacs-lisp
+(global-set-key (kbd "C-x C-b") 'ibuffer)
+#+end_src
 
 * Document preparation
 ** markdown
