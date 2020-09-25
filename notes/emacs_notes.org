@@ -111,16 +111,25 @@ Use C-c C-x C-A to archive to the end of the file
 | t   | toggle TODO state    |
 
 ** Calendar
+
+
 [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Adding-to-Diary.html#Adding-to-Diary][Document]]
 
 | key | function                    |
 |-----+-----------------------------|
 | i d | add diary entry for the day |
 
+** Links
+| keys      | function       |
+|-----------+----------------|
+| C-c l     | org-store-link |
+| C-c C-l   | insert linke   |
+
 * Journal
-| keys        | function          |
-|-------------+-------------------|
-| C-u C-c C-j | new journal entry |
+| keys        | function           |
+|-------------+--------------------|
+| C-c C-j     | org-journal-new-entry |
+| C-u C-c C-j | view journal entry |
 
 
 * Programming

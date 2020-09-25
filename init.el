@@ -25,6 +25,20 @@
   (setq company-idle-delay 0.3)
   (global-company-mode t))
 
+;; display time
+(display-time-mode t)
+
+;; dashboard
+;; (use-package dashboard
+;;   :ensure t
+;;   :config
+;;   (dashboard-setup-startup-hook)
+;;   (setq dashboard-items '(
+;;         (recents  . 5)
+;;         (bookmarks . 5)
+;; 		  (projects . 5)))
+;; )
+
 ;; Enhance M-x
 (use-package smex
   :ensure t
@@ -90,7 +104,6 @@
 (setq org-agenda-use-time-grid nil)
 
 ;; Customize agenda
-
 ;; based on https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html
 
 (defun air-org-skip-subtree-if-priority (priority)
@@ -133,18 +146,55 @@
 (setq-default org-display-custom-times t)
 (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
 
-;; ========== ORG capture
-(setq org-capture-templates
-      '(("a" "My TODO task format." entry
-         (file "todo.org")
-         "* TODO %?
-SCHEDULED: %t")))
+(use-package org-bullets
+  :ensure t
+  :init
+  (setq org-bullets-bullet-list
+      '("◉" "●" "○" "▪" "▪"))
+  :config
+  (add-hook 'org-mode-hook (lambda () (org-bullets-mode 1)))
+  (setq org-ellipsis " ▾")
+)
 
 ;; ========== org journal
 (use-package org-journal
   :ensure t
   :custom
-    (org-journal-dir "~/.deft/journal/"))
+  (org-journal-dir "~/.deft/journal/")
+  (org-journal-file-format "%Y-%m-%d.org"))
+
+;; very useful; from http://www.howardism.org/Technical/Emacs/journaling-org.html
+(defun get-journal-file-today ()
+  "Return filename for today's journal entry."
+  (let ((daily-name (format-time-string "%Y-%m-%d.org")))
+    (expand-file-name (concat org-journal-dir daily-name))))
+
+(defun journal-file-today ()
+  "Create and load a journal file based on today's date."
+  (interactive)
+  (find-file (get-journal-file-today)))
+
+;; ========== ORG capture
+
+;; the template for journal is from https://github.com/bastibe/org-journal
+(defun org-journal-find-location ()
+  ;; Open today's journal, but specify a non-nil prefix argument in order to
+  ;; inhibit inserting the heading; org-capture will insert the heading.
+  (org-journal-new-entry t)
+  (org-narrow-to-subtree))
+
+(setq org-capture-templates
+      '(("a" "My TODO task format"
+	 entry
+         (file "todo.org")
+         "* TODO %?
+            SCHEDULED: %t")
+	("j" "Journal entry"
+	 plain
+	 (function org-journal-find-location)
+         "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
+	 :jump-to-captured t
+	 :immediate-finish t)))
 
 ;; ========== Deft
 (use-package deft
