@@ -298,7 +298,7 @@ The syntax of the template is explained in the documentation for the variable ~o
 
 
 * Interactive functions for personal use
-  +begin_src emacs-lisp
+  #+begin_src emacs-lisp
   (defun hhyu-init ()
       (interactive)
       (find-file "~/.emacs.d/init.el"))
@@ -306,7 +306,8 @@ The syntax of the template is explained in the documentation for the variable ~o
   (defun hhyu-cheatsheet ()
       (interactive)
       (dired "~/.emacs.d/notes"))
-  +end_src
+  #+end_src
+
 
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
