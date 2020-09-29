@@ -1,0 +1,8 @@
+* Regular expression
+import re
+file = 'HSI-01-DEC-2018/HSI010/HSI_010_R_LE_Central_180112_2.h5'
+regexp_pattern = "(?P<dir>HSI-[0-9]{2}-[A-Z]{3}-[0-9]{4}/HSI[0-9]{3})/(?P<file>HSI_.*)"
+
+zz= re.search(regexp_pattern, file)
+print(zz.group('dir'))
+print(zz.group('file'))

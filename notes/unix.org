@@ -1,0 +1,7 @@
+* tmux
+| keys               | function              |
+|--------------------+-----------------------|
+| tmux new           | new session           |
+| tmux new -s <name> | new session with name |
+| tmux ls            | list sessions         |
+| tmux attach <name> | attach to session     |
