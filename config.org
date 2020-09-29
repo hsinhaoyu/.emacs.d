@@ -34,6 +34,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 
     #+begin_src emacs-lisp
     (setq inhibit-startup-message t)
+    (setq column-number-mode t)
     #+end_src
 
 ** Theme

@@ -133,17 +133,20 @@ Use C-c C-x C-A to archive to the end of the file
 
 
 * Programming
-| keys     | function                            |
-|----------+-------------------------------------|
-| M-x ffap | find file at point                  |
-| M-;      | write a comment, or comment a block |
-| C-M-f    | move forward S-exp                  |
-| C-M-b    | move backward S-exp                 |
-| C-M-d    | move down into a list               |
-| C-M-u    | move up into a list                 |
-| C-M-n    | move forward to next list           |
-| C-M-p    | move to previous list               |
-| C-M-k    | kill s-exp                          |
+| keys                     | function                            |
+|--------------------------+-------------------------------------|
+| M-x ffap                 | find file at point                  |
+| M-;                      | write a comment, or comment a block |
+| C-M-f                    | move forward S-exp                  |
+| C-M-b                    | move backward S-exp                 |
+| C-M-d                    | move down into a list               |
+| C-M-u                    | move up into a list                 |
+| C-M-n                    | move forward to next list           |
+| C-M-p                    | move to previous list               |
+| C-M-k                    | kill s-exp                          |
+| python-indent-shift-left | unindent                            |
+| python-indent-sift-right | indent                              |
+
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
