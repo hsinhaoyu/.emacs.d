@@ -10,6 +10,7 @@
 (load-file custom-file)
 
 (setq inhibit-startup-message t)
+(setq column-number-mode t)
 
 (use-package monokai-theme
     :ensure t)
