@@ -120,17 +120,20 @@ Use C-c C-x C-A to archive to the end of the file
 | i d | add diary entry for the day |
 
 ** Links
-| keys      | function       |
-|-----------+----------------|
-| C-c l     | org-store-link |
-| C-c C-l   | insert linke   |
+| keys    | function        |
+|---------+-----------------|
+| C-c l   | org-store-link  |
+| C-c C-l | org-insert-link |
+** Code block
+| key | function        |
+|-----+-----------------|
+| C-' | edit code block |
 
 * Journal
 | keys        | function           |
 |-------------+--------------------|
 | C-c C-j     | org-journal-new-entry |
 | C-u C-c C-j | view journal entry |
-
 
 * Programming
 | keys                     | function                            |
@@ -146,7 +149,6 @@ Use C-c C-x C-A to archive to the end of the file
 | C-M-k                    | kill s-exp                          |
 | python-indent-shift-left | unindent                            |
 | python-indent-sift-right | indent                              |
-
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name

@@ -264,7 +264,7 @@ The syntax of the template is explained in the documentation for the variable ~o
   (setq org-capture-templates
       '(("a" "My TODO task format"
 	 entry
-         (file "todo.org")
+         (file "~/.deft/capture-todo.org")
          "* TODO %?
             SCHEDULED: %t")
 	("j" "Journal entry"
@@ -274,6 +274,11 @@ The syntax of the template is explained in the documentation for the variable ~o
 	 :jump-to-captured t
 	 :immediate-finish t)))
   #+end_src
+** Preview
+#+begin_src emacs-lisp
+(use-package htmlize
+    :ensure t)
+#+end_src
 
 
 * Programming
@@ -309,6 +314,7 @@ The syntax of the template is explained in the documentation for the variable ~o
       (interactive)
       (dired "~/.emacs.d/notes"))
   #+end_src
+
 
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
