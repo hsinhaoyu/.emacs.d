@@ -49,6 +49,8 @@
 (add-hook 'text-mode-hook 'visual-line-mode)
 (add-hook 'org-mode 'visual-line-mode)
 
+(tool-bar-mode -1)
+
 (use-package markdown-mode
     :ensure t
     :commands (markdown-mode gfm-mode)
