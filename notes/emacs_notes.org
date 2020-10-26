@@ -135,6 +135,12 @@ Use C-c C-x C-A to archive to the end of the file
 | C-c C-j     | org-journal-new-entry |
 | C-u C-c C-j | view journal entry |
 
+in calendar view
+| key | function                               |
+|-----+----------------------------------------|
+| j r | view an entry in a new buffer          |
+| j d | view an entry but do not switch to it. |
+
 * Programming
 | keys                     | function                            |
 |--------------------------+-------------------------------------|

@@ -164,17 +164,24 @@
     (org-narrow-to-subtree))
 
 (setq org-capture-templates
-    '(("a" "My TODO task format"
-       entry
-       (file "todo.org")
-       "* TODO %?
-          SCHEDULED: %t")
-      ("j" "Journal entry"
-       plain
-       (function org-journal-find-location)
-       "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
-       :jump-to-captured t
-       :immediate-finish t)))
+   '(("t" "TODO inbox"
+	     entry
+         (file "~/.deft/capture-todo.org")
+         "* TODO %?
+            SCHEDULED: %t")
+     ("n" "notes inbox"
+	     entry
+         (file "~/.deft/capture-notes.org")
+         "* %T\n%i%?")
+	 ("j" "Journal entry"
+	     plain
+	     (function org-journal-find-location)
+         "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
+	     :jump-to-captured t
+	     :immediate-finish t)))
+
+(use-package htmlize
+    :ensure t)
 
 (use-package magit
     :ensure t
