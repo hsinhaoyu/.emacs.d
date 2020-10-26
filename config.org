@@ -132,16 +132,26 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
 
 
 * Org mode
+I use Org mode for my todos, note taking, and journaling.
 ** Basics
 Some basic UX settings
   #+begin_src emacs-lisp
   ;; spellcheck all org documents
   (add-hook 'org-mode-hook 'flyspell-mode)
 
-  ;; evoke agenda with one key
-  (define-key global-map "\C-ca" 'org-agenda)
+  ;; useful key bindings 
+  ;; Insert link. Rather than asking for a label, use "journal entry"
+  (defun hh-org-insert-link ()
+     (interactive)
+     (org-insert-link nil nil "Journal Entry"))
 
-  ;; used identation to indicate the hierarchy of headings
+  (add-hook 'org-mode-hook
+    (lambda ()
+        (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+        (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+        (define-key org-mode-map (kbd "C-c jl") 'hh-org-insert-link)))
+
+  ;; used identation to indicate the hierarchy of headings, rather than stars
   (setq org-startup-indented t)
 
   ;; wrap around
@@ -322,4 +332,8 @@ The syntax of the template is explained in the documentation for the variable ~o
 
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
+- [[https://www.masteringemacs.org/article/mastering-key-bindings-emacs][Mastering Key Bindings in Emacs by Mickey Petersen]]
+- [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
+- [[https://tuhdo.github.io/emacs-tutor2.html][Emacs Mini Manual (PART 2) - LISP PRIMER]]
+- [[https://tuhdo.github.io/emacs-tutor3.html][Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS]]
 

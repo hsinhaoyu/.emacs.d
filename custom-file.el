@@ -10,7 +10,7 @@
  '(org-agenda-files (quote ("~/.deft/learn_org.org")))
  '(package-selected-packages
    (quote
-    (htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ magit use-package company spacemacs-theme))))
+    (org-mode htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ magit use-package company spacemacs-theme))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

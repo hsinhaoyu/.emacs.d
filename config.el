@@ -46,6 +46,11 @@
 
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 
+(add-hook 'text-mode-hook 'visual-line-mode)
+(add-hook 'org-mode 'visual-line-mode)
+
+(tool-bar-mode -1)
+
 (use-package markdown-mode
     :ensure t
     :commands (markdown-mode gfm-mode)
@@ -76,10 +81,19 @@
 ;; spellcheck all org documents
 (add-hook 'org-mode-hook 'flyspell-mode)
 
-;; evoke agenda with one key
-(define-key global-map "\C-ca" 'org-agenda)
+;; useful key bindings 
+;; Insert link. Rather than asking for a label, use "journal entry"
+(defun hh-org-insert-link ()
+   (interactive)
+   (org-insert-link nil nil "Journal Entry"))
 
-;; used identation to indicate the hierarchy of headings
+(add-hook 'org-mode-hook
+  (lambda ()
+      (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+      (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+      (define-key org-mode-map (kbd "C-c jl") 'hh-org-insert-link)))
+
+;; used identation to indicate the hierarchy of headings, rather than stars
 (setq org-startup-indented t)
 
 ;; wrap around
