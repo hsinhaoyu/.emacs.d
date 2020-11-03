@@ -20,7 +20,7 @@ This is my Emacs configuration file, in literate programming style (based on [[h
     (package-install 'use-package))
     #+end_src
 
-
+    
 * Basic UX settings
 ** Move custom files outside ~init.el~
 Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
@@ -87,6 +87,20 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 ** Replace ~list-buffer~ with [[https://www.emacswiki.org/emacs/IbufferMode#Ibuffer][ibuffer]]
 #+begin_src emacs-lisp
 (global-set-key (kbd "C-x C-b") 'ibuffer)
+#+end_src
+** Text wrapping
+
+Turn on [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Visual-Line-Mode.html][visual-line-mode]] for text and org files. This wraps words by word boundaries.
+
+#+begin_src emacs-lisp
+(add-hook 'text-mode-hook 'visual-line-mode)
+(add-hook 'org-mode 'visual-line-mode)
+#+end_src
+** GUI
+Turn off the tool bar and scroll bar in windows.
+#+begin_src emacs-lisp
+(tool-bar-mode -1)
+(toggle-scroll-bar -1)
 #+end_src
 
 

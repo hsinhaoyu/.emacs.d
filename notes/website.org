@@ -4,6 +4,7 @@ Notes about my website
 
 aws-shell
 s3 sync ./public s3://hhyu.org
+aws cloudfront create-invalidation --distribution-id E38WVZ7P03183F --paths /*
 
 * new blog post
 
