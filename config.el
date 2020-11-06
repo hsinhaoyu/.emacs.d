@@ -210,6 +210,9 @@
     :config
         (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
 
+(use-package dockerfile-mode
+ :ensure t)
+
 (defun hhyu-init ()
     (interactive)
     (find-file "~/.emacs.d/config.org"))
