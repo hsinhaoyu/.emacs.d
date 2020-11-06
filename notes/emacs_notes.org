@@ -160,15 +160,18 @@ in calendar view
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
 
 * Client/server mode
-I haven't figured out how to use client/server mode yet. The following is not the right solution. See [[https://www.emacswiki.org/emacs/EmacsAsDaemon][this link]] for further investigations.
+Based on [[https://www.emacswiki.org/emacs/EmacsAsDaemon][this link]], I created =~/Library/LaunchAgents/gnu.emacs.daemon.plist=, and then used =launchctl= to launch the emacs daemon.
 
-To use emacs in client/server mode, I added the following in .zshrc
+#+begin_src sh
+launchctl load -w ~/Library/LaunchAgents/gnu.emacs.daemon.plist
+#+end_src
+
+I added the following in .zshrc to call the emacs client
 
 #+begin_src sh :tangle no
-/Applications/Emacs.app/Contents/MacOS/Emacs --daemon=emacs_d
-alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
-export VISUAL="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
-export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
+export VISUAL="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
+export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 #+end_src
 
 * Lisp
