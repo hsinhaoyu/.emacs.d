@@ -158,6 +158,19 @@ in calendar view
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
+
+* Client/server mode
+I haven't figured out how to use client/server mode yet. The following is not the right solution. See [[https://www.emacswiki.org/emacs/EmacsAsDaemon][this link]] for further investigations.
+
+To use emacs in client/server mode, I added the following in .zshrc
+
+#+begin_src sh :tangle no
+/Applications/Emacs.app/Contents/MacOS/Emacs --daemon=emacs_d
+alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
+export VISUAL="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
+export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -s emacs_d -c"
+#+end_src
+
 * Lisp
 - [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
   
