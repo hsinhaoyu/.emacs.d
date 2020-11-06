@@ -1,6 +1,0 @@
-# -*- mode: snippet -*-
-# name: org code block for lisp
-# key: >orglisp
-# --
-#+start_src emacs-lisp
-#+end_src
