@@ -50,6 +50,7 @@
 (add-hook 'org-mode 'visual-line-mode)
 
 (tool-bar-mode -1)
+(toggle-scroll-bar -1)
 
 (use-package markdown-mode
     :ensure t
@@ -208,6 +209,9 @@
     :init (yas-global-mode 1)
     :config
         (add-to-list 'yas-snippet-dirs (locate-user-emacs-file "snippets")))
+
+(use-package dockerfile-mode
+ :ensure t)
 
 (defun hhyu-init ()
     (interactive)
