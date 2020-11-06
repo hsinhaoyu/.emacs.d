@@ -332,6 +332,7 @@ The syntax of the template is explained in the documentation for the variable ~o
   #+end_src
 
 ** Docker
+The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it easier to program containers.
 #+begin_src emacs-lisp
 (use-package dockerfile-mode
  :ensure t)
