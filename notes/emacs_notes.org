@@ -160,16 +160,11 @@ in calendar view
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
 
 * Client/server mode
-Based on [[https://www.emacswiki.org/emacs/EmacsAsDaemon][this link]], I created =~/Library/LaunchAgents/gnu.emacs.daemon.plist=, and then used =launchctl= to launch the emacs daemon.
-
-#+begin_src sh
-launchctl load -w ~/Library/LaunchAgents/gnu.emacs.daemon.plist
-#+end_src
-
 I added the following in .zshrc to call the emacs client
 
 #+begin_src sh :tangle no
-alias emacs="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
+alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 export VISUAL="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 #+end_src
