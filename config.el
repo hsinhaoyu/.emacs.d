@@ -50,6 +50,7 @@
 (add-hook 'org-mode 'visual-line-mode)
 
 (tool-bar-mode -1)
+(toggle-scroll-bar -1)
 
 (use-package markdown-mode
     :ensure t
