@@ -1,2 +1,7 @@
 * Resources
 - [[https://www.mikedane.com/static-site-generators/hugo/][good lesson]]
+* upgrade
+** current version
+- brew info hugo
+** update
+- brew upgrade hugo

@@ -308,7 +308,6 @@ The syntax of the template is explained in the documentation for the variable ~o
     :ensure t)
 #+end_src
 
-
 * Programming
 ** Git integration with [[https://magit.vc][Magit]]
   #+begin_src emacs-lisp
@@ -339,6 +338,110 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 #+end_src
 
 
+* Emacs client/server
+#+begin_src emacs-lisp
+(setq server-socket-dir (format "/tmp/emacs%d" (user-uid)))
+#+end_src
+
+My client/server setup is based on [[http://mjwall.com/blog/2013/10/04/how-i-use-emacs/][this article]]. To make it work on macOS, I defined these two aliases in ~.zshenv~ (~.zshrc~ is not the right place, because it is not sourced by shell scripts):
+
+#+begin_src sh
+alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
+alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
+export VISUAL=~/bin/et
+export EDITOR=~/bin/et
+#+end_src
+
+For the shell scripts, I changed =#!/bin/bash= to =#!/bin/zsh=, and inserted =setopt aliases= to expand aliases. I also had to remove =exec= in =et=.
+
+** ec (emacs client in GUI mode)
+#+begin_src sh :tangle ec
+#!/bin/zsh
+
+# I took this from http://mjwall.com/blog/2013/10/04/how-i-use-emacs/
+# added "setopt aliases" for zsh
+setopt aliases
+
+# This script starts emacs daemon if it is not running, opens whatever file
+# you pass in and changes the focus to emacs.  Without any arguments, it just
+# opens the current buffer or *scratch* if nothing else is open.  The following
+# example will open ~/.bashrc
+
+# ec ~/.bashrc
+
+# You can also pass it multiple files, it will open them all.  Unbury-buffer
+# will cycle through those files in order
+
+# The compliment to the script is et, which opens emacs in the terminal
+# attached to a daemon
+
+# If you want to execute elisp, pass in -e whatever.
+# You may also want to stop the output from returning to the terminal, like
+# ec -e "(message \"Hello\")" > /dev/null
+
+# emacsclient options for reference
+# -a "" starts emacs daemon and reattaches
+# -c creates a new frame
+# -n returns control back to the terminal
+# -e eval the script
+
+# Number of current visible frames,
+# Emacs daemon always has a visible frame called F1
+visible_frames() {
+  emacsclient -a "" -e '(length (visible-frame-list))'
+}
+
+change_focus() {
+  emacsclient -n -e "(select-frame-set-input-focus (selected-frame))" > /dev/null
+}
+
+# try switching to the frame incase it is just minimized
+# will start a server if not running
+test "$(visible_frames)" -eq "1" && change_focus
+
+if [ "$(visible_frames)" -lt  "2" ]; then # need to create a frame
+  # -c $@ with no args just opens the scratch buffer
+  emacsclient -n -c "$@" && change_focus
+else # there is already a visible frame besides the daemon, so
+  change_focus
+  # -n $@ errors if there are no args
+  test  "$#" -ne "0" && emacsclient -n "$@"
+fi
+
+#+end_src
+
+** et (emacs client in text mode)
+#+begin_src sh :tangle et
+#!/bin/zsh
+
+# I took this from http://mjwall.com/blog/2013/10/04/how-i-use-emacs/
+# added "setopt aliases" for zsh
+setopt aliases
+
+# Makes sure emacs daemon is running and opens the file in Emacs in
+# the terminal.
+
+# If you want to execute elisp, use -e whatever, like so
+
+# et -e "(message \"Word up\")"
+
+# You may want to redirect that to /dev/null if you don't want the
+# return to printed on the terminal.  Also, just echoing a message
+# may not be visible if Emacs then gives you a message about what
+# to do when do with the frame
+
+# The compliment to this script is ec
+
+# Emacsclient option reference
+# -a "" starts emacs daemon and reattaches
+# -t starts in terminal, since I won't be using the gui
+# can also pass in -n if you want to have the shell return right away
+
+emacsclient -a "" -t "$@"
+
+#+end_src
+
+
 * Interactive functions for personal use
   #+begin_src emacs-lisp
   (defun hhyu-init ()
@@ -353,6 +456,7 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
+- [[https://github.com/alhassy/emacs.d][Al-hassy's book-length config file]]
 - [[https://www.masteringemacs.org/article/mastering-key-bindings-emacs][Mastering Key Bindings in Emacs by Mickey Petersen]]
 - [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
 - [[https://tuhdo.github.io/emacs-tutor2.html][Emacs Mini Manual (PART 2) - LISP PRIMER]]
