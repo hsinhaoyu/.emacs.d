@@ -392,7 +392,7 @@ Here is the shell script:
 lsof -c Emacs | grep server | tr -s " " | cut -d' ' -f8
 #+end_src
 
-[[https://en.wikipedia.org/wiki/Lsof][=lsof=]] is the unix command that lists all the files opened by a process.
+[[https://en.wikipedia.org/wiki/Lsof][lsof]] is the unix command that lists all the files opened by a process.
 ** =ec= shell script: run =emacsclient= in GUI mode
 
 The concept came from [[http://mjwall.com/blog/2013/10/04/how-i-use-emacs/][this article]], but I couldn't get it to work on macOS so I had to make some changes.
