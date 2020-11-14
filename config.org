@@ -415,7 +415,7 @@ change_focus() {
 
 if [[ $socket_file == "" ]]; then
     echo "starting Emacs server..."
-    # I am not sure what I need --chdir $PWD for emacs to load the file from the working directory. But if I didn't add it, emacs starts with $HOME
+    # I am not sure why I need --chdir $PWD for emacs to load the file from the working directory. But if I didn't add it, emacs starts with $HOME
     $emacs --chdir $PWD --execute "(server-start)" $@ &
 else
     $emacsclient -n $@ --socket-name $socket_file
