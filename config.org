@@ -102,7 +102,7 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
 ;; (toggle-scroll-bar -1)
 #+end_src
 * Scratch buffer
-The scratch buffer is a convenient to display a cheat sheet.
+The scratch buffer is a convenient place to display cheat sheets.
 #+begin_src emacs-lisp
 (setq initial-scratch-message (concat
   "* Scratch Buffer *"
