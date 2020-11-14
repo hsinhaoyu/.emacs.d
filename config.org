@@ -351,8 +351,8 @@ alias emacsnw="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 I decided to use the terminal mode emacs for the unix setting for visual editors (defined in =.zshenv=). It seems to be fine.
 
 #+begin_src sh
-export VISUAL=/Applications/Emacs/Contents/MacOS/Emacs -nw
-export EDITOR=/Applications/Emacs/Contents/MacOS/Emacs -nw
+export VISUAL="/Applications/Emacs/Contents/MacOS/Emacs -nw"
+export EDITOR="/Applications/Emacs/Contents/MacOS/Emacs -nw"
 #+end_src
 
 ** Automatically start the emacs daemon at log in
