@@ -19,7 +19,6 @@ This is my Emacs configuration file, in literate programming style (based on [[h
     (package-refresh-contents)
     (package-install 'use-package))
     #+end_src
-
     
 * Basic UX settings
 ** Move custom files outside ~init.el~
@@ -97,13 +96,18 @@ Turn on [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Visual-Line-
 (add-hook 'org-mode 'visual-line-mode)
 #+end_src
 ** GUI
-Turn off the tool bar and scroll bar in windows.
+Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scroll bar, just to make the margin of the window more visible.
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
-(toggle-scroll-bar -1)
+;; (toggle-scroll-bar -1)
 #+end_src
-
-
+* Scratch buffer
+The scratch buffer is a convenient to display a cheat sheet.
+#+begin_src emacs-lisp
+(setq initial-scratch-message (concat
+  "* Scratch Buffer *"
+  "\n# Evaluate S-expression: C-x C-e"))
+#+end_src 
 * Document preparation
 ** Markdown mode
 Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ files. A ~marked~ script has to be created, so that markdown files can be viewed with Marked 2 on macOS (see [[https://leanpub.com/markdown-mode/read][this document]]).
@@ -121,7 +125,6 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-
 
 * ~Deft~ for searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
@@ -143,7 +146,6 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
                                      (nospace . "-")
 				       (case-fn . downcase))))
   #+end_src
-
 
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
@@ -337,122 +339,100 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
  :ensure t)
 #+end_src
 
-
-* Emacs client/server
-#+begin_src emacs-lisp
-(setq server-socket-dir (format "/tmp/emacs%d" (user-uid)))
-#+end_src
-
-My client/server setup is based on [[http://mjwall.com/blog/2013/10/04/how-i-use-emacs/][this article]]. To make it work on macOS, I defined these two aliases in ~.zshenv~ (~.zshrc~ is not the right place, because it is not sourced by shell scripts):
+* Shell commands, client/server
+** Shell commands for running emacs without the daemon
+I used the shell command =emacs= to evoke the non-client/server emacs in GUI mode. Similarly, =emacsnw= runs emacs in the terminal. These two commands are defined in =.zshrc=.
 
 #+begin_src sh
-alias emacs="/Applications/Emacs.app/Contents/MacOS/Emacs"
-alias emacsclient="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient"
-export VISUAL=~/bin/et
-export EDITOR=~/bin/et
+function emacs() { /Applications/Emacs.app/Contents/MacOS/Emacs $@ &; }
+alias emacsnw="/Applications/Emacs.app/Contents/MacOS/Emacs -nw"
 #+end_src
 
-For the shell scripts, I changed =#!/bin/bash= to =#!/bin/zsh=, and inserted =setopt aliases= to expand aliases. I also had to remove =exec= in =et=.
+I decided to use the terminal mode emacs for the unix setting for visual editors. It seems to be fine.
 
-** ec (emacs client in GUI mode)
+#+begin_src sh
+export VISUAL=/Applications/Emacs/Contents/MacOS/Emacs -nw
+export EDITOR=/Applications/Emacs/Contents/MacOS/Emacs -nw
+#+end_src
+
+** Automatically start the emacs daemon at log in
+According to [[http://www.rockhoppertech.com/blog/emacs-daemon-on-macos/][this article]], we can automatically start the emacs daemon by creating a =gnu.emacs.daemon.plist= file under =~/Library/LaunchAgents/= (This file can be extracted from this document using =M-x org-babel-tangle=).
+
+Note: Starting the emacs daemon this way seems to create problems from time to time. I decided not to do it.
+
+#+begin_src xml :tangle gnu.emacs.daemon.plist
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <key>Label</key>
+  <string>gnu.emacs.daemon</string>
+  <key>ProgramArguments</key>
+  <array>
+    <string>/Applications/Emacs.app/Contents/MacOS/Emacs</string>
+    <string>--daemon</string>
+  </array>
+  <key>RunAtLoad</key>
+  <true/>
+  <key>UserName</key>
+  <string>genedelisa</string>
+</dict>
+#+end_src
+** Test if the server is running
+To test if the emacs server is running, use the =emacsserver= shell script. If the server is running, it returns the socket filename. 
+
+I put the script under =~/bin=, so make sure that it's in the search path.
+#+begin_src sh
+export PATH=$HOME/bin:$PATH
+#+end_src
+
+Here is the shell script:
+#+begin_src sh :tangle emacsserver
+lsof -c Emacs | grep server | tr -s " " | cut -d' ' -f8
+#+end_src
+
+[[https://en.wikipedia.org/wiki/Lsof][=lsof=]] is the unix command that lists all the files opened by a process.
+** =ec= shell script: run =emacsclient= in GUI mode
+
+The concept came from [[http://mjwall.com/blog/2013/10/04/how-i-use-emacs/][this article]], but I couldn't get it to work on macOS so I had to make some changes.
+
 #+begin_src sh :tangle ec
 #!/bin/zsh
 
-# I took this from http://mjwall.com/blog/2013/10/04/how-i-use-emacs/
-# added "setopt aliases" for zsh
-setopt aliases
+socket_file=$(~/bin/emacsserver)
+emacs=/Applications/Emacs.app/Contents/MacOS/Emacs
+emacsclient=/Applications/Emacs.app/Contents/MacOS/bin/emacsclient
 
-# This script starts emacs daemon if it is not running, opens whatever file
-# you pass in and changes the focus to emacs.  Without any arguments, it just
-# opens the current buffer or *scratch* if nothing else is open.  The following
-# example will open ~/.bashrc
-
-# ec ~/.bashrc
-
-# You can also pass it multiple files, it will open them all.  Unbury-buffer
-# will cycle through those files in order
-
-# The compliment to the script is et, which opens emacs in the terminal
-# attached to a daemon
-
-# If you want to execute elisp, pass in -e whatever.
-# You may also want to stop the output from returning to the terminal, like
-# ec -e "(message \"Hello\")" > /dev/null
-
-# emacsclient options for reference
-# -a "" starts emacs daemon and reattaches
-# -c creates a new frame
-# -n returns control back to the terminal
-# -e eval the script
-
-# Number of current visible frames,
-# Emacs daemon always has a visible frame called F1
 visible_frames() {
-  emacsclient -a "" -e '(length (visible-frame-list))'
+  $emacsclient -s $socket_file -e '(length (visible-frame-list))'
 }
 
+# I don't actually use this function, but might be useful in some situation
 change_focus() {
-  emacsclient -n -e "(select-frame-set-input-focus (selected-frame))" > /dev/null
+  $emacsclient -n -s $socket_file -e "(select-frame-set-input-focus (selected-frame))" > /dev/null
 }
 
-# try switching to the frame incase it is just minimized
-# will start a server if not running
-test "$(visible_frames)" -eq "1" && change_focus
-
-if [ "$(visible_frames)" -lt  "2" ]; then # need to create a frame
-  # -c $@ with no args just opens the scratch buffer
-  emacsclient -n -c "$@" && change_focus
-else # there is already a visible frame besides the daemon, so
-  change_focus
-  # -n $@ errors if there are no args
-  test  "$#" -ne "0" && emacsclient -n "$@"
+if [[ $socket_file == "" ]]; then
+    echo "starting Emacs server..."
+    # I am not sure what I need --chdir $PWD for emacs to load the file from the working directory. But if I didn't add it, emacs starts with $HOME
+    $emacs --chdir $PWD --execute "(server-start)" $@ &
+else
+    $emacsclient -n $@ --socket-name $socket_file
 fi
-
 #+end_src
-
-** et (emacs client in text mode)
-#+begin_src sh :tangle et
-#!/bin/zsh
-
-# I took this from http://mjwall.com/blog/2013/10/04/how-i-use-emacs/
-# added "setopt aliases" for zsh
-setopt aliases
-
-# Makes sure emacs daemon is running and opens the file in Emacs in
-# the terminal.
-
-# If you want to execute elisp, use -e whatever, like so
-
-# et -e "(message \"Word up\")"
-
-# You may want to redirect that to /dev/null if you don't want the
-# return to printed on the terminal.  Also, just echoing a message
-# may not be visible if Emacs then gives you a message about what
-# to do when do with the frame
-
-# The compliment to this script is ec
-
-# Emacsclient option reference
-# -a "" starts emacs daemon and reattaches
-# -t starts in terminal, since I won't be using the gui
-# can also pass in -n if you want to have the shell return right away
-
-emacsclient -a "" -t "$@"
-
-#+end_src
-
-
 * Interactive functions for personal use
   #+begin_src emacs-lisp
   (defun hhyu-init ()
       (interactive)
       (find-file "~/.emacs.d/config.org"))
-
   (defun hhyu-cheatsheet ()
       (interactive)
       (dired "~/.emacs.d/notes"))
+  (defun hhyu-wide ()
+      (interactive)
+      (set-frame-width (selected-frame) 200))
   #+end_src
-
 
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
