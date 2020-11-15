@@ -101,12 +101,34 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
 (tool-bar-mode -1)
 ;; (toggle-scroll-bar -1)
 #+end_src
+** Unix setting
+In =.zshrc=, remember to export three environment variables
+#+begin_src sh
+export DEFT_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
+export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
+export ORG_JOURNAL_PATH='/Users/hhyu/Documents/emacs_docs/journal_docs'
+#+end_src
+** Experimental
+This is supposed to be useful for accessing environment variables on macOS. Disabled because I haven't found it useful yet.
+#+BEGIN_SRC
+(use-package exec-path-from-shell
+  :ensure t
+  :init
+  (when (memq window-system '(mac ns x))
+    (exec-path-from-shell-initialize)))
+
+#+END_SRC
 * Scratch buffer
 The scratch buffer is a convenient place to display cheat sheets.
 #+begin_src emacs-lisp
-(setq initial-scratch-message (concat
-  "* Scratch Buffer *"
-  "\n# Evaluate S-expression: C-x C-e"))
+(setq initial-scratch-message 
+  (concat
+     "* Scratch Buffer *"
+     "\n# Evaluate S-expression: C-x C-e"
+     (format "\n# DEFT_PATH=%s" (getenv "DEFT_PATH"))
+     (format "\n# ORG_AGENDA_PATH=%s"  (getenv "ORG_AGENDA_PATH"))
+     (format "\n# ORG_JOURNAL_PATH=%s" (getenv "ORG_JOURNAL_PATH"))
+  ))
 #+end_src 
 * Document preparation
 ** Markdown mode
@@ -130,13 +152,18 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 
   #+begin_src emacs-lisp
+  ;; if DEFT_PATH is not defined, use a default path
+  (defun get_deft_path ()
+    (let ((deft_path (getenv "DEFT_PATH")))
+      (if deft_path deft_path "~/.deft")))
+
   (use-package deft
       :ensure t
       :bind (("<f8>" . deft))
       :commands (deft)
       :config
       (setq deft-extensions '("txt" "tex" "md" "org")
-            deft-directory "~/.deft"
+            deft-directory (get_deft_path)
 	      deft-default-extension "org"
 	      deft-recursive t
 	      deft-use-filter-string-for-filename nil
@@ -196,7 +223,13 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
   #+begin_src emacs-lisp
-  (setq org-agenda-files '("~/.deft"))
+  ;; if ORG_PATH is not defined, use the default DEFT path
+  (defun get_agenda_path ()
+    (let ((org_agenda_path (getenv "ORG_AGENDA_PATH")))
+      (if org_agenda_path org_agenda_path "~/.deft")))
+
+  ;;(setq org-agenda-files '("~/.deft"))
+  (setq org-agenda-files (list (get_agenda_path)))
   #+end_src
 
 This defines my todo workflow
@@ -255,10 +288,15 @@ Based on [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-m
 I use org mode to keep a work journal. Note that the journal files are kept under .deft.
 
   #+begin_src emacs-lisp
+  ;; if ORG_JOURNAL_PATH is not defined, use a default setting
+  (defun get_org_journal_path ()
+    (let ((org_journal_path (getenv "ORG_JOURNAL_PATH")))
+      (if org_journal_path org_journal_path "~/.deft/journal")))
+
   (use-package org-journal
         :ensure t
         :custom
-            (org-journal-dir "~/.deft/journal/")
+            (org-journal-dir (get_org_journal_path))
             (org-journal-file-format "%Y-%m-%d.org"))
   #+end_src
     
