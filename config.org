@@ -479,4 +479,5 @@ fi
 - [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
 - [[https://tuhdo.github.io/emacs-tutor2.html][Emacs Mini Manual (PART 2) - LISP PRIMER]]
 - [[https://tuhdo.github.io/emacs-tutor3.html][Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS]]
+- [[http://ergoemacs.org/emacs/elisp_basics.html][Emacs LISP basics]]
 
