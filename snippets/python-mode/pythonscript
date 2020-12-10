@@ -2,7 +2,7 @@
 # name: pythonscript
 # key: <pythonscript
 # --
-#!/usr/bin/python
+#!/usr/bin/env python
 
 import argparse
 
