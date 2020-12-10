@@ -10,6 +10,7 @@ print(zz.group('file'))
 #+end_src
 
 * argument parser
+
 #+start_src python
 import argparse
 parser = argparse.ArgumentParser(description="bla bla",
@@ -25,3 +26,10 @@ print(args.source)
 
 
 
+
+* CSV
+import csv
+with open(root_dir + new_dir + 'train/training_set.csv', 'w') as training_set_file:
+    csv_writer = csv.writer(training_set_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
+    for row in table:
+        csv_writer.writerow(row)
