@@ -376,7 +376,11 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 (use-package dockerfile-mode
  :ensure t)
 #+end_src
-
+** Go
+#+begin_src emacs-lisp
+(use-package go-mode
+ :ensure t)
+#+end_src
 * Shell commands, client/server
 ** Shell commands for running emacs without the daemon
 I used the shell command =emacs= to evoke the non-client/server emacs in GUI mode. Similarly, =emacsnw= runs emacs in the terminal. These two commands are defined in =.zshrc=.
