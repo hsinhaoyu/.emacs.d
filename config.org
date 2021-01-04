@@ -1,24 +1,25 @@
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
+#+STARTUP: overview
 
 This is my Emacs configuration file, in literate programming style (based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]]).
 
 * Package management
 ** Use [[https://melpa.org/#/][MELPA]] for package archive
 
-    #+begin_src emacs-lisp
-    (package-initialize)
-    (add-to-list 'package-archives
-	         '("melpa" . "http://melpa.org/packages/"))
-    #+end_src
+#+begin_src emacs-lisp
+(package-initialize)
+  (add-to-list 'package-archives
+      '("melpa-stable" . "http://stable.melpa.org/packages/"))
+#+end_src
 
 ** Make sure that ~use-package~ is loaded
 
-    #+begin_src emacs-lisp
-    (when (not (package-installed-p 'use-package))
+#+begin_src emacs-lisp
+(when (not (package-installed-p 'use-package))
     (package-refresh-contents)
     (package-install 'use-package))
-    #+end_src
+#+end_src
     
 * Basic UX settings
 ** Move custom files outside ~init.el~
@@ -28,24 +29,22 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 (setq custom-file "~/.emacs.d/custom-file.el")
 (load-file custom-file)
 #+end_src
-
+** Debugging
+#+begin_src emacs-lisp
+;;(toggle-debug-on-error)
+#+end_src
 ** General settings
-
-    #+begin_src emacs-lisp
-    (setq inhibit-startup-message t)
-    (setq column-number-mode t)
-    #+end_src
-
+#+begin_src emacs-lisp
+(setq inhibit-startup-message t)
+(setq column-number-mode t)
+#+end_src
 ** Theme
-
 #+begin_src emacs-lisp
 (use-package monokai-theme
     :ensure t)
 (load-theme 'monokai t)
 #+end_src
-    
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
-
   #+begin_src emacs-lisp
   (use-package smex
       :ensure t
@@ -56,18 +55,14 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
       :bind 
           ("M-x" . smex))
   #+end_src
-
 ** [[https://company-mode.github.io][company]] mode for completion 
-
   #+begin_src emacs-lisp
   (use-package company
       :config
           (setq company-idle-delay 0.3)
           (global-company-mode t))
   #+end_src
-
 ** [[https://github.com/DarwinAwardWinner/ido-completing-read-plus][ido]]: Display possible completions at all places
-
   #+begin_src emacs-lisp
   (use-package ido-completing-read+
       :ensure t
@@ -88,7 +83,6 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 (global-set-key (kbd "C-x C-b") 'ibuffer)
 #+end_src
 ** Text wrapping
-
 Turn on [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Visual-Line-Mode.html][visual-line-mode]] for text and org files. This wraps words by word boundaries.
 
 #+begin_src emacs-lisp
@@ -99,7 +93,7 @@ Turn on [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Visual-Line-
 Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scroll bar, just to make the margin of the window more visible.
 #+begin_src emacs-lisp
 (tool-bar-mode -1)
-;; (toggle-scroll-bar -1)
+(toggle-scroll-bar -1)
 #+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
@@ -133,7 +127,6 @@ The scratch buffer is a convenient place to display cheat sheets.
 * Document preparation
 ** Markdown mode
 Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ files. A ~marked~ script has to be created, so that markdown files can be viewed with Marked 2 on macOS (see [[https://leanpub.com/markdown-mode/read][this document]]).
-
 
   #+begin_src emacs-lisp
   (use-package markdown-mode
@@ -219,7 +212,7 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
   (setq-default org-display-custom-times t)
   (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
   #+end_src
-
+  
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
   #+begin_src emacs-lisp
@@ -288,16 +281,17 @@ Based on [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-m
 I use org mode to keep a work journal. Note that the journal files are kept under .deft.
 
   #+begin_src emacs-lisp
-  ;; if ORG_JOURNAL_PATH is not defined, use a default setting
-  (defun get_org_journal_path ()
-    (let ((org_journal_path (getenv "ORG_JOURNAL_PATH")))
-      (if org_journal_path org_journal_path "~/.deft/journal")))
+    ;; if ORG_JOURNAL_PATH is not defined, use a default setting
+    (defun get_org_journal_path ()
+      (let ((org_journal_path (getenv "ORG_JOURNAL_PATH")))
+        (if org_journal_path org_journal_path "~/.deft/journal")))
 
-  (use-package org-journal
-        :ensure t
-        :custom
-            (org-journal-dir (get_org_journal_path))
-            (org-journal-file-format "%Y-%m-%d.org"))
+
+    ;;(use-package org-journal
+    ;;      :ensure t
+    ;;      :custom
+    ;;          (org-journal-dir (get_org_journal_path))
+    ;;          (org-journal-file-format "%Y-%m-%d.org"))
   #+end_src
     
 I don't actually use these functions (stolen from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]]), but they should be very useful.
@@ -313,7 +307,7 @@ I don't actually use these functions (stolen from [[https://blog.thomasheartman.
       (interactive)
       (find-file (get-journal-file-today)))
   #+end_src
-
+  
 ** Org capture
 Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
 The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
@@ -347,7 +341,21 @@ The syntax of the template is explained in the documentation for the variable ~o
 (use-package htmlize
     :ensure t)
 #+end_src
+* Roam
+#+begin_src emacs-lisp
+  (use-package org-roam
+     :ensure t)
+  (setq org-roam-directory "/Users/hhyu/Documents/emacs_docs/org-roam")
+  (add-hook 'after-init-hook 'org-roam-mode)
+  (setq org-roam-dailies-directory "daily/")
+  (setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         #'org-roam-capture--get-point
+         "* %?"
+         :file-name "daily/%<%Y-%m-%d>"
+         :head "#+title: %<%Y-%m-%d>\n\n")))
 
+#+end_src
 * Programming
 ** Git integration with [[https://magit.vc][Magit]]
   #+begin_src emacs-lisp
