@@ -379,6 +379,15 @@ This doesn't seem to work
 #+begin_src emacs-lisp
 (setq org-roam-dailies-directory "daily/")
 #+end_src
+
+#+begin_src emacs-lisp
+(setq org-roam-dailies-capture-templates
+      '(("d" "default" entry
+         #'org-roam-capture--get-point
+         "* %?"
+         :file-name "daily/%<%Y-%m-%d>"
+         :head "#+title: Journal %<%Y-%m-%d>\n\n")))
+#+end_src
 * Roam capture
 #+begin_src emacs-lisp
     (setq org-roam-capture-templates
