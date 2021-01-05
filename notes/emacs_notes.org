@@ -1,4 +1,5 @@
-Emacs notes
+#+TITLE: Emacs notes
+#+STARTUP: overview
 
 * Resources
 Use C-c C-o to open links
@@ -46,6 +47,7 @@ Use C-c C-o to open links
 | C-c C-q | quit                          |
 | C-c C-n | create new file               |
 | C-c C-m | create new file with filename |
+| C-c C-g | refresh                       |
 
 * ORG 
 ** Tutorials and resources
@@ -90,12 +92,11 @@ Use C-c C-x C-A to archive to the end of the file
 ** Table
 
 | key     | function                  |
-|---------|---------------------------|
+|---------+---------------------------|
 | Tab     | move to the next cell     |
 | S-Table | move to the previous cell |
 
-** Agenda                                                              
-
+** Agenda
 - [[https://blog.aaronbieber.com/2016/09/25/agenda-interactions-primer.html][useful tutorial]]
 
 | key | function             |
@@ -125,9 +126,9 @@ Use C-c C-x C-A to archive to the end of the file
 | C-c l   | org-store-link  |
 | C-c C-l | org-insert-link |
 ** Code block
-| key | function        |
-|-----+-----------------|
-| C-' | edit code block |
+| key   | function        |
+|-------+-----------------|
+| C-c ' | edit code block |
 
 * Journal
 | keys        | function           |

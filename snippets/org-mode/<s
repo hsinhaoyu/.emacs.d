@@ -2,5 +2,5 @@
 # name: <s
 # key: <s
 # --
-#+begin_src
+#+begin_src emacs-lisp
 #+end_src

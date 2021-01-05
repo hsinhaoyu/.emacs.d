@@ -172,26 +172,26 @@ I use Org mode for my todos, note taking, and journaling.
 ** Basics
 Some basic UX settings
   #+begin_src emacs-lisp
-  ;; spellcheck all org documents
-  (add-hook 'org-mode-hook 'flyspell-mode)
+    ;; spellcheck all org documents
+    (add-hook 'org-mode-hook 'flyspell-mode)
 
-  ;; useful key bindings 
-  ;; Insert link. Rather than asking for a label, use "journal entry"
-  (defun hh-org-insert-link ()
-     (interactive)
-     (org-insert-link nil nil "Journal Entry"))
+    ;; useful key bindings 
+    ;; Insert link. Rather than asking for a label, use "journal entry"
+    (defun hh-org-insert-link ()
+       (interactive)
+       (org-insert-link nil nil "Journal Entry"))
 
-  (add-hook 'org-mode-hook
-    (lambda ()
-        (define-key org-mode-map (kbd "C-c a") 'org-agenda)
-        (define-key org-mode-map (kbd "C-c l") 'org-store-link)
-        (define-key org-mode-map (kbd "C-c jl") 'hh-org-insert-link)))
+    (add-hook 'org-mode-hook
+      (lambda ()
+          (define-key org-mode-map (kbd "C-c a") 'org-agenda)
+          (define-key org-mode-map (kbd "C-c l") 'org-store-link)
+          (define-key org-mode-map (kbd "C-c jl") 'hh-org-insert-link)))
 
-  ;; used identation to indicate the hierarchy of headings, rather than stars
-  (setq org-startup-indented t)
+    ;; used identation to indicate the hierarchy of headings, rather than stars
+    (setq org-startup-indented t)
 
-  ;; wrap around
-  (setq org-startup-truncated nil)
+    ;; wrap around
+    (setq org-startup-truncated nil)
   #+end_src
 
 Use bullets rather than stars
@@ -308,53 +308,88 @@ I don't actually use these functions (stolen from [[https://blog.thomasheartman.
       (find-file (get-journal-file-today)))
   #+end_src
   
-** Org capture
-Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
-The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
-
-  #+begin_src emacs-lisp
-  (defun org-journal-find-location ()
-      ;; Open today's journal, but specify a non-nil prefix argument in order to
-      ;; inhibit inserting the heading; org-capture will insert the heading.
-      (org-journal-new-entry t)
-      (org-narrow-to-subtree))
-
-  (setq org-capture-templates
-     '(("t" "TODO inbox"
-	       entry
-           (file "~/.deft/capture-todo.org")
-           "* TODO %?
-              SCHEDULED: %t")
-       ("n" "notes inbox"
-	       entry
-           (file "~/.deft/capture-notes.org")
-           "* %T\n%i%?")
-	   ("j" "Journal entry"
-	       plain
-	       (function org-journal-find-location)
-           "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
-	       :jump-to-captured t
-	       :immediate-finish t)))
-  #+end_src
 ** Preview
 #+begin_src emacs-lisp
 (use-package htmlize
     :ensure t)
 #+end_src
+* Org capture
+Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
+The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
+
+Some preliminary settings
+#+begin_src emacs-lisp :noweb yes
+  (defun org-journal-find-location ()
+    ;; Open today's journal, but specify a non-nil prefix argument in order to
+    ;; inhibit inserting the heading; org-capture will insert the heading.
+    (org-journal-new-entry t)
+    (org-narrow-to-subtree))
+
+  (setq org-capture-templates
+      '(
+        <<ORG_CAPTURE>>
+       )
+  )
+#+end_src
+
+Capture ad hoc todos in a special file
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
+("t" "TODO inbox"
+     entry
+     (file "~/.deft/capture-todo.org")
+     "* TODO %?
+        SCHEDULED: %t")
+#+end_src
+
+Capture ad hoc notes in a special file
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
+("n" "notes inbox"
+     entry
+     (file "~/.deft/capture-notes.org")
+     "* %T\n%i%?")
+#+end_src
+
+Capture org journal
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
+("j" "Journal entry"
+     plain
+     (function org-journal-find-location)
+     "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
+     :jump-to-captured t
+     :immediate-finish t)
+#+end_src
 * Roam
+** Basic
 Use the deft directory for Roam.
 #+begin_src emacs-lisp
   (use-package org-roam
      :ensure t)
   (setq org-roam-directory (get_deft_path))
   (add-hook 'after-init-hook 'org-roam-mode)
-  (setq org-roam-dailies-directory "daily/")
-  (setq org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         #'org-roam-capture--get-point
-         "* %?"
-         :file-name "daily/%<%Y-%m-%d>"
-         :head "#+title: %<%Y-%m-%d>\n\n")))
+#+end_src
+** Completion
+This doesn't seem to work
+#+begin_src emacs-lisp
+(use-package company-org-roam
+ :ensure t
+ :config
+  (push 'company-org-roam company-backends))
+#+end_src
+** Daily notes
+#+begin_src emacs-lisp
+(setq org-roam-dailies-directory "daily/")
+#+end_src
+* Roam capture
+#+begin_src emacs-lisp
+    (setq org-roam-capture-templates
+      '(("d" "default"
+              entry
+              (function org-roam--capture-get-point)
+              "%?"
+              :file-name "%<%Y%m%d%H%M%S>-${slug}"
+              :head "#+title: ${title}\n"
+              :unnarrowed t)
+       ))
 #+end_src
 * Programming
 ** Git integration with [[https://magit.vc][Magit]]
