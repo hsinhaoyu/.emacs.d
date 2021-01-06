@@ -57,10 +57,11 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
   #+end_src
 ** [[https://company-mode.github.io][company]] mode for completion 
   #+begin_src emacs-lisp
-  (use-package company
-      :config
-          (setq company-idle-delay 0.5)
-          (global-company-mode t))
+    (use-package company
+        :config
+            (setq company-idle-delay 0.25)
+            (setq completion-ignore-case t)
+            (global-company-mode t))
   #+end_src
 ** [[https://github.com/DarwinAwardWinner/ido-completing-read-plus][ido]]: Display possible completions at all places
   #+begin_src emacs-lisp
@@ -124,8 +125,7 @@ The scratch buffer is a convenient place to display cheat sheets.
      (format "\n# ORG_JOURNAL_PATH=%s" (getenv "ORG_JOURNAL_PATH"))
   ))
 #+end_src 
-* Document preparation
-** Markdown mode
+* Markdown mode
 Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ files. A ~marked~ script has to be created, so that markdown files can be viewed with Marked 2 on macOS (see [[https://leanpub.com/markdown-mode/read][this document]]).
 
   #+begin_src emacs-lisp
@@ -361,6 +361,7 @@ Capture org journal
 * Roam
 ** Basic setup
 I took this from [[https://github.com/org-roam/org-roam][org-roam's GitHub README]].
+About completion, see this [[https://org-roam.discourse.group/t/how-to-to-get-title-of-the-target-note-working-with-inline-autocomplete-in-org-roam/782][discussion]].
 
 Note that I use the deft directory for Roam.
 #+begin_src emacs-lisp
@@ -369,24 +370,14 @@ Note that I use the deft directory for Roam.
       :hook    (after-init . org-roam-mode)
       :custom  (org-roam-directory (get_deft_path))
       :bind (:map org-roam-mode-map
-                  (("C-c n l" . org-roam)
-		       ("C-c n c" . org-roam-capture)
-                   ("C-c n f" . org-roam-find-file)
-                   ("C-c n d" . org-roam-dailies-capture-today)
-                   ("C-c n D" . org-roam-dailies-find-today))
+                  (("C-c r l" . org-roam)
+                   ("C-c r c" . org-roam-capture)
+                   ("C-c r f" . org-roam-find-file)
+                   ("C-c r j" . org-roam-dailies-capture-today)
+                   ("C-c r d" . org-roam-dailies-find-today))
              :map org-mode-map
-                   (("C-c n i" . org-roam-insert)
-                        ("C-c n I" . org-roam-insert-immediate))))
-#+end_src
-** Completion
-This doesn't seem to work
-#+begin_src emacs-lisp
-  (use-package company-org-roam
-   :ensure t
-   :config
-    (push 'company-org-roam company-backends))
-
-  ;;(setq org-roam-completion-everywhere t)
+                  (("C-c r i" . org-roam-insert)
+                   ("C-c r I" . org-roam-insert-immediate))))
 #+end_src
 ** Daily notes
 #+begin_src emacs-lisp

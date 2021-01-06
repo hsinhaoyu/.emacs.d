@@ -130,6 +130,16 @@ Use C-c C-x C-A to archive to the end of the file
 |-------+-----------------|
 | C-c ' | edit code block |
 
+* ORG Roam
+| key     | function                       |
+|---------+--------------------------------|
+| C-c r l | org-roam                       |
+| C-c r c | org-roam-capture               |
+| C-c r f | org-roam-find-file             |
+| C-c r j | org-roam-dailies-capture-today |
+| C-c r d | org-roam-dailies-find-today    |
+| C-c r i | org-roam-insert                |
+| C-c r I | org-roam-insert-immediate      |
 * Journal
 | keys        | function           |
 |-------------+--------------------|
