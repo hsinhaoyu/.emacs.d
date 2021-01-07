@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: org roam header
+# key: <roam_header
+# --
+#+TITLE: XXX
+#+FILETAGS: XXX
+#+ROAM_TAGS: XXX
+#+ROAM_KEY: XXX
+- tags :: XXX
