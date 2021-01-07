@@ -111,8 +111,14 @@ This is supposed to be useful for accessing environment variables on macOS. Disa
   :init
   (when (memq window-system '(mac ns x))
     (exec-path-from-shell-initialize)))
-
 #+END_SRC
+* eLisp programming support
+Load packages to make Emacs programming easier.
+
+[[https://github.com/magnars/s.el][s.el]] is a library for string manipulation:
+#+begin_src emacs-lisp
+(use-package s :ensure t)
+#+end_src
 * Scratch buffer
 The scratch buffer is a convenient place to display cheat sheets.
 #+begin_src emacs-lisp
@@ -140,7 +146,7 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-
+  
 * ~Deft~ for searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 
@@ -240,6 +246,16 @@ This defines my todo workflow
   (setq org-agenda-use-time-grid nil)
   #+end_src
 
+  The `org-agenda-prefix-format` variable is a way to customize how agenda is displayed. Use `C-h v` to see the template syntax. Here, I set up a noweb macro so other parts of this config file can change it.
+
+#+begin_src emacs-lisp :noweb yes
+  (setq org-agenda-prefix-format
+        '(
+          <<AGENDA_PREFIX>>
+          )
+  )
+#+end_src
+
 ** Customized agenda commands
 Based on [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-mode.html][this article]].
 
@@ -278,7 +294,7 @@ Based on [[https://blog.aaronbieber.com/2016/09/24/an-agenda-for-life-with-org-m
   #+end_src
 
 ** Org Journal
-I use org mode to keep a work journal. Note that the journal files are kept under .deft.
+org-journal is a system for writing journals based on org. I have replaced it with org-roam's "dailies". So this section has become obsolete.
 
   #+begin_src emacs-lisp
     ;; if ORG_JOURNAL_PATH is not defined, use a default setting
@@ -313,7 +329,7 @@ I don't actually use these functions (stolen from [[https://blog.thomasheartman.
 (use-package htmlize
     :ensure t)
 #+end_src
-* Org capture
+** Org capture
 Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
 The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
 
@@ -359,6 +375,7 @@ Capture org journal
      :immediate-finish t)
 #+end_src
 * Roam
+Instead of using Roam directly, I use [[https://www.orgroam.com][org-roam]], which makes it easier to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
 ** Basic setup
 I took this from [[https://github.com/org-roam/org-roam][org-roam's GitHub README]].
 About completion, see this [[https://org-roam.discourse.group/t/how-to-to-get-title-of-the-target-note-working-with-inline-autocomplete-in-org-roam/782][discussion]].
@@ -378,6 +395,40 @@ Note that I use the deft directory for Roam.
              :map org-mode-map
                   (("C-c r i" . org-roam-insert)
                    ("C-c r I" . org-roam-insert-immediate))))
+#+end_src
+** Interaction with org-agenda
+I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html][this article]], to simplify how TODOs are displayed in org-agenda. To make it work, set the category of a heading with
+
+#+begin_src
+:PROPERTIES:
+:CATEGORY: XXX
+:END:
+#+end_src
+
+Here, we set up templates controlling how items are displayed in agenda. Note that AGENDA_PREFIX is a macro defined earlier.
+#+begin_src emacs-lisp :tangle no :noweb-ref AGENDA_PREFIX
+  (agenda . " %i %-12:(+org-entry-category)%?-12t% s")
+  (todo   . " %i %-12:(+org-entry-category)")
+  (tags   . " %i %-12:(+org-entry-category)")
+  (search . " %i %-12:(+org-entry-category)")
+#+end_src
+
+Some helper code:
+#+begin_src emacs-lisp
+  (defun +org-entry-category ()
+    "Get catgory of item at point. Supports org-roam filenames by chopping prefix cookie"
+    (+string-chop-prefix-regexp
+     "^[0-9]+\\-"
+     (or (org-entry-get nil "CATEGORY")
+         (if buffer-name
+             (file-name-sans-extension
+              (file-name-nondirectory buffer-file-name))
+           ""))))
+
+  ;; requires s.el
+  (defun +string-chop-prefix-regexp (prefix s)
+    "Remove PREFIX regexp if it at the start of s"
+    (s-chop-prefix (car (s-match prefix s)) s))
 #+end_src
 ** Daily notes
 #+begin_src emacs-lisp
@@ -521,15 +572,19 @@ fi
 #+end_src
 * Interactive functions for personal use
   #+begin_src emacs-lisp
-  (defun hhyu-init ()
+    (defun hhyu-init ()
+        (interactive)
+        (find-file "~/.emacs.d/config.org"))
+    (defun hhyu-cheatsheet ()
+        (interactive)
+        (dired "~/.emacs.d/notes"))
+    (defun hhyu-wide ()
+        (interactive)
+        (set-frame-width (selected-frame) 200))
+    (defun emacs-cheatshee ()
       (interactive)
-      (find-file "~/.emacs.d/config.org"))
-  (defun hhyu-cheatsheet ()
-      (interactive)
-      (dired "~/.emacs.d/notes"))
-  (defun hhyu-wide ()
-      (interactive)
-      (set-frame-width (selected-frame) 200))
+      (find-file "~/.emacs.d/notes/emacs_notes.org"))
+  
   #+end_src
 
 * References

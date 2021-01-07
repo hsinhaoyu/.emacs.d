@@ -1,2 +1,10 @@
 *~
 config.el
+ido.last
+org-roam.db
+recentf
+bookmarks
+.org-id-locations
+transient/
+diary
+elpa/

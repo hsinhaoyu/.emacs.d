@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: regexp
+# key: <regexp
+# --
+import re
+
+regexp = "(?P<num>[0-9]*)[a-z]*"
+zz = re.search(regexp, "123abc")
+print(zz.group('num'))

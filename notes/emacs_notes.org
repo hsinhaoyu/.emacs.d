@@ -48,6 +48,8 @@ Use C-c C-o to open links
 | C-c C-n | create new file               |
 | C-c C-m | create new file with filename |
 | C-c C-g | refresh                       |
+| C-c C-d | delete file                   |
+| C-c C-r | rename file                   |
 
 * ORG 
 ** Tutorials and resources
@@ -140,6 +142,23 @@ Use C-c C-x C-A to archive to the end of the file
 | C-c r d | org-roam-dailies-find-today    |
 | C-c r i | org-roam-insert                |
 | C-c r I | org-roam-insert-immediate      |
+
+links:
+#+begin_src
+[[roam:title]]           links to org-roam file with title
+[[roam:*headline]]       links to a headline in the current org-roam file
+[[roamm:title*headline]] links to title and headline
+#+end_src
+
+header:
+#+begin_src
+#+TITLE:     XXX
+#+FILETAGS:  XXX
+#+ROAM_TAGS: XXX
+#+ROAM_KEY:  XXX
+- tags ::    XXX
+#+end_src
+
 * Journal
 | keys        | function           |
 |-------------+--------------------|

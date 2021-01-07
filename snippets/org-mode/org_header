@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: header for org mode files
+# key: <orgheader 
+# --
+:PROPERTIES:
+:CATEGORY: XXX
+:END:
+#+TITLE: XXX
