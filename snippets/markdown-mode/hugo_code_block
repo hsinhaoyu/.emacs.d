@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: code block for hugo
+# key: <hugo-codeblock
+# --
+{{< highlight lisp "style=monokailight" >}}
+{{< / highlight >}}
