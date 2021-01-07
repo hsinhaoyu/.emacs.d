@@ -332,6 +332,7 @@ I don't actually use these functions (stolen from [[https://blog.thomasheartman.
 ** Org capture
 Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
 The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
+Since I have moved to org-roam, which has its own capture system, this section is now obsolete.
 
 Some preliminary settings
 #+begin_src emacs-lisp :noweb yes
@@ -407,13 +408,13 @@ I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-man
 
 Here, we set up templates controlling how items are displayed in agenda. Note that AGENDA_PREFIX is a macro defined earlier.
 #+begin_src emacs-lisp :tangle no :noweb-ref AGENDA_PREFIX
-  (agenda . " %i %-12:(+org-entry-category)%?-12t% s")
-  (todo   . " %i %-12:(+org-entry-category)")
-  (tags   . " %i %-12:(+org-entry-category)")
-  (search . " %i %-12:(+org-entry-category)")
+  (agenda . " %i %-20:(+org-entry-category)%?-12t% s")
+  (todo   . " %i %-20:(+org-entry-category)")
+  (tags   . " %i %-20:(+org-entry-category)")
+  (search . " %i %-20:(+org-entry-category)")
 #+end_src
 
-Some helper code:
+Some helper code. If the CATEGORY property is not set, use the file name (but stripped away Roam's prefix).
 #+begin_src emacs-lisp
   (defun +org-entry-category ()
     "Get catgory of item at point. Supports org-roam filenames by chopping prefix cookie"
