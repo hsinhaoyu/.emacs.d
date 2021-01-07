@@ -10,7 +10,7 @@ This is my Emacs configuration file, in literate programming style (based on [[h
 #+begin_src emacs-lisp
 (package-initialize)
   (add-to-list 'package-archives
-      '("melpa-stable" . "http://stable.melpa.org/packages/"))
+      '("melpa" . "http://melpa.org/packages/"))
 #+end_src
 
 ** Make sure that ~use-package~ is loaded
@@ -40,9 +40,10 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 #+end_src
 ** Theme
 #+begin_src emacs-lisp
-(use-package monokai-theme
-    :ensure t)
-(load-theme 'monokai t)
+  ;;(use-package monokai-theme
+  ;;    :ensure t)
+  ;;(load-theme 'monokai t)
+  (load-theme 'one-light t)
 #+end_src
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
   #+begin_src emacs-lisp
