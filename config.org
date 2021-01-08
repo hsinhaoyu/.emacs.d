@@ -1,3 +1,4 @@
+
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 #+STARTUP: overview
@@ -31,7 +32,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 #+end_src
 ** Debugging
 #+begin_src emacs-lisp
-;;(toggle-debug-on-error)
+(toggle-debug-on-error)
 #+end_src
 ** General settings
 #+begin_src emacs-lisp
@@ -386,7 +387,7 @@ Note that I use the deft directory for Roam.
 #+begin_src emacs-lisp
   (use-package org-roam
       :ensure t
-      :hook    (after-init . org-roam-mode)
+      :hook    (org-mode . org-roam-mode)
       :custom  (org-roam-directory (get_deft_path))
       :bind (:map org-roam-mode-map
                   (("C-c r l" . org-roam)
@@ -457,7 +458,36 @@ Some helper code. If the CATEGORY property is not set, use the file name (but st
               :unnarrowed t)
        ))
 #+end_src
-* Programming
+* Programming: Python
+
+#begin_src emacs-lisp
+  (use-package anaconda-mode
+      :ensure t
+      :init
+         (add-hook 'python-mode-hook 'anaconda-mode)
+         (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+#+end_src
+
+I use [[https://elpy.readthedocs.io/en/latest/introduction.html][Elpy]] for working with Python code.
+
+Elpy is designed to work with virtual environment managers such as virtualenv or venv. It doesn't seem to work with `conda`. I disabled virtual environment for the moment.
+#begin_src emacs-lisp
+(setq elpy-rpc-virtualenv-path 'current)
+#+end_src
+
+The config code is based on [[https://medium.com/analytics-vidhya/managing-a-python-development-environment-in-emacs-43897fd48c6a][this article]]
+#begin_src emacs-lisp
+  (use-package elpy
+      :ensure t
+      :bind
+      (:map elpy-mode-map
+            ("C-M-n" . elpy-nav-forward-block)
+            ("C-M-p" . elpy-nav-backward-block))
+      :init
+      (elpy-enable))
+#+end_src
+
+* Programming: misc
 ** Git integration with [[https://magit.vc][Magit]]
   #+begin_src emacs-lisp
   (use-package magit
@@ -592,9 +622,5 @@ fi
 * References
 - [[https://github.com/dileban/.emacs.d][Dileban's config]]
 - [[https://github.com/alhassy/emacs.d][Al-hassy's book-length config file]]
-- [[https://www.masteringemacs.org/article/mastering-key-bindings-emacs][Mastering Key Bindings in Emacs by Mickey Petersen]]
-- [[https://tuhdo.github.io/emacs-tutor.html][Emacs Mini Manual (PART 1) - THE BASICS]]
-- [[https://tuhdo.github.io/emacs-tutor2.html][Emacs Mini Manual (PART 2) - LISP PRIMER]]
-- [[https://tuhdo.github.io/emacs-tutor3.html][Emacs Mini Manual (PART 3) - CUSTOMIZING AND EXTENDING EMACS]]
-- [[http://ergoemacs.org/emacs/elisp_basics.html][Emacs LISP basics]]
+
 
