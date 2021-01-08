@@ -188,7 +188,7 @@ in calendar view
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
-
+  
 * Client/server mode
 [[https://www.emacswiki.org/emacs/EmacsAsDaemon][This document]] explains how to start emacs as a daemon on macOS. Seems to be too complicated.
 
@@ -203,6 +203,19 @@ export VISUAL="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 export EDITOR="/Applications/Emacs.app/Contents/MacOS/bin/emacsclient -c"
 #+end_src
 
+* snippets
+** wrap around
+This is an example of a snippet that wraps around selected region. activate the snippet from menu.
+#+begin_src emacs-lisp
+# -*- mode: snippet -*-
+# name: code block for hugo
+# key: <hugo-codeblock
+# expand-env: ((yas-wrap-around-region nil))
+# --
+{{< highlight lisp "style=monokailight" >}}
+`yas-selected-text`
+{{< / highlight >}}
+#+end_src
 * Lisp
 - [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
   
