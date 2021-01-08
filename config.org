@@ -460,31 +460,19 @@ Some helper code. If the CATEGORY property is not set, use the file name (but st
 #+end_src
 * Programming: Python
 
-#begin_src emacs-lisp
-  (use-package anaconda-mode
-      :ensure t
-      :init
-         (add-hook 'python-mode-hook 'anaconda-mode)
-         (add-hook 'python-mode-hook 'anaconda-eldoc-mode))
+I tried [[https://elpy.readthedocs.io/en/latest/][elpy]] and [[https://melpa.org/#/anaconda-mode][annaconda-mode]], but couldn't get them to work. [[http://tkf.github.io/emacs-jedi/latest/][jedi]] seems to do what I need to do.
+
+Jedi doesn't work without `virtualenv`. I installed it, although I am already using conda. This might create problems in the future. I will investigate further.
+
+I installed jedi manually. Following the instruction, I did:
+#+begin_src sh
+  M-x install-package RET company-jedi
+  M-x jedi:install-server
 #+end_src
 
-I use [[https://elpy.readthedocs.io/en/latest/introduction.html][Elpy]] for working with Python code.
-
-Elpy is designed to work with virtual environment managers such as virtualenv or venv. It doesn't seem to work with `conda`. I disabled virtual environment for the moment.
-#begin_src emacs-lisp
-(setq elpy-rpc-virtualenv-path 'current)
-#+end_src
-
-The config code is based on [[https://medium.com/analytics-vidhya/managing-a-python-development-environment-in-emacs-43897fd48c6a][this article]]
-#begin_src emacs-lisp
-  (use-package elpy
-      :ensure t
-      :bind
-      (:map elpy-mode-map
-            ("C-M-n" . elpy-nav-forward-block)
-            ("C-M-p" . elpy-nav-backward-block))
-      :init
-      (elpy-enable))
+#+begin_src emacs-lisp
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
 #+end_src
 
 * Programming: misc

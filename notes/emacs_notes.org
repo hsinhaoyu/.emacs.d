@@ -10,17 +10,36 @@ Use C-c C-o to open links
 - [[https://blog.aaronbieber.com/2015/07/05/a-gentle-introduction-to-emacs-configuration.html][A gentle introduction to Emacs configuration]]
 
 * Movement
-| keys | function                                                |
-|------+---------------------------------------------------------|
-| M-m  | Jump to first non-whitespace character in line in emacs |
+| keys        | function                                                |
+|-------------+---------------------------------------------------------|
+| M-m         | Jump to first non-whitespace character in line in emacs |
+| C-u C-space | jump to previous location                               |
 
-* jumping around
+* Structural editing
+| key   | function                            |
+|-------+-------------------------------------|
+| C-M-f | move forward s-expression           |
+| C-M-b | move backward s-expression          |
+| C-M-d | move down into a list               |
+| C-M-u | move up out of a list               |
+| C-M-n | move forward to the next list       |
+| C-M-p | move backward to previous list      |
+| M-}   | move forward to end of paragraph    |
+| M-{   | move backward to start of paragraph |
+| C-M-a | move to beginning of defun          |
+| C-M-e | move to end of defun                |
+* python mode
+| key     | function                  |
+|---------+---------------------------|
+| C-c >   | python-indent-shift-right |
+| C-c <   | python-indent-shift-left  |
+| C-x TAB | rigid indents             |
+* bookmarks
 | keys    | function         |
 |---------+------------------|
 | C-x r m | set bookmark     |
 | C-x r l | list bookmakrs   |
 | C-x r b | jump to bookmark |
-
 * iTerms2 setting
 - Under Session/Keys, set Left Option Key to ESC
 
