@@ -387,8 +387,8 @@ Note that I use the deft directory for Roam.
 #+begin_src emacs-lisp
   (use-package org-roam
       :ensure t
-      :hook    (org-mode . org-roam-mode)
       :custom  (org-roam-directory (get_deft_path))
+      :hook (org-mode . org-roam-mode)
       :bind (:map org-roam-mode-map
                   (("C-c r l" . org-roam)
                    ("C-c r c" . org-roam-capture)
@@ -397,7 +397,8 @@ Note that I use the deft directory for Roam.
                    ("C-c r d" . org-roam-dailies-find-today))
              :map org-mode-map
                   (("C-c r i" . org-roam-insert)
-                   ("C-c r I" . org-roam-insert-immediate))))
+                   ("C-c r I" . org-roam-insert-immediate)))
+  )
 #+end_src
 ** Interaction with org-agenda
 I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html][this article]], to simplify how TODOs are displayed in org-agenda. To make it work, set the category of a heading with
@@ -473,6 +474,11 @@ I installed jedi manually. Following the instruction, I did:
 #+begin_src emacs-lisp
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
+#+end_src
+
+Roam is a minor mode. It's turned on after loading a .org file, but it's not turned off afterwards. This is a hack to turn it off, if I load a python file. There must be better ways to do this.
+#+begin_src emacs-lisp
+(add-hook 'python-mode-hook (lambda () (org-roam-mode -1)))
 #+end_src
 
 * Programming: misc
