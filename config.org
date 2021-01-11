@@ -466,7 +466,7 @@ Jedi doesn't work without `virtualenv`. I installed it, although I am already us
 
 I installed jedi manually. Following the instruction, I did:
 #+begin_src sh
-  M-x install-package RET company-jedi
+  M-x package-install RET company-jedi
   M-x jedi:install-server
 #+end_src
 
