@@ -32,7 +32,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 #+end_src
 ** Debugging
 #+begin_src emacs-lisp
-(toggle-debug-on-error)
+;;(toggle-debug-on-error)
 #+end_src
 ** General settings
 #+begin_src emacs-lisp
@@ -378,7 +378,7 @@ Capture org journal
      :immediate-finish t)
 #+end_src
 * Roam
-Instead of using Roam directly, I use [[https://www.orgroam.com][org-roam]], which makes it easier to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
+I use [[https://www.orgroam.com][org-roam]] to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
 ** Basic setup
 I took this from [[https://github.com/org-roam/org-roam][org-roam's GitHub README]].
 About completion, see this [[https://org-roam.discourse.group/t/how-to-to-get-title-of-the-target-note-working-with-inline-autocomplete-in-org-roam/782][discussion]].
@@ -389,12 +389,12 @@ Note that I use the deft directory for Roam.
       :ensure t
       :custom  (org-roam-directory (get_deft_path))
       :hook (org-mode . org-roam-mode)
-      :bind (:map org-roam-mode-map
-                  (("C-c r l" . org-roam)
-                   ("C-c r c" . org-roam-capture)
-                   ("C-c r f" . org-roam-find-file)
-                   ("C-c r j" . org-roam-dailies-capture-today)
-                   ("C-c r d" . org-roam-dailies-find-today))
+      :bind (("C-c r c" . org-roam-capture)
+             ("C-c r f" . org-roam-find-file)
+             ("C-c r j" . org-roam-dailies-capture-today)
+             ("C-c r d" . org-roam-dailies-find-today)
+             :map org-roam-mode-map
+                  (("C-c r l" . org-roam))
              :map org-mode-map
                   (("C-c r i" . org-roam-insert)
                    ("C-c r I" . org-roam-insert-immediate)))
@@ -438,26 +438,42 @@ Some helper code. If the CATEGORY property is not set, use the file name (but st
 #+begin_src emacs-lisp
 (setq org-roam-dailies-directory "daily/")
 #+end_src
+** Roam capture templates
+To add an org-roam file, I begin with `org-roam-capture`. We have to define a couple of template.
 
-#+begin_src emacs-lisp
-(setq org-roam-dailies-capture-templates
-      '(("d" "default" entry
-         #'org-roam-capture--get-point
-         "* %?"
-         :file-name "daily/%<%Y-%m-%d>"
-         :head "#+title: Journal %<%Y-%m-%d>\n\n")))
+#+begin_src emacs-lisp :noweb yes
+  (setq org-roam-capture-templates
+     '(
+          <<ORG_ROAM_CAPTURE>>
+       )
+   )
 #+end_src
-* Roam capture
-#+begin_src emacs-lisp
-    (setq org-roam-capture-templates
-      '(("d" "default"
-              entry
-              (function org-roam--capture-get-point)
-              "%?"
-              :file-name "%<%Y%m%d%H%M%S>-${slug}"
-              :head "#+title: ${title}\n"
-              :unnarrowed t)
-       ))
+
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
+  ("d" "default" plain (function org-roam--capture-get-point)
+      "%?"
+     :file-name "%<%Y%m%d%H%M%S>-${slug}"
+     :head "#+title: ${title}\n#+roam_alias:\n#+roam_tags:\n- tags ::\n"
+     :unnarrowed t
+  )
+#+end_src 
+** Roam daily templates
+For org-roam daily entries, we need some templates.
+
+#+begin_src emacs-lisp :noweb yes
+  (setq org-roam-dailies-capture-templates
+      '(
+          <<ORG_ROAM_DAILY_CAPTURE>>
+      )
+  )      
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
+  ("d" "default" entry
+       #'org-roam-capture--get-point
+       "* %?"
+       :file-name "daily/%<%Y-%m-%d>"
+       :head "#+title: Journal %<%Y-%m-%d>\n\n")
 #+end_src
 * Programming: Python
 

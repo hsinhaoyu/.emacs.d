@@ -171,7 +171,9 @@ links:
 
 header:
 #+begin_src
-#+TITLE:     XXX
+#+title: 
+#+roam_alias: "bla"
+#+roam_tags: 
 #+FILETAGS:  XXX
 #+ROAM_TAGS: XXX
 #+ROAM_KEY:  XXX
