@@ -151,7 +151,7 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
   
 * ~Deft~ for searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
-
+** Basic setup
   #+begin_src emacs-lisp
   ;; if DEFT_PATH is not defined, use a default path
   (defun get_deft_path ()
@@ -174,7 +174,22 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
                                      (nospace . "-")
 				       (case-fn . downcase))))
   #+end_src
+** Customized summary
+  By default, the summary of each file ignores uppercase markups such as `#+AUTHOR:`. I want it to ignore lowercase ones too.
 
+  #+begin_src emacs-lisp :noweb yes
+  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\)")
+  #+end_src
+
+  This matches things like #+title: or #+TITLE:
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX1
+  ^#\\+[[:alpha:]_]+:.*$
+  #+end_src
+
+  This matches my convention "- tags ::"
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX2
+  ^- tags ::.*$
+  #+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
 ** Basics

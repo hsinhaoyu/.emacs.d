@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: add category
+# key: <category
+# --
+:PROPERTIES:
+:CATEGORY: XXX
+:END:
