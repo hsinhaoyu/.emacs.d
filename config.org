@@ -44,7 +44,14 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
   ;;(use-package monokai-theme
   ;;    :ensure t)
   ;;(load-theme 'monokai t)
-  (load-theme 'one-light t)
+  ;;(load-theme 'one-light t)
+
+  ;; use variable-pitch fonts for some headings and titles
+  (setq zenburn-use-variable-pitch t)
+
+  ;; scale headings in org-mode
+  (setq zenburn-scale-org-headlines t)
+  (use-package zenburn-theme :ensure t)
 #+end_src
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
   #+begin_src emacs-lisp
