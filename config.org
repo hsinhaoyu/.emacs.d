@@ -479,7 +479,7 @@ Notes from classes
   ("c" "class notes" plain (function org-roam--capture-get-point)
       "%?"
      :file-name "%<%Y%m%d%H%M%S>-${slug}"
-     :head "#+title: Class Notes: ${title}\n#+roam_alias:\n#+roam_tags:\ntags :: [[roam:education]]\n"
+     :head "#+title: Class Notes: ${title}\n#+roam_alias:\n#+roam_tags: education\ntags :: [[roam:education]]\n"
      :unnarrowed t
   )
 #+end_src
