@@ -156,7 +156,7 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
              (gfm-mode . flyspell-mode)))
   #+end_src
   
-* ~Deft~ for searching documents 
+* Deft: For searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 ** Basic setup
   #+begin_src emacs-lisp
@@ -183,19 +183,10 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
   #+end_src
 ** Customized summary
   By default, the summary of each file ignores uppercase markups such as `#+AUTHOR:`. I want it to ignore lowercase ones too.
+  The `RX1`, `RX2`, `RX3` templates are defined in the Org-roam/Deft support section.
 
   #+begin_src emacs-lisp :noweb yes
-  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\)")
-  #+end_src
-
-  This matches things like #+title: or #+TITLE:
-  #+begin_src emacs-lisp :tangle no :noweb-ref RX1
-  ^#\\+[[:alpha:]_]+:.*$
-  #+end_src
-
-  This matches my convention "- tags ::"
-  #+begin_src emacs-lisp :tangle no :noweb-ref RX2
-  ^- tags ::.*$
+  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")
   #+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
@@ -412,8 +403,10 @@ Note that I use the deft directory for Roam.
       :custom  (org-roam-directory (get_deft_path))
       :hook (org-mode . org-roam-mode)
       :bind (("C-c r c" . org-roam-capture)
+	         ("<f10>"   . org-roam-capture)
              ("C-c r f" . org-roam-find-file)
              ("C-c r j" . org-roam-dailies-capture-today)
+             ("<f9>"    . org-roam-dailies-capture-today)
              ("C-c r d" . org-roam-dailies-find-today)
              :map org-roam-mode-map
                   (("C-c r l" . org-roam))
@@ -490,7 +483,23 @@ Notes from classes
      :unnarrowed t
   )
 #+end_src
+** Deft support
+When Deft is used to display org-roam documents, RX1, RX2 and RX3 are lines that should not be displayed in file summary.
 
+This matches things like #+title: or #+TITLE:
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX1
+  ^#\\+[[:alpha:]_]+:.*$
+  #+end_src
+
+  This matches my convention "- tags ::". 
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX2
+  ^- tags ::.*$
+  #+end_src
+
+  In addition to "- tags ::", I also use "tags ::"
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX3
+  ^tags ::.*$
+  #+end_src
 ** Roam daily templates
 For org-roam daily entries, we need some templates.
 
@@ -505,9 +514,17 @@ For org-roam daily entries, we need some templates.
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("d" "default" entry
        #'org-roam-capture--get-point
-       "* %?"
+       "*** %(format-time-string \"%H:%M\")\n%?"
        :file-name "daily/%<%Y-%m-%d>"
-       :head "#+title: Journal %<%Y-%m-%d>\n\n")
+       :head "#+title: Journal %<%Y-%m-%d>\n#+roam_tags: Daily\n\n")
+#+end_src
+
+#+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
+  ("m" "meeting" entry
+       #'org-roam-capture--get-point
+       "*** %(format-time-string \"%H:%M\") [[roam:meeting]]\n%?"
+       :file-name "daily/%<%Y-%m-%d>"
+       :head "#+title: Journal %<%Y-%m-%d>\n#+roam_tags: Daily\n\n")
 #+end_src
 * Programming: Python
 
