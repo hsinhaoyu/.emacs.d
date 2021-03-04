@@ -32,7 +32,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 #+end_src
 ** Debugging
 #+begin_src emacs-lisp
-;;(toggle-debug-on-error)
+(toggle-debug-on-error)
 #+end_src
 ** General settings
 #+begin_src emacs-lisp
@@ -182,8 +182,9 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
 				       (case-fn . downcase))))
   #+end_src
 ** Customized summary
-  By default, the summary of each file ignores uppercase markups such as `#+AUTHOR:`. I want it to ignore lowercase ones too.
-  The `RX1`, `RX2`, `RX3` templates are defined in the Org-roam/Deft support section.
+
+  TODO: A hack
+  The RX1, RX2, RX3 patterns are defined in the Org-roam/Deft support section.
 
   #+begin_src emacs-lisp :noweb yes
   (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")
@@ -435,12 +436,6 @@ Note that I use the deft directory for Roam.
 ** Interaction with org-agenda
 I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html][this article]], to simplify how TODOs are displayed in org-agenda. To make it work, set the category of a heading with
 
-#+begin_src
-:PROPERTIES:
-:CATEGORY: XXX
-:END:
-#+end_src
-
 Here, we set up templates controlling how items are displayed in agenda. Note that AGENDA_PREFIX is a macro defined earlier.
 #+begin_src emacs-lisp :tangle no :noweb-ref AGENDA_PREFIX
   (agenda . " %i %-20:(+org-entry-category)%?-12t% s")
@@ -501,8 +496,9 @@ Notes from classes
   )
 #+end_src
 ** Deft support
-When Deft is used to display org-roam documents, RX1, RX2 and RX3 are lines that should not be displayed in file summary.
+When Deft is used to display org-roam documents, DEFT_SUMMARY define lines that should not be displayed in file summary. Note that "\\|" is the "or" pattern in regular expression .
 
+By default, the summary of each file ignores uppercase markups such as `#+AUTHOR:`. I want it to ignore lowercase ones too.
 This matches things like #+title: or #+TITLE:
   #+begin_src emacs-lisp :tangle no :noweb-ref RX1
   ^#\\+[[:alpha:]_]+:.*$
