@@ -1,3 +1,8 @@
+* tasks
+** the size of a directory:
+du -sh <dir name>
+-s: don't list size of subdirectories
+-h: report size in human readable format
 * zsh osx plugin
 | key        | function                            |
 |------------+-------------------------------------|
