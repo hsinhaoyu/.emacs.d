@@ -187,7 +187,7 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
   The filter patterns RX1, RX2 and RX3 are defined in the Org-roam/Deft support section.
 
   #+begin_src emacs-lisp :noweb yes
-  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")c
+  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")
   #+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
