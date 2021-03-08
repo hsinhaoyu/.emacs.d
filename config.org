@@ -32,7 +32,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 #+end_src
 ** Debugging
 #+begin_src emacs-lisp
-(toggle-debug-on-error)
+;;(toggle-debug-on-error)
 #+end_src
 ** General settings
 #+begin_src emacs-lisp
@@ -183,11 +183,11 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
   #+end_src
 ** Customized summary
 
-  TODO: A hack
-  The RX1, RX2, RX3 patterns are defined in the Org-roam/Deft support section.
+  Filter out headers of org files in Deft's summary display.
+  The filter patterns RX1, RX2 and RX3 are defined in the Org-roam/Deft support section.
 
   #+begin_src emacs-lisp :noweb yes
-  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")
+  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")c
   #+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
@@ -496,7 +496,7 @@ Notes from classes
   )
 #+end_src
 ** Deft support
-When Deft is used to display org-roam documents, DEFT_SUMMARY define lines that should not be displayed in file summary. Note that "\\|" is the "or" pattern in regular expression .
+Here we define some patterns that should be stripped away in Deft's display. 
 
 By default, the summary of each file ignores uppercase markups such as `#+AUTHOR:`. I want it to ignore lowercase ones too.
 This matches things like #+title: or #+TITLE:
