@@ -237,14 +237,19 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
   
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
+Since I save all Roam dailies under the /daily directory under the deft directory, I also included that directory.
+I thought that org-agenda-files is by default recursive, but if I didn't include the daily subdirectory, agenda doesn't see TODO's in dailies.
   #+begin_src emacs-lisp
-  ;; if ORG_PATH is not defined, use the default DEFT path
-  (defun get_agenda_path ()
-    (let ((org_agenda_path (getenv "ORG_AGENDA_PATH")))
-      (if org_agenda_path org_agenda_path "~/.deft")))
+    ;; if ORG_PATH is not defined, use the default DEFT path
+    (defun get_agenda_path ()
+      (let ((org_agenda_path (getenv "ORG_AGENDA_PATH")))
+        (if org_agenda_path org_agenda_path "~/.deft")))
 
-  ;;(setq org-agenda-files '("~/.deft"))
-  (setq org-agenda-files (list (get_agenda_path)))
+    ;;(setq org-agenda-files '("~/.deft"))
+    (setq org-agenda-files
+          (list (get_agenda_path)
+                (concat (get_agenda_path) "/daily")))
+      
   #+end_src
 
 This defines my todo workflow
