@@ -234,7 +234,21 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
   (setq-default org-display-custom-times t)
   (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
   #+end_src
-  
+
+** Code blocks
+By default, only lisp code blocks can be evaluated. Other languages have to be enabled.
+[[https://jherrlin.github.io/posts/emacs-orgmode-source-code-blocks/][This]] is a useful tutorial about org-mode code blocks.
+#+begin_src emacs-lisp
+  ;; Do not ask for confirmation when evaluation a block
+  (setq org-confirm-babel-evaluate nil)
+
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((emacs-lisp . t)
+     (shell . t)
+     (sed . t)
+     (awk . t)))
+#+end_src
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
 Since I save all Roam dailies under the /daily directory under the deft directory, I also included that directory.
