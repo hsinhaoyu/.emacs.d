@@ -247,7 +247,8 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
    '((emacs-lisp . t)
      (shell . t)
      (sed . t)
-     (awk . t)))
+     (awk . t)
+     (python . t)))
 #+end_src
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
