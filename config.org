@@ -248,7 +248,8 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
      (shell . t)
      (sed . t)
      (awk . t)
-     (python . t)))
+     (python . t)
+     (R . t)))
 #+end_src
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
@@ -581,6 +582,13 @@ Roam is a minor mode. It's turned on after loading a .org file, but it's not tur
 (add-hook 'python-mode-hook (lambda () (org-roam-mode -1)))
 #+end_src
 
+* Programming: R
+This [[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-R.html][document]] explains how to use R code blocks. The ESS (Emacs Speaks Statistics) package is needed.
+#+begin_src emacs-lisp
+  (use-package ess
+    :ensure t
+    :init (require 'ess-site))
+#+end_src
 * Programming: misc
 ** Git integration with [[https://magit.vc][Magit]]
   #+begin_src emacs-lisp
@@ -613,6 +621,12 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 #+begin_src emacs-lisp
 (use-package go-mode
  :ensure t)
+#+end_src
+** Common LISP
+For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
+#+begin_src emacs-lisp
+(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(setq inferior-lisp-program "sbcl")
 #+end_src
 * Shell commands, client/server
 ** Shell commands for running emacs without the daemon
