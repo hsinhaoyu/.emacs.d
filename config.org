@@ -437,22 +437,23 @@ About completion, see this [[https://org-roam.discourse.group/t/how-to-to-get-ti
 
 Note that I use the deft directory for Roam.
 #+begin_src emacs-lisp
-  (use-package org-roam
-      :ensure t
-      :custom  (org-roam-directory (get_deft_path))
-      :hook (org-mode . org-roam-mode)
-      :bind (("C-c r c" . org-roam-capture)
-	         ("<f10>"   . org-roam-capture)
-             ("C-c r f" . org-roam-find-file)
-             ("C-c r j" . org-roam-dailies-capture-today)
-             ("<f9>"    . org-roam-dailies-capture-today)
-             ("C-c r d" . org-roam-dailies-find-today)
-             :map org-roam-mode-map
-                  (("C-c r l" . org-roam))
-             :map org-mode-map
-                  (("C-c r i" . org-roam-insert)
-                   ("C-c r I" . org-roam-insert-immediate)))
-  )
+    (use-package org-roam
+	:ensure t
+	:custom  (org-roam-directory (get_deft_path))
+	:hook (org-mode . org-roam-setup)
+	:bind (("C-c r c" . org-roam-capture)
+	       ("<f10>"   . org-roam-capture)
+	       ("C-c r f" . org-roam-find-file)
+	       ("C-c r j" . org-roam-dailies-capture-today)
+	       ("<f9>"    . org-roam-dailies-capture-today)
+	       ("C-c r d" . org-roam-dailies-find-today)
+	       :map org-roam-mode-map
+		    (("C-c r l" . org-roam))
+	       :map org-mode-map
+		    (("C-c r i" . org-roam-insert)
+		     ("C-c r I" . org-roam-insert-immediate)))
+    )
+  (setq org-roam-v2-ack t)
 #+end_src
 ** Interaction with org-agenda
 I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html][this article]], to simplify how TODOs are displayed in org-agenda. To make it work, set the category of a heading with
@@ -489,7 +490,7 @@ Some helper code. If the CATEGORY property is not set, use the file name (but st
 ** Roam capture templates
 To add an org-roam file, I begin with `org-roam-capture`. We have to define a couple of template. Note that I used no-web (emacs' literate programming tool) to divide the templates into manageable chunks.
 
-#+begin_src emacs-lisp :noweb yes
++begin_src emacs-lisp :noweb yes
   (setq org-roam-capture-templates
      '(
           <<ORG_ROAM_CAPTURE>>
@@ -498,17 +499,22 @@ To add an org-roam file, I begin with `org-roam-capture`. We have to define a co
 #+end_src
 
 The default template
+
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
-  ("d" "default" plain (function org-roam--capture-get-point)
-      "%?"
-     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-     :head "#+title: ${title}\n#+roam_alias:\n#+roam_tags:\ntags ::\n"
-     :unnarrowed t
-  )
+  ;; ("d" "default" plain (function org-roam--capture-get-point)
+  ;;     "%?"
+  ;;    :file-name "%<%Y%m%d%H%M%S>-${slug}"
+  ;;    :head "#+title: ${title}\n#+roam_alias:\n#+roam_tags:\ntags ::\n"
+  ;;    :unnarrowed t
+  ;; )
+  ("d" "default" plain "%?"
+    :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+		       "#+title: ${title}\n")
+    :unnarrowed t)
 #+end_src
 
 Notes from classes
-#+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
++begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
   ("c" "class notes" plain (function org-roam--capture-get-point)
       "%?"
      :file-name "%<%Y%m%d%H%M%S>-${slug}"
