@@ -163,21 +163,6 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
              (gfm-mode . flyspell-mode)))
   #+end_src
 
-* Smarter selection: Ivy
-#+begin_src emacs-lisp
-  (use-package ivy
-    :ensure t 
-    :diminish
-    :config
-        (ivy-mode 1))
-#+end_src
-
-counsel is a companion package for Ivy
-#+begin_src emacs-lisp
-  (use-package counsel
-    :ensure t
-    :init (counsel-mode))
-#+end_src
 * Deft: For searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 ** Basic setup
