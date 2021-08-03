@@ -1,4 +1,3 @@
-
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 #+STARTUP: overview
@@ -9,9 +8,9 @@ This is my Emacs configuration file, in literate programming style (based on [[h
 ** Use [[https://melpa.org/#/][MELPA]] for package archive
 
 #+begin_src emacs-lisp
-(package-initialize)
+  (package-initialize)
   (add-to-list 'package-archives
-      '("melpa" . "http://melpa.org/packages/"))
+               '("melpa" . "http://melpa.org/packages/"))
 #+end_src
 
 ** Make sure that ~use-package~ is loaded
@@ -52,6 +51,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
   ;; scale headings in org-mode
   (setq zenburn-scale-org-headlines t)
   (use-package zenburn-theme :ensure t)
+  ;;(load-theme 'tango-dark)
 #+end_src
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
   #+begin_src emacs-lisp
@@ -105,6 +105,13 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 #+end_src
+** A more elegant modeline: doom-modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+  (setq doom-modeline-icon nil)
+#+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
@@ -155,7 +162,22 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-  
+
+* Smarter selection: Ivy
+#+begin_src emacs-lisp
+  (use-package ivy
+    :ensure t 
+    :diminish
+    :config
+        (ivy-mode 1))
+#+end_src
+
+counsel is a companion package for Ivy
+#+begin_src emacs-lisp
+  (use-package counsel
+    :ensure t
+    :init (counsel-mode))
+#+end_src
 * Deft: For searching documents 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 ** Basic setup
