@@ -141,7 +141,7 @@ The scratch buffer is a convenient place to display cheat sheets.
 (setq initial-scratch-message 
   (concat
      "* Scratch Buffer *"
-     "\n# Evaluate S-expression: C-x C-e"
+     "\n# Evaluate S-expression: C-x C-e or C-j"
      (format "\n# DEFT_PATH=%s" (getenv "DEFT_PATH"))
      (format "\n# ORG_AGENDA_PATH=%s"  (getenv "ORG_AGENDA_PATH"))
      (format "\n# ORG_JOURNAL_PATH=%s" (getenv "ORG_JOURNAL_PATH"))
