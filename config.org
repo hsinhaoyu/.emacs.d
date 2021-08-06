@@ -177,6 +177,24 @@ counsel is a companion package for Ivy
     :ensure t
     :init (counsel-mode))
 #+end_src
+* Dired customization
+Reference: [[http://ergoemacs.org/emacs/emacs_dired_tips.html][Xah Lee's page]]
+
+Hide ownership details:
+#+begin_src emacs-lisp
+  (defun xah-dired-mode-setup ()
+    "to be run as hook for `dired-mode'."
+    (dired-hide-details-mode 1))
+
+  (add-hook 'dired-mode-hook 'xah-dired-mode-setup)
+#+end_src
+
+Use the same buffer for viewing directory:
+#+begin_src emacs-lisp
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+
+  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+#+end_src
 * Deft: For searching documents
 
 Note: Org-Roam V2 inserted a PROPERTY header to all files, which doesn't display well in Deft. But luckily Org-Roam V2 can replace Deft, so this section has become obsolete. I will remove it after a little while.
