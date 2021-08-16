@@ -15,6 +15,15 @@ Use C-c C-o to open links
 | M-m         | Jump to first non-whitespace character in line in emacs |
 | C-u C-space | jump to previous location                               |
 
+
+** How to set a location to jump to?
+C-SPC C-SPC    This set the mark and deactivate it
+C-u C-SPC      jump
+
+Another useful jump is:
+
+C-x C-SPC      This pops the global mark ring
+
 * Structural editing
 | key   | function                            |
 |-------+-------------------------------------|
@@ -206,6 +215,7 @@ in calendar view
 | C-M-k                    | kill s-exp                          |
 | python-indent-shift-left | unindent                            |
 | python-indent-sift-right | indent                              |
+| C-M-a                    | move to the beginning of a function |
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name

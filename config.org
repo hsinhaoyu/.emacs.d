@@ -601,7 +601,7 @@ This matches things like #+title: or #+TITLE:
   This matches the "drawer" introduced in Org Roam V2.
   Removes all lines that begin with a colon
   #+begin_src emacs-lisp :tangle no :noweb-ref RX4
-  ^:.*
+  :PROPERTIES:\n\\(.+\n\\)+:END:\n
   #+end_src
 ** Roam dailies
 
