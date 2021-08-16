@@ -117,7 +117,6 @@ In =.zshrc=, remember to export three environment variables
 #+begin_src sh
 export DEFT_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
 export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
-export ORG_JOURNAL_PATH='/Users/hhyu/Documents/emacs_docs/journal_docs'
 #+end_src
 ** Experimental
 This is supposed to be useful for accessing environment variables on macOS. Disabled because I haven't found it useful yet.
@@ -144,7 +143,6 @@ The scratch buffer is a convenient place to display cheat sheets.
      "\n# Evaluate S-expression: C-x C-e or C-j"
      (format "\n# DEFT_PATH=%s" (getenv "DEFT_PATH"))
      (format "\n# ORG_AGENDA_PATH=%s"  (getenv "ORG_AGENDA_PATH"))
-     (format "\n# ORG_JOURNAL_PATH=%s" (getenv "ORG_JOURNAL_PATH"))
   ))
 #+end_src 
 * Markdown mode
@@ -247,23 +245,18 @@ I use Org mode for my todos, note taking, and journaling.
 
 I used to use "org journal" for journal keeping, but I have since replaced it with org-roam's dailies. So I have removed the org-journal section.
 
+I have also removed the section on capture templates. This is because I use org-roam for capruring.
+
 ** Basics
 Some basic UX settings
   #+begin_src emacs-lisp
     ;; spellcheck all org documents
     (add-hook 'org-mode-hook 'flyspell-mode)
 
-    ;; useful key bindings 
-    ;; Insert link. Rather than asking for a label, use "journal entry"
-    (defun hh-org-insert-link ()
-       (interactive)
-       (org-insert-link nil nil "Journal Entry"))
-
     (add-hook 'org-mode-hook
       (lambda ()
           (define-key org-mode-map (kbd "C-c a") 'org-agenda)
-          (define-key org-mode-map (kbd "C-c l") 'org-store-link)
-          (define-key org-mode-map (kbd "C-c jl") 'hh-org-insert-link)))
+          (define-key org-mode-map (kbd "C-c l") 'org-store-link)))
 
     ;; used identation to indicate the hierarchy of headings, rather than stars
     (setq org-startup-indented t)
@@ -407,52 +400,6 @@ I plan to set up a second command. TODO
 #+begin_src emacs-lisp
 (use-package htmlize
     :ensure t)
-#+end_src
-** Org capture
-Org capture is a system for quickly dispatching texts to different destinations. The template for journal is from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]].
-The syntax of the template is explained in the documentation for the variable ~org-capture-templates~.
-Since I have moved to org-roam, which has its own capture system, this section is now obsolete.
-
-Some preliminary settings
-#+begin_src emacs-lisp :noweb yes
-  (defun org-journal-find-location ()
-    ;; Open today's journal, but specify a non-nil prefix argument in order to
-    ;; inhibit inserting the heading; org-capture will insert the heading.
-    (org-journal-new-entry t)
-    (org-narrow-to-subtree))
-
-  (setq org-capture-templates
-      '(
-        <<ORG_CAPTURE>>
-       )
-  )
-#+end_src
-
-Capture ad hoc todos in a special file
-#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
-("t" "TODO inbox"
-     entry
-     (file "~/.deft/capture-todo.org")
-     "* TODO %?
-        SCHEDULED: %t")
-#+end_src
-
-Capture ad hoc notes in a special file
-#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
-("n" "notes inbox"
-     entry
-     (file "~/.deft/capture-notes.org")
-     "* %T\n%i%?")
-#+end_src
-
-Capture org journal
-#+begin_src emacs-lisp :tangle no :noweb-ref ORG_CAPTURE
-("j" "Journal entry"
-     plain
-     (function org-journal-find-location)
-     "** %(format-time-string org-journal-time-format)%^{Title}\n%i%?"
-     :jump-to-captured t
-     :immediate-finish t)
 #+end_src
 * Org-Roam
 I use [[https://www.orgroam.com][org-roam]] to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
