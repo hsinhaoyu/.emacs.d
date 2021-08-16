@@ -161,15 +161,12 @@ Use C-c C-x C-A to archive to the end of the file
 | C-c ' | edit code block |
 
 * ORG Roam
-| key     | function                       |
-|---------+--------------------------------|
-| C-c r l | org-roam                       |
-| C-c r c | org-roam-capture               |
-| C-c r f | org-roam-find-file             |
-| C-c r j | org-roam-dailies-capture-today |
-| C-c r d | org-roam-dailies-find-today    |
-| C-c r i | org-roam-insert                |
-| C-c r I | org-roam-insert-immediate      |
+| key     | function               |
+|---------+------------------------|
+| C-c r f | org-roam-node-file     |
+| C-c r i | org-roam-node-insert   |
+| C-c r a | org-roam-alias-add     |
+| C-c r l | org-roam-buffer-toggle |
 
 links:
 #+begin_src
@@ -181,11 +178,8 @@ links:
 header:
 #+begin_src
 #+title: 
-#+roam_alias: "bla"
-#+roam_tags: 
+#+roam_aliases: "bla"
 #+FILETAGS:  XXX
-#+ROAM_TAGS: XXX
-#+ROAM_KEY:  XXX
 - tags ::    XXX
 #+end_src
 
