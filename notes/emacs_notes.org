@@ -15,6 +15,15 @@ Use C-c C-o to open links
 | M-m         | Jump to first non-whitespace character in line in emacs |
 | C-u C-space | jump to previous location                               |
 
+
+** How to set a location to jump to?
+C-SPC C-SPC    This set the mark and deactivate it
+C-u C-SPC      jump
+
+Another useful jump is:
+
+C-x C-SPC      This pops the global mark ring
+
 * Structural editing
 | key   | function                            |
 |-------+-------------------------------------|
@@ -152,15 +161,12 @@ Use C-c C-x C-A to archive to the end of the file
 | C-c ' | edit code block |
 
 * ORG Roam
-| key     | function                       |
-|---------+--------------------------------|
-| C-c r l | org-roam                       |
-| C-c r c | org-roam-capture               |
-| C-c r f | org-roam-find-file             |
-| C-c r j | org-roam-dailies-capture-today |
-| C-c r d | org-roam-dailies-find-today    |
-| C-c r i | org-roam-insert                |
-| C-c r I | org-roam-insert-immediate      |
+| key     | function               |
+|---------+------------------------|
+| C-c r f | org-roam-node-file     |
+| C-c r i | org-roam-node-insert   |
+| C-c r a | org-roam-alias-add     |
+| C-c r l | org-roam-buffer-toggle |
 
 links:
 #+begin_src
@@ -172,11 +178,8 @@ links:
 header:
 #+begin_src
 #+title: 
-#+roam_alias: "bla"
-#+roam_tags: 
+#+roam_aliases: "bla"
 #+FILETAGS:  XXX
-#+ROAM_TAGS: XXX
-#+ROAM_KEY:  XXX
 - tags ::    XXX
 #+end_src
 
@@ -206,6 +209,7 @@ in calendar view
 | C-M-k                    | kill s-exp                          |
 | python-indent-shift-left | unindent                            |
 | python-indent-sift-right | indent                              |
+| C-M-a                    | move to the beginning of a function |
 
 * how to
 - get the filename associated with a buffer? C-h v and then enter the variable name buffer-file-name
@@ -240,3 +244,9 @@ This is an example of a snippet that wraps around selected region. activate the 
 * Lisp
 - [[https://blog.aaronbieber.com/2016/08/07/getting-started-with-emacs-lisp.html][Getting started with Emacs LISP]]
   
+
+* Packages
+use "package-refresh-content" to update the latest info of the packages.
+use "package-list-packages" to list all. The install.
+
+"package-refresh-content" doesn't work on my Chrombook. As work around, run "package-list-packages", then use the pull down menu to select "refresh".
