@@ -1,4 +1,3 @@
-
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 #+STARTUP: overview
@@ -9,9 +8,9 @@ This is my Emacs configuration file, in literate programming style (based on [[h
 ** Use [[https://melpa.org/#/][MELPA]] for package archive
 
 #+begin_src emacs-lisp
-(package-initialize)
+  (package-initialize)
   (add-to-list 'package-archives
-      '("melpa" . "http://melpa.org/packages/"))
+               '("melpa" . "http://melpa.org/packages/"))
 #+end_src
 
 ** Make sure that ~use-package~ is loaded
@@ -52,6 +51,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
   ;; scale headings in org-mode
   (setq zenburn-scale-org-headlines t)
   (use-package zenburn-theme :ensure t)
+  ;;(load-theme 'tango-dark)
 #+end_src
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]
   #+begin_src emacs-lisp
@@ -105,6 +105,13 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
 (tool-bar-mode -1)
 (toggle-scroll-bar -1)
 #+end_src
+** A more elegant modeline: doom-modeline
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :init (doom-modeline-mode 1))
+  (setq doom-modeline-icon nil)
+#+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
@@ -134,7 +141,7 @@ The scratch buffer is a convenient place to display cheat sheets.
 (setq initial-scratch-message 
   (concat
      "* Scratch Buffer *"
-     "\n# Evaluate S-expression: C-x C-e"
+     "\n# Evaluate S-expression: C-x C-e or C-j"
      (format "\n# DEFT_PATH=%s" (getenv "DEFT_PATH"))
      (format "\n# ORG_AGENDA_PATH=%s"  (getenv "ORG_AGENDA_PATH"))
      (format "\n# ORG_JOURNAL_PATH=%s" (getenv "ORG_JOURNAL_PATH"))
@@ -155,7 +162,6 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-  
 * Smarter selection: Ivy
 #+begin_src emacs-lisp
   (use-package ivy
@@ -171,39 +177,71 @@ counsel is a companion package for Ivy
     :ensure t
     :init (counsel-mode))
 #+end_src
-* Deft: For searching documents 
+* Dired customization
+Reference: [[http://ergoemacs.org/emacs/emacs_dired_tips.html][Xah Lee's page]]
+
+Hide ownership details:
+#+begin_src emacs-lisp
+  (defun xah-dired-mode-setup ()
+    "to be run as hook for `dired-mode'."
+    (dired-hide-details-mode 1))
+
+  (add-hook 'dired-mode-hook 'xah-dired-mode-setup)
+#+end_src
+
+Use the same buffer for viewing directory:
+#+begin_src emacs-lisp
+  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+
+  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+#+end_src
+* Deft: For searching documents
+
+Note: Org-Roam V2 inserted a PROPERTY header to all files, which doesn't display well in Deft. But luckily Org-Roam V2 can replace Deft, so this section has become obsolete. I will remove it after a little while.
+
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
+
 ** Basic setup
-  #+begin_src emacs-lisp
-  ;; if DEFT_PATH is not defined, use a default path
-  (defun get_deft_path ()
-    (let ((deft_path (getenv "DEFT_PATH")))
-      (if deft_path deft_path "~/.deft")))
 
-  (use-package deft
-      :ensure t
-      :bind (("<f8>" . deft))
-      :commands (deft)
-      :config
-      (setq deft-extensions '("txt" "tex" "md" "org")
-            deft-directory (get_deft_path)
-	      deft-default-extension "org"
-	      deft-recursive t
-	      deft-use-filter-string-for-filename nil
-	      deft-use-filename-as-title nil
-	      deft-markdown-mode-title-level 1
-	      deft-file-naming-rules '((noslash . "-")
-                                     (nospace . "-")
-				       (case-fn . downcase))))
-  #+end_src
+- I don't want Deft to display the filename as the title of a document, so I set deft-use-filename-as-title to nil
+
+#+begin_src emacs-lisp
+    ;; if DEFT_PATH is not defined, use a default path
+    (defun get_deft_path ()
+      (let ((deft_path (getenv "DEFT_PATH")))
+        (if deft_path deft_path "~/.deft")))
+
+    (use-package deft
+        :ensure t
+        :after org
+        :bind (("<f8>" . deft))
+        :commands (deft)
+        :config
+        (setq deft-extensions '("txt" "tex" "md" "org")
+              deft-directory (get_deft_path)
+              deft-default-extension "org"
+              deft-recursive t
+              deft-use-filter-string-for-filename t
+              deft-use-filename-as-title nil
+              deft-markdown-mode-title-level 1
+              deft-file-naming-rules '((noslash . "-")
+                                       (nospace . "-")
+                                       (case-fn . downcase))))
+#+end_src
+** Customized title
+Filter out headers in Deft's title display.
+#+begin_src emacs-lisp
+;;(setq deft-strip-title-regexp "^:PROPERTIES:$")
+#+end_src
 ** Customized summary
+Filter out headers of org files in Deft's summary display.
+The filter patterns RX1, RX2, RX3... are defined in the Org-roam/Deft support section.
 
-  Filter out headers of org files in Deft's summary display.
-  The filter patterns RX1, RX2 and RX3 are defined in the Org-roam/Deft support section.
+The second pattern removes "* " at the beginning of a line
 
-  #+begin_src emacs-lisp :noweb yes
-  (setq deft-strip-summary-regexp "\\([]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\)")
-  #+end_src
+#+begin_src emacs-lisp :noweb yes
+  (setq deft-strip-summary-regexp "\\([]\\|^\\*+[[:blank:]]\\|<<RX1>>\\|<<RX2>>\\|<<RX3>>\\|<<RX4>>\\)")
+#+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
 ** Basics
@@ -444,29 +482,42 @@ Capture org journal
      :jump-to-captured t
      :immediate-finish t)
 #+end_src
-* Roam
+* Org-Roam
 I use [[https://www.orgroam.com][org-roam]] to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
 ** Basic setup
 I took this from [[https://github.com/org-roam/org-roam][org-roam's GitHub README]].
 About completion, see this [[https://org-roam.discourse.group/t/how-to-to-get-title-of-the-target-note-working-with-inline-autocomplete-in-org-roam/782][discussion]].
 
 Note that I use the deft directory for Roam.
+
+Notes about V2:
+- Use org-roam-setup instead of org-roam-mode to start up
+
 #+begin_src emacs-lisp
   (use-package org-roam
-      :ensure t
-      :custom  (org-roam-directory (get_deft_path))
-      :hook (org-mode . org-roam-mode)
-      :bind (("C-c r c" . org-roam-capture)
-	         ("<f10>"   . org-roam-capture)
-             ("C-c r f" . org-roam-find-file)
-             ("C-c r j" . org-roam-dailies-capture-today)
-             ("<f9>"    . org-roam-dailies-capture-today)
-             ("C-c r d" . org-roam-dailies-find-today)
-             :map org-roam-mode-map
-                  (("C-c r l" . org-roam))
-             :map org-mode-map
-                  (("C-c r i" . org-roam-insert)
-                   ("C-c r I" . org-roam-insert-immediate)))
+    :ensure t
+
+    :init
+    (setq org-roam-v2-ack t)
+
+    :custom
+    (org-roam-directory (get_deft_path))
+    (org-roam-completion-everywhere t)
+
+    :config
+    (org-roam-setup)
+
+    :bind (("C-c r c" . org-roam-capture)
+           ("C-c r f" . org-roam-node-find)
+           ("C-c r i" . org-roam-node-insert)
+           ("C-c r l" . org-roam-buffer-toggle)
+           ("C-c r j" . org-roam-dailies-capture-today)
+           ("<f9>"    . org-roam-dailies-capture-today)
+           ("C-c r d" . org-roam-dailies-goto-today)
+           :map org-mode-map
+           ("C-M-i"   . completion-at-point)
+           ("C-c r a" . org-roam-alias-add)
+          )
   )
 #+end_src
 ** Interaction with org-agenda
@@ -497,12 +548,12 @@ Some helper code. If the CATEGORY property is not set, use the file name (but st
     "Remove PREFIX regexp if it at the start of s"
     (s-chop-prefix (car (s-match prefix s)) s))
 #+end_src
-** Daily notes
-#+begin_src emacs-lisp
-(setq org-roam-dailies-directory "daily/")
-#+end_src
 ** Roam capture templates
 To add an org-roam file, I begin with `org-roam-capture`. We have to define a couple of template. Note that I used no-web (emacs' literate programming tool) to divide the templates into manageable chunks.
+
+Notes about Org-Roam V2:
+- "#+roam_tags" is gone. I never used it anyway
+- "#+roam_alias" is gone. Replaced by the "roam_aliases" property. Press "C-c r a" to insert a new alias
 
 #+begin_src emacs-lisp :noweb yes
   (setq org-roam-capture-templates
@@ -512,22 +563,19 @@ To add an org-roam file, I begin with `org-roam-capture`. We have to define a co
    )
 #+end_src
 
-The default template
+The default template:
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
-  ("d" "default" plain (function org-roam--capture-get-point)
-      "%?"
-     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-     :head "#+title: ${title}\n#+roam_alias:\n#+roam_tags:\ntags ::\n"
-     :unnarrowed t
-  )
+  ("d" "default" plain "%?"
+    :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+                       "#+title: ${title}\ntags ::\n")
+    :unnarrowed t)
 #+end_src
 
-Notes from classes
+Notes from classes:
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
-  ("c" "class notes" plain (function org-roam--capture-get-point)
-      "%?"
-     :file-name "%<%Y%m%d%H%M%S>-${slug}"
-     :head "#+title: Class Notes: ${title}\n#+roam_alias:\n#+roam_tags: education\ntags :: [[roam:education]]\n"
+  ("c" "class notes" plain "%?"
+     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}"
+                        "#+title: Class Notes: ${title}\nntags :: [[roam:education]]\n")
      :unnarrowed t
   )
 #+end_src
@@ -549,9 +597,21 @@ This matches things like #+title: or #+TITLE:
   #+begin_src emacs-lisp :tangle no :noweb-ref RX3
   ^tags ::.*$
   #+end_src
-** Roam daily templates
-For org-roam daily entries, we need some templates.
 
+  This matches the "drawer" introduced in Org Roam V2.
+  Removes all lines that begin with a colon
+  #+begin_src emacs-lisp :tangle no :noweb-ref RX4
+  :PROPERTIES:\n\\(.+\n\\)+:END:\n
+  #+end_src
+** Roam dailies
+
+Set up the location of the dailies.
+#+begin_src emacs-lisp
+(setq org-roam-dailies-directory "daily/")
+#+end_src
+
+
+For org-roam daily entries, we need some templates.
 #+begin_src emacs-lisp :noweb yes
   (setq org-roam-dailies-capture-templates
       '(
@@ -562,18 +622,20 @@ For org-roam daily entries, we need some templates.
 
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("d" "default" entry
-       #'org-roam-capture--get-point
-       "*** %(format-time-string \"%H:%M\")\n%?"
-       :file-name "daily/%<%Y-%m-%d>"
-       :head "#+title: Journal %<%Y-%m-%d>\n#+roam_tags: Daily\n\n")
+       "*** %(format-time-string \"%H:%M\") %?"
+       :if-new (file+head
+                "%<%Y-%m-%d>.org"
+                "#+title: Journal %<%Y-%m-%d>\n")
+  )
 #+end_src
 
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("m" "meeting" entry
-       #'org-roam-capture--get-point
-       "*** %(format-time-string \"%H:%M\") [[roam:meeting]]\n%?"
-       :file-name "daily/%<%Y-%m-%d>"
-       :head "#+title: Journal %<%Y-%m-%d>\n#+roam_tags: Daily\n\n")
+       "*** %(format-time-string \"%H:%M\") %? [[roam:meeting]]\n"
+       :if-new (file+head
+                "%<%Y-%m-%d>.org"
+                "#+title: Journal %<%Y-%m-%d>\n")
+  )
 #+end_src
 * Programming: Python
 
