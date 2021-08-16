@@ -244,6 +244,9 @@ The second pattern removes "* " at the beginning of a line
 #+end_src
 * Org mode
 I use Org mode for my todos, note taking, and journaling.
+
+I used to use "org journal" for journal keeping, but I have since replaced it with org-roam's dailies. So I have removed the org-journal section.
+
 ** Basics
 Some basic UX settings
   #+begin_src emacs-lisp
@@ -400,37 +403,6 @@ Then, define the template:
 
 I plan to set up a second command. TODO
 
-** Org Journal
-org-journal is a system for writing journals based on org. I have replaced it with org-roam's "dailies". So this section has become obsolete.
-
-  #+begin_src emacs-lisp
-    ;; if ORG_JOURNAL_PATH is not defined, use a default setting
-    (defun get_org_journal_path ()
-      (let ((org_journal_path (getenv "ORG_JOURNAL_PATH")))
-        (if org_journal_path org_journal_path "~/.deft/journal")))
-
-
-    ;;(use-package org-journal
-    ;;      :ensure t
-    ;;      :custom
-    ;;          (org-journal-dir (get_org_journal_path))
-    ;;          (org-journal-file-format "%Y-%m-%d.org"))
-  #+end_src
-    
-I don't actually use these functions (stolen from [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][here]]), but they should be very useful.
-
-  #+begin_src emacs-lisp
-  (defun get-journal-file-today ()
-      "Return filename for today's journal entry."
-      (let ((daily-name (format-time-string "%Y-%m-%d.org")))
-             (expand-file-name (concat org-journal-dir daily-name))))
-
-  (defun journal-file-today ()
-      "Create and load a journal file based on today's date."
-      (interactive)
-      (find-file (get-journal-file-today)))
-  #+end_src
-  
 ** Preview
 #+begin_src emacs-lisp
 (use-package htmlize
