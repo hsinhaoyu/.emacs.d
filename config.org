@@ -247,7 +247,8 @@ I used to use "org journal" for journal keeping, but I have since replaced it wi
 
 I have also removed the section on capture templates. This is because I use org-roam for capruring.
 
-** Basics
+** Basics UX
+
 Some basic UX settings
   #+begin_src emacs-lisp
     ;; spellcheck all org documents
@@ -284,6 +285,18 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
   (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
   #+end_src
 
+Create some margin space (I got this from System Crafters youtube channel)
+#+begin_src emacs-lisp
+  (defun hhyu/org-mode-visual-fill ()
+    (setq visual-fill-column-wide 50
+          visual-fill-column-center-text t)
+    (visual-fill-column-mode 1))
+
+  (use-package visual-fill-column
+    :ensure t
+    :hook (org-mode . hhyu/org-mode-visual-fill))
+#+end_src
+  
 ** Code blocks
 By default, only lisp code blocks can be evaluated. Other languages have to be enabled.
 [[https://jherrlin.github.io/posts/emacs-orgmode-source-code-blocks/][This]] is a useful tutorial about org-mode code blocks.

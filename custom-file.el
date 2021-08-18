@@ -10,7 +10,7 @@
  '(org-agenda-files (quote ("~/.deft/learn_org.org")))
  '(package-selected-packages
    (quote
-    (counsel doom-modeline ivy ess zenburn-theme company-jedi anaconda-mode one-themes nofrils-acme-theme smartparens smartparens-mode smartparen-mode company-org-roam olivetti org-roam go-mode exec-path-from-shell dockerfile-mode org-mode htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ magit use-package company spacemacs-theme))))
+    (visual-fill-column counsel doom-modeline ivy ess zenburn-theme company-jedi anaconda-mode one-themes nofrils-acme-theme smartparens smartparens-mode smartparen-mode company-org-roam olivetti org-roam go-mode exec-path-from-shell dockerfile-mode org-mode htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ magit use-package company spacemacs-theme))))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
