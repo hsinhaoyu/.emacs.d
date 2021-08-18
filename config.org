@@ -494,18 +494,20 @@ Notes about Org-Roam V2:
 
 The default template:
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
-  ("d" "default" plain "%?"
-    :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
+  ("d" "default" plain
+   "%?"
+   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}.org"
                        "#+title: ${title}\ntags ::\n")
-    :unnarrowed t)
+   :unnarrowed t)
 #+end_src
 
 Notes from classes:
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
-  ("c" "class notes" plain "%?"
-     :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}"
-                        "#+title: Class Notes: ${title}\nntags :: [[roam:education]]\n")
-     :unnarrowed t
+  ("c" "class notes" plain
+   "%?"
+   :if-new (file+head "%<%Y%m%d%H%M%S>-${slug}"
+                      "#+title: Class Notes: ${title}\nntags :: [[roam:education]]\n")
+   :unnarrowed t
   )
 #+end_src
 ** Deft support
