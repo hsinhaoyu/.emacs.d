@@ -37,8 +37,6 @@ To retrospectively start a new branch:
 - create the branch
 - reset --soft master origin/master
 
-
-x
 ** branching
 *** checkout a remote branch
 
