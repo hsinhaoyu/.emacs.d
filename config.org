@@ -189,10 +189,11 @@ Hide ownership details:
 
 Use the same buffer for viewing directory:
 #+begin_src emacs-lisp
-  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
-
-  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+;;  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+;;
+;;  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
 #+end_src
+
 * Deft: For searching documents
 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
