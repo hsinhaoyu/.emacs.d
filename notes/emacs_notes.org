@@ -15,7 +15,6 @@ Use C-c C-o to open links
 | M-m         | Jump to first non-whitespace character in line in emacs |
 | C-u C-space | jump to previous location                               |
 
-
 ** How to set a location to jump to?
 C-SPC C-SPC    This set the mark and deactivate it
 C-u C-SPC      jump
