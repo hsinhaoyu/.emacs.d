@@ -189,13 +189,12 @@ Hide ownership details:
 
 Use the same buffer for viewing directory:
 #+begin_src emacs-lisp
-  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
-
-  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+;;  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
+;;
+;;  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
 #+end_src
-* Deft: For searching documents
 
-Note: Org-Roam V2 inserted a PROPERTY header to all files, which doesn't display well in Deft. But luckily Org-Roam V2 can replace Deft, so this section has become obsolete. I will remove it after a little while.
+* Deft: For searching documents
 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
 
@@ -226,12 +225,26 @@ Note: Org-Roam V2 inserted a PROPERTY header to all files, which doesn't display
                                        (nospace . "-")
                                        (case-fn . downcase))))
 #+end_src
-** Customized title
-Filter out headers in Deft's title display.
+** Customized title (for Org-Roam)
+For the title, Filter out the :PROPERTY:....:END: block introduced by Org-Roam V2.
+
 #+begin_src emacs-lisp
-;;(setq deft-strip-title-regexp "^:PROPERTIES:$")
+  (defun hhyu/deft-title-preprocess (orig-func &rest args)
+    (let* ((file (car args))
+           (contents (cadr args))
+           (m (string-match ":PROPERTIES:\n\\(.+\n\\)+:END:\n" contents)))
+      (if m
+          (let ((new-contents
+                 (substring contents
+                            (match-end 0)
+                            (length contents))))
+               (funcall orig-func file new-contents))
+          (funcall orig-func file contents))))
+
+  (advice-add 'deft-parse-title :around #'hhyu/deft-title-preprocess)
 #+end_src
-** Customized summary
+
+** Customized summary (for Org-Roam)
 Filter out headers of org files in Deft's summary display.
 The filter patterns RX1, RX2, RX3... are defined in the Org-roam/Deft support section.
 
@@ -247,7 +260,8 @@ I used to use "org journal" for journal keeping, but I have since replaced it wi
 
 I have also removed the section on capture templates. This is because I use org-roam for capruring.
 
-** Basics
+** Basics UX
+
 Some basic UX settings
   #+begin_src emacs-lisp
     ;; spellcheck all org documents
@@ -284,6 +298,18 @@ Display timestamps in 12 hour format. This changes how timestamps are displayed,
   (setq org-time-stamp-custom-formats '("<%a %b %e %Y>" . "<%a %b %e %Y %l:%M%p>"))
   #+end_src
 
+Create some margin space (I got this from System Crafters youtube channel)
+#+begin_src emacs-lisp
+  ;;(defun hhyu/org-mode-visual-fill ()
+  ;;  (setq visual-fill-column-wide 50
+  ;;        visual-fill-column-center-text t)
+  ;;  (visual-fill-column-mode 1))
+
+  ;;(use-package visual-fill-column
+  ;;  :ensure t
+  ;;  :hook (org-mode . hhyu/org-mode-visual-fill))
+#+end_src
+  
 ** Code blocks
 By default, only lisp code blocks can be evaluated. Other languages have to be enabled.
 [[https://jherrlin.github.io/posts/emacs-orgmode-source-code-blocks/][This]] is a useful tutorial about org-mode code blocks.
@@ -516,10 +542,8 @@ This matches things like #+title: or #+TITLE:
   ^tags ::.*$
   #+end_src
 
-  This matches the "drawer" introduced in Org Roam V2.
-  Removes all lines that begin with a colon
   #+begin_src emacs-lisp :tangle no :noweb-ref RX4
-  :PROPERTIES:\n\\(.+\n\\)+:END:\n
+    :PROPERTIES:\n\\(.+\n\\)+:END:\n
   #+end_src
 ** Roam dailies
 
