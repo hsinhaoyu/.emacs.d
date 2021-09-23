@@ -112,6 +112,14 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
     :init (doom-modeline-mode 1))
   (setq doom-modeline-icon nil)
 #+end_src
+** Which key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :init (which-key-mode)
+    :config
+        (setq which-key-idle-delay 1))
+#+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
@@ -578,6 +586,16 @@ For org-roam daily entries, we need some templates.
                 "%<%Y-%m-%d>.org"
                 "#+title: Journal %<%Y-%m-%d>\n")
   )
+#+end_src
+* Project management: Projectile
+#+begin_src emacs-lisp
+  (use-package projectile
+    :ensure t
+    :config (projectile-mode)
+    :bind-keymap ("C-c p" . projectile-command-map)
+    :init
+        (setq projectile-switch-project-action #'projectile-dired))
+
 #+end_src
 * Programming: Python
 
