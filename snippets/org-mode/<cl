@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: Common LISP codeblock
+# key: <cl
+# --
+#+begin_src lisp
+$0
+#+end_src

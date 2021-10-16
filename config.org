@@ -328,6 +328,7 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
   (org-babel-do-load-languages
    'org-babel-load-languages
    '((emacs-lisp . t)
+     (lisp . t)
      (shell . t)
      (sed . t)
      (awk . t)
