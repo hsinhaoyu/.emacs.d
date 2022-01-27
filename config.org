@@ -51,6 +51,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
   ;; scale headings in org-mode
   (setq zenburn-scale-org-headlines t)
   (use-package zenburn-theme :ensure t)
+  (load-theme 'zenburn t)
   ;;(load-theme 'tango-dark)
 #+end_src
 ** Enhance M-x with [[https://github.com/nonsequitur/smex][smex]]

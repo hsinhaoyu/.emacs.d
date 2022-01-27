@@ -1,0 +1,1 @@
+("~/.emacs.d/" "~/learn/test_projectile/")
