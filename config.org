@@ -8,7 +8,6 @@ This is my Emacs configuration file, in literate programming style (based on [[h
 ** Use [[https://melpa.org/#/][MELPA]] for package archive
 
 #+begin_src emacs-lisp
-  (package-initialize)
   (add-to-list 'package-archives
                '("melpa" . "http://melpa.org/packages/"))
 #+end_src
@@ -599,7 +598,41 @@ For org-roam daily entries, we need some templates.
         (setq projectile-switch-project-action #'projectile-dired))
 
 #+end_src
+* Programming: LSP (Language Server Protocol)
+
+See https://emacs-lsp.github.io/lsp-mode/
+
+Remember that a language server needs to be installed for each language
+
+#+begin_src emacs-lisp
+  (use-package lsp-mode
+    :ensure t
+    :commands (lsp lsp-deferred)
+    :init
+    (setq lsp-keymap-prefix "C-l")
+    :config
+    (lsp-enable-which-key-integration t))
+#+end_src
+
 * Programming: Python
+** Python language server
+Install [[https://github.com/python-lsp/python-lsp-server][python-lsp-server]] with =pip install "python-lsp-server[all]"=.
+Running =pyls= under bash should work.
+
+** Python mode
+To evoke the "Python shell", =M-x run-python=.
+
+This required =lsp-mode=, so check the LSP section. 
+#+begin_src emacs-lisp
+  (use-package python-mode
+    :ensure nil
+    :hook (python-mode . lsp-deferred)
+    )
+#+end_src
+
+* Programming: Python (old)
+
+I used to use [[http://tkf.github.io/emacs-jedi/latest/][jedi]], but since 2021, I decided to use a setup based on LSP (following the System Crafter [[https://www.youtube.com/watch?v=jPXIP46BnNA][video]].
 
 I tried [[https://elpy.readthedocs.io/en/latest/][elpy]] and [[https://melpa.org/#/anaconda-mode][annaconda-mode]], but couldn't get them to work. [[http://tkf.github.io/emacs-jedi/latest/][jedi]] seems to do what I need to do.
 
@@ -611,19 +644,21 @@ I installed jedi manually. Following the instruction, I did:
   M-x jedi:install-server
 #+end_src
 
-#+begin_src emacs-lisp
++begin_src emacs-lisp
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 #+end_src
 
 Roam is a minor mode. It's turned on after loading a .org file, but it's not turned off afterwards. This is a hack to turn it off, if I load a python file. There must be better ways to do this.
-#+begin_src emacs-lisp
++begin_src emacs-lisp
 (add-hook 'python-mode-hook (lambda () (org-roam-mode -1)))
 #+end_src
 
 * Programming: R
 This [[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-R.html][document]] explains how to use R code blocks. The ESS (Emacs Speaks Statistics) package is needed.
-#+begin_src emacs-lisp
+
+Disabled because it seems to conflict with LSP
++begin_src emacs-lisp
   (use-package ess
     :ensure t
     :init (require 'ess-site))

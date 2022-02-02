@@ -194,6 +194,16 @@ in calendar view
 | j r | view an entry in a new buffer          |
 | j d | view an entry but do not switch to it. |
 
+* Programming: LSP
+| key     | function                        |
+|---------+---------------------------------|
+| C-l g r | lsp-find-references (g=goto)    |
+| C-l g g | lsp-find-definition (g=goto)    |
+| C-l r r | ls-rename (r=refactor)          |
+|         | flymake-show-diagnostics-buffer |
+| C-l = = | lsp-format-buffer               |
+|         | lsp-format-region               |
+
 * Programming
 | keys                     | function                            |
 |--------------------------+-------------------------------------|
