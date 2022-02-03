@@ -588,6 +588,12 @@ For org-roam daily entries, we need some templates.
                 "#+title: Journal %<%Y-%m-%d>\n")
   )
 #+end_src
+* Writing
+Grammarly
+#+begin_src emacs-lisp
+  (use-package flycheck-grammarly
+    :ensure t)
+#+end_src
 * Project management: Projectile
 #+begin_src emacs-lisp
   (use-package projectile
