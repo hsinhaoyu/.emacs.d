@@ -333,7 +333,26 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
      (sed . t)
      (awk . t)
      (python . t)
-     (R . t)))
+     (R . t)
+     (sqlite . t)))
+#+end_src
+
+
+Added this =org-babel-tangle-append= command, so that tangling appends to existing files (from [[https://emacs.stackexchange.com/questions/28098/how-to-change-org-mode-babel-tangle-write-to-file-way-as-append-instead-of-overr][this post]]).
+#+begin_src emacs-lisp
+  (defun org-babel-tangle-append ()
+    "Append source code block at point to its tangle file.
+  The command works like `org-babel-tangle' with prefix arg
+  but `delete-file' is ignored."
+    (interactive)
+    (cl-letf (((symbol-function 'delete-file) #'ignore))
+      (org-babel-tangle)))
+
+  (defun org-babel-tangle-append-setup ()
+    "Add key-binding C-c C-v C-t for `org-babel-tangle-append'."
+    (org-defkey org-mode-map (kbd "C-c C-v +") 'org-babel-tangle-append))
+
+  (add-hook 'org-mode-hook #'org-babel-tangle-append-setup)
 #+end_src
 ** Workflow
 Integration with deft: Use everything under deft to build agenda.
@@ -433,8 +452,11 @@ I plan to set up a second command. TODO
 
 ** Preview
 #+begin_src emacs-lisp
-(use-package htmlize
+  (use-package htmlize
     :ensure t)
+
+  ;; see https://github.com/gongzhitaao/orgcss
+  (setq org-html-htmlize-output-type 'css)
 #+end_src
 * Org-Roam
 I use [[https://www.orgroam.com][org-roam]] to keep track of org files that are connected to each other. It is inspired by the cloud-based commercial product [[https://roamresearch.com][Roam]]. 
