@@ -1,1 +1,1 @@
-("~/.emacs.d/" "~/learn/test_projectile/")
+("~/projects/why_functional/" "~/.emacs.d/" "~/learn/test_projectile/")

@@ -374,7 +374,7 @@ I thought that org-agenda-files is by default recursive, but if I didn't include
 This defines my todo workflow
   #+begin_src emacs-lisp
   (setq org-todo-keywords
-      '((sequence "TODO" "IN-PROGRESS" "WAITING" "DONE")))
+      '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "SOMEDAY(s)" "PROJ(p)" "|" "DONE(d)" "CANCELED(c)")))
   #+end_src
 ** Agenda UX
 
