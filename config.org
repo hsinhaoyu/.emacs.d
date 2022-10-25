@@ -67,6 +67,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
 ** [[https://company-mode.github.io][company]] mode for completion 
   #+begin_src emacs-lisp
     (use-package company
+        :ensure t
         :config
             (setq company-idle-delay 0.25)
             (setq completion-ignore-case t)
@@ -727,7 +728,7 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 ** Common LISP
 For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
 #+begin_src emacs-lisp
-(load (expand-file-name "~/.quicklisp/slime-helper.el"))
+(load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "sbcl")
 #+end_src
 * Shell commands, client/server
