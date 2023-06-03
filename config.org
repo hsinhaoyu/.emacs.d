@@ -335,7 +335,9 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
      (awk . t)
      (python . t)
      (R . t)
-     (sqlite . t)))
+     (sqlite . t)
+     (lilypond . t)
+     ))
 #+end_src
 
 
