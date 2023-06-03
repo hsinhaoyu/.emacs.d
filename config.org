@@ -633,7 +633,10 @@ See https://emacs-lsp.github.io/lsp-mode/
 
 Remember that a language server needs to be installed for each language
 
-#+begin_src emacs-lisp
+
+I used to use the `lsp-mode` module to communicate with the language server. But I am now using `eglot`.
+
++begin_src emacs-lisp
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
@@ -641,12 +644,12 @@ Remember that a language server needs to be installed for each language
     (setq lsp-keymap-prefix "C-l")
     :config
     (lsp-enable-which-key-integration t))
-#+end_src
++end_src
 
 * Programming: Python
 ** Python language server
 Install [[https://github.com/python-lsp/python-lsp-server][python-lsp-server]] with =pip install "python-lsp-server[all]"=.
-Running =pyls= under bash should work.
+Running =pylsp= under bash should work.
 
 ** Python mode
 To evoke the "Python shell", =M-x run-python=.
