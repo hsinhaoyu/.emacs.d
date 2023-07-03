@@ -496,6 +496,16 @@ Note that I use the deft directory for Roam.
           )
   )
 #+end_src
+** Configure the org-roam buffer display
+Configure the behavior of the org-roam buffer. I took this code directly from org-roam's [[https://www.orgroam.com/manual.html#Configuring-the-Org_002droam-buffer-display][manual]].
+#+begin_src emacs-lisp
+  (add-to-list 'display-buffer-alist
+               '("\\*org-roam\\*"
+                 (display-buffer-in-direction)
+                 (direction . right)
+                 (window-width . 0.33)
+                 (window-height . fit-window-to-buffer)))
+#+end_src
 ** Interaction with org-agenda
 I use the setup recommended in [[https://d12frosted.io/posts/2020-06-24-task-management-with-roam-vol2.html][this article]], to simplify how TODOs are displayed in org-agenda. To make it work, set the category of a heading with
 
