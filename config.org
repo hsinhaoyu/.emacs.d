@@ -64,7 +64,7 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
       :bind 
           ("M-x" . smex))
   #+end_src
-** [[https://company-mode.github.io][company]] mode for completion 
+** [[https://company-mode.github.io][company]] mode for completion
   #+begin_src emacs-lisp
     (use-package company
         :ensure t
@@ -73,26 +73,6 @@ Move all ~custom-*~ stuff into ~custom-file.el~. Do not put them in ~init.el~.
             (setq completion-ignore-case t)
             (global-company-mode t))
   #+end_src
-** [[https://github.com/DarwinAwardWinner/ido-completing-read-plus][ido]]: Display possible completions at all places
-  #+begin_src emacs-lisp
-  (use-package ido-completing-read+
-      :ensure t
-      :config
-          ;; This enables ido in all contexts where it could be useful, not just
-          ;; for selecting buffer and file names
-          (ido-mode t)
-          (ido-everywhere t)
-          ;; This allows partial matches, e.g. "uzh" will match "Ustad Zakir Hussain"
-	  (setq ido-enable-flex-matching t)
-	  (setq ido-use-filename-at-point nil)
-	  ;; Includes buffer names of recently opened files, even if they're not open now.
-	  (setq ido-use-virtual-buffers t)
-	  :diminish nil)
-  #+end_src
-** Replace ~list-buffer~ with [[https://www.emacswiki.org/emacs/IbufferMode#Ibuffer][ibuffer]]
-#+begin_src emacs-lisp
-(global-set-key (kbd "C-x C-b") 'ibuffer)
-#+end_src
 ** Text wrapping
 Turn on [[https://www.gnu.org/software/emacs/manual/html_node/emacs/Visual-Line-Mode.html][visual-line-mode]] for text and org files. This wraps words by word boundaries.
 
@@ -169,21 +149,47 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-* Smarter selection: Ivy
+* Vertico - Completion and selection
+I use it to replace =Ivy=. Efficient for selecting an item from many.
+
 #+begin_src emacs-lisp
-  (use-package ivy
-    :ensure t 
-    :diminish
-    :config
-        (ivy-mode 1))
+  (use-package vertico
+    :init
+    (vertico-mode)
+
+    ;; Different scroll margin
+    ;; (setq vertico-scroll-margin 0)
+
+    ;; Show more candidates
+    ;; (setq vertico-count 20)
+
+    ;; Grow and shrink the Vertico minibuffer
+    ;; (setq vertico-resize t)
+
+    ;; Optionally enable cycling for `vertico-next' and `vertico-previous'.
+    ;; (setq vertico-cycle t)
+    )
+#+end_src
+* Consult - Completion and navigation
+[[https://github.com/minad/consult][Cosult]] is similar to Ivy's =counsel=, but =Consult='s preview function is very compelling. See [[https://www.reddit.com/r/emacs/comments/qfrxgb/comment/hi6mfh7/?context=1][this page]] for more info about the relationship between Consult and Ivy. Note that it's not useful without Vertico.
+
+Useful commands:
+- =consult-line=: Quickly filter lines containing texts in a buffer (somewhat similar to Ivy's =Swiper= but not quite)
+
+#+begin_src emacs-lisp
+  (use-package consult
+    :bind (
+           ("C-x b" . consult-buffer)    ;; orig. switch-to-buffer
+           )
+    ;; Enable automatic preview at point in the *Completions* buffer. This is
+    ;; relevant when you use the default completion UI.
+    :hook (completion-list-mode . consult-preview-at-point-mode)
+
+    ;; The :init configuration is always executed (Not lazy)
+    :init
+  )
 #+end_src
 
-counsel is a companion package for Ivy
-#+begin_src emacs-lisp
-  (use-package counsel
-    :ensure t
-    :init (counsel-mode))
-#+end_src
 * Dired customization
 Reference: [[http://ergoemacs.org/emacs/emacs_dired_tips.html][Xah Lee's page]]
 
@@ -206,6 +212,8 @@ Use the same buffer for viewing directory:
 * Deft: For searching documents
 
 [[https://github.com/jrblevin/deft][Deft mode]] is a tool for managing notes, similar to Notational Velocity on macOS.
+
+Note that I am planning to replace it with =consult=.
 
 ** Basic setup
 
@@ -622,6 +630,35 @@ For org-roam daily entries, we need some templates.
                 "%<%Y-%m-%d>.org"
                 "#+title: Journal %<%Y-%m-%d>\n")
   )
+#+end_src
+** consult-org-roam
+#+begin_src emacs-lisp
+  (use-package consult-org-roam
+     :ensure t
+     :after org-roam
+     :init
+     (require 'consult-org-roam)
+     ;; Activate the minor mode
+     (consult-org-roam-mode 1)
+     :custom
+     ;; Use `ripgrep' for searching with `consult-org-roam-search'
+     (consult-org-roam-grep-func #'consult-ripgrep)
+     ;; Configure a custom narrow key for `consult-buffer'
+     (consult-org-roam-buffer-narrow-key ?r)
+     ;; Display org-roam buffers right after non-org-roam buffers
+     ;; in consult-buffer (and not down at the bottom)
+     (consult-org-roam-buffer-after-buffers t)
+     :config
+     ;; Eventually suppress previewing for certain functions
+     (consult-customize
+      consult-org-roam-forward-links
+      :preview-key (kbd "M-."))
+     :bind
+     ;; Define some convenient keybindings as an addition
+     ("C-c n e" . consult-org-roam-file-find)
+     ("C-c n b" . consult-org-roam-backlinks)
+     ("C-c n l" . consult-org-roam-forward-links)
+     ("C-c n r" . consult-org-roam-search))
 #+end_src
 * Writing
 Grammarly
