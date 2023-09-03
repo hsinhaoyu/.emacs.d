@@ -101,6 +101,14 @@ Turn off the tool bar and scroll bar in windows. Note: I decided to keep the scr
     :config
         (setq which-key-idle-delay 1))
 #+end_src
+** Undo tree
+Organize undo as a tree. The most useful command is =undo-tree-visualize=.
+#+begin_src emacs-lisp
+  (use-package undo-tree
+    :ensure t
+    :init
+     (global-undo-tree-mode))
+#+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
@@ -149,7 +157,9 @@ Use [[https://jblevins.org/projects/markdown-mode/][Markdown mode]] for ~.md~ fi
       :hook ((markdown-mode . flyspell-mode)
              (gfm-mode . flyspell-mode)))
   #+end_src
-* Vertico - Completion and selection
+* Completion and navigation: based on the Consult ecosystem
+** Vertico - Completion and selection
+
 I use it to replace =Ivy=. Efficient for selecting an item from many.
 
 #+begin_src emacs-lisp
@@ -170,7 +180,29 @@ I use it to replace =Ivy=. Efficient for selecting an item from many.
     ;; (setq vertico-cycle t)
     )
 #+end_src
-* Consult - Completion and navigation
+
+** Marginalia: annotation for Vertico
+[[https://github.com/minad/marginalia/][Mrginalia]] provides additional information in minibuffers (primarily to support Vertico).
+
+#+begin_src emacs-lisp
+  ;; Enable rich annotations using the Marginalia package
+  (use-package marginalia
+    ;; Bind `marginalia-cycle' locally in the minibuffer.  To make the binding
+    ;; available in the *Completions* buffer, add it to the
+    ;; `completion-list-mode-map'.
+    :bind (:map minibuffer-local-map
+           ("M-A" . marginalia-cycle))
+
+    ;; The :init section is always executed.
+    :init
+
+    ;; Marginalia must be actived in the :init section of use-package such that
+    ;; the mode gets enabled right away. Note that this forces loading the
+    ;; package.
+    (marginalia-mode))
+#+end_src
+
+** Consult - Completion and navigation
 [[https://github.com/minad/consult][Cosult]] is similar to Ivy's =counsel=, but =Consult='s preview function is very compelling. See [[https://www.reddit.com/r/emacs/comments/qfrxgb/comment/hi6mfh7/?context=1][this page]] for more info about the relationship between Consult and Ivy. Note that it's not useful without Vertico.
 
 Useful commands:
@@ -189,7 +221,14 @@ Useful commands:
     :init
   )
 #+end_src
-
+** Orderless - for search
+#+begin_src emacs-lisp
+  (use-package orderless
+    :ensure t
+    :custom
+    (completion-styles '(orderless basic))
+    (completion-category-overrides '((file (styles basic partial-completion)))))
+#+end_src
 * Dired customization
 Reference: [[http://ergoemacs.org/emacs/emacs_dired_tips.html][Xah Lee's page]]
 
@@ -632,6 +671,8 @@ For org-roam daily entries, we need some templates.
   )
 #+end_src
 ** consult-org-roam
+[[https://github.com/jgru/consult-org-roam][consult-org-roam]] makes it possible to search org-roam files with previews.
+
 #+begin_src emacs-lisp
   (use-package consult-org-roam
      :ensure t
@@ -755,6 +796,15 @@ Disabled because it seems to conflict with LSP
     :init (require 'ess-site))
 #+end_src
 * Programming: misc
+** Check code comments on the fly
+#+begin_src emacs-lisp
+  (dolist (hook '(common-lisp-lisp-mode-hook
+                  emacs-lisp-mode-hook
+                  python-mode-hook
+                  shell-mode-hook
+                  LaTeX-mode-hook))
+    (add-hook hook 'flyspell-prog-mode))
+#+end_src
 ** Git integration with [[https://magit.vc][Magit]]
   #+begin_src emacs-lisp
   (use-package magit
@@ -766,7 +816,6 @@ Disabled because it seems to conflict with LSP
   #+begin_src emacs-lisp
   (global-set-key (kbd "M-i") 'imenu)
   #+end_src 
-
 ** code snippets using [[https://github.com/joaotavora/yasnippet][yasnippet]]
   #+begin_src emacs-lisp
   (use-package yasnippet
@@ -880,16 +929,15 @@ fi
     (defun hhyu-init ()
         (interactive)
         (find-file "~/.emacs.d/config.org"))
-    (defun hhyu-cheatsheet ()
+    (defun hhyu-cheatsheets ()
         (interactive)
-        (dired "~/.emacs.d/notes"))
+        (dired "~/dev/resources/cheatsheets/"))
+    (defun hhyu-tips ()
+        (interactive)
+        (find-file "~/dev/resources/cheatsheets/emacs_tips.org"))
     (defun hhyu-wide ()
         (interactive)
         (set-frame-width (selected-frame) 200))
-    (defun emacs-cheatshee ()
-      (interactive)
-      (find-file "~/.emacs.d/notes/emacs_notes.org"))
-  
   #+end_src
 
 * References
