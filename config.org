@@ -520,19 +520,20 @@ Note that I use the deft directory for Roam.
 #+begin_src emacs-lisp
   (use-package org-roam
     :ensure t
-  
+
     :init
     (setq org-roam-v2-ack t)
-  
+
     :custom
     (org-roam-directory (get_deft_path))
     (org-roam-completion-everywhere t)
-  
+
     :config
     (org-roam-db-autosync-mode)
-  
+
     :bind (("C-c r c" . org-roam-capture)
-           ("C-c r f" . org-roam-node-find)
+           ("C-c r f" . consult-org-roam-file-find)
+           ("C-c r s" . consult-org-roam-search)
            ("C-c r i" . org-roam-node-insert)
            ("C-c r l" . org-roam-buffer-toggle)
            ("C-c r j" . org-roam-dailies-capture-today)
@@ -589,7 +590,8 @@ Notes about Org-Roam V2:
 - "#+roam_tags" is gone. I never used it anyway
 - "#+roam_alias" is gone. Replaced by the "roam_aliases" property. Press "C-c r a" to insert a new alias
 
-#+begin_src emacs-lisp :noweb yes
+I think I have disabled it by setting noweb to no
+#+begin_src emacs-lisp :noweb no
   (setq org-roam-capture-templates
      '(
           <<ORG_ROAM_CAPTURE>>
@@ -645,14 +647,16 @@ Set up the location of the dailies.
 #+end_src
 
 
-For org-roam daily entries, we need some templates.
-#+begin_src emacs-lisp :noweb yes
+For org-roam daily entries, we eneed some templates.
+#+begin_comment
+#+begin_src emacs-lisp :noweb no
   (setq org-roam-dailies-capture-templates
       '(
           <<ORG_ROAM_DAILY_CAPTURE>>
       )
   )      
 #+end_src
+#+end_comment
 
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("d" "default" entry
