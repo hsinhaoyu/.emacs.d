@@ -384,6 +384,7 @@ By default, only lisp code blocks can be evaluated. Other languages have to be e
      (R . t)
      (sqlite . t)
      (lilypond . t)
+     (scheme . t)
      ))
 #+end_src
 
