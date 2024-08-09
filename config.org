@@ -591,6 +591,7 @@ Notes about Org-Roam V2:
 - "#+roam_alias" is gone. Replaced by the "roam_aliases" property. Press "C-c r a" to insert a new alias
 
 I think I have disabled it by setting noweb to no
+#+begin_comment
 #+begin_src emacs-lisp :noweb no
   (setq org-roam-capture-templates
      '(
@@ -598,6 +599,7 @@ I think I have disabled it by setting noweb to no
        )
    )
 #+end_src
+#+end_comment
 
 The default template:
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_CAPTURE
