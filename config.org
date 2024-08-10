@@ -650,15 +650,13 @@ Set up the location of the dailies.
 
 
 For org-roam daily entries, we eneed some templates.
-#+begin_comment
-#+begin_src emacs-lisp :noweb no
+#+begin_src emacs-lisp :noweb yes
   (setq org-roam-dailies-capture-templates
       '(
           <<ORG_ROAM_DAILY_CAPTURE>>
       )
   )      
 #+end_src
-#+end_comment
 
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("d" "default" entry
@@ -669,6 +667,7 @@ For org-roam daily entries, we eneed some templates.
   )
 #+end_src
 
+#+begin_comment
 #+begin_src emacs-lisp :tangle no :noweb-ref ORG_ROAM_DAILY_CAPTURE
   ("m" "meeting" entry
        "*** %(format-time-string \"%H:%M\") %? [[roam:meeting]]\n"
@@ -677,6 +676,7 @@ For org-roam daily entries, we eneed some templates.
                 "#+title: Journal %<%Y-%m-%d>\n")
   )
 #+end_src
+#+end_comment
 ** consult-org-roam
 [[https://github.com/jgru/consult-org-roam][consult-org-roam]] makes it possible to search org-roam files with previews.
 
