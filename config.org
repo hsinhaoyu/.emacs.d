@@ -115,7 +115,30 @@ In =.zshrc=, remember to export three environment variables
 export DEFT_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
 export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
 #+end_src
-** Casual Dired - user-friendly Dired
+** [[https://github.com/kickingvegas/casual-bookmarks][Causal Bookmarks]] - user-friendly bookmarks
+
+#+begin_src emacs-lisp
+(use-package bookmark
+  :ensure nil
+  :defer t)
+(use-package casual-bookmarks
+  :ensure t
+  :bind (:map bookmark-bmenu-mode-map
+              ("C-o" . casual-bookmarks-tmenu)
+              ("S" . casual-bookmarks-sortby-tmenu)
+              ("J" . bookmark-jump))
+  :after (bookmark))
+#+end_src
+
+Add a menu item for easy access.
+#+begin_src emacs-lisp
+(require 'casual-bookmarks)
+(easy-menu-add-item global-map '(menu-bar)
+                    casual-bookmarks-main-menu
+                    "Tools")
+#+end_src
+
+** [[https://github.com/kickingvegas/casual-dired][Casual Dired]] - user-friendly Dired
 Invoke =M-x= dired to launch =Dired=, then =C-o=.
 
 #+begin_src emacs-lisp
