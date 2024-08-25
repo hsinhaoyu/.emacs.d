@@ -149,6 +149,13 @@ Invoke =M-x= dired to launch =Dired=, then =C-o=.
               ("s" . #'casual-dired-sort-by-tmenu)
               ("/" . #'casual-dired-search-replace-tmenu)))
 #+end_src
+** [[https://github.com/kickingvegas/casual-avy][Casual Avy]] - User-friendly Avy
+Quickly move to any where in the visible area by searching. 
+#+begin_src emacs-lisp
+(use-package casual-avy
+  :ensure t
+  :bind ("M-g" . casual-avy-tmenu))
+#+end_src
 ** Experimental
 This is supposed to be useful for accessing environment variables on macOS. Disabled because I haven't found it useful yet.
 #+BEGIN_SRC
