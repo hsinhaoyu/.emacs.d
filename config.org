@@ -888,7 +888,7 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
 #+begin_src emacs-lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "sbcl")
+(setq inferior-lisp-program "/opt/homebrew/bin/sbcl")
 #+end_src
 * Shell commands, client/server
 ** Shell commands for running emacs without the daemon
