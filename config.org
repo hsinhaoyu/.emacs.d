@@ -843,7 +843,7 @@ Disabled because it seems to conflict with LSP
     :ensure t
     :init (require 'ess-site))
 #+end_src
-* Programming: misc
+* Programming: Misc
 ** Check code comments on the fly
 #+begin_src emacs-lisp
   (dolist (hook '(common-lisp-lisp-mode-hook
@@ -879,12 +879,24 @@ The [[https://github.com/spotify/dockerfile-mode][dockerfile-mode]] makes it eas
 (use-package dockerfile-mode
  :ensure t)
 #+end_src
-** Go
+** =dumb-jump= for locating function definitions
+The "Mastering Emacs" book recommends the [[https://github.com/jacktasia/dumb-jump][dumb-jump]] package for locating programming symbols.  [[https://susam.net/cc/mastering-emacs/ch06.html#xref][This page]] has more info.
+
+The package's README recommends installing [[https://github.com/ggreer/the_silver_searcher#installing][ag]]. I installed it with homebrew. 
+
+#+begin_src emacs-lisp
+  (use-package dumb-jump
+    :ensure t)
+
+  ;; Enable the xref backend. 
+  (add-hook 'xref-backend-functions #'dumb-jump-xref-activate)
+#+end_src
+* Programming: Go
 #+begin_src emacs-lisp
 (use-package go-mode
  :ensure t)
 #+end_src
-** Common LISP
+* Programming: Common LISP
 For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
 #+begin_src emacs-lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
