@@ -775,64 +775,26 @@ Lilypond comes with a lilypond-mode, but I have to add it to the load path mysel
         (setq projectile-switch-project-action #'projectile-dired))
 
 #+end_src
-* Programming: LSP (Language Server Protocol)
-
-See https://emacs-lsp.github.io/lsp-mode/
-
-Remember that a language server needs to be installed for each language
-
-
-I used to use the `lsp-mode` module to communicate with the language server. But I am now using `eglot`.
-
-+begin_src emacs-lisp
-  (use-package lsp-mode
-    :ensure t
-    :commands (lsp lsp-deferred)
-    :init
-    (setq lsp-keymap-prefix "C-l")
-    :config
-    (lsp-enable-which-key-integration t))
-+end_src
-
 * Programming: Python
-** Python language server
-Install [[https://github.com/python-lsp/python-lsp-server][python-lsp-server]] with =pip install "python-lsp-server[all]"=.
-Running =pylsp= under bash should work.
+I am using Emacs' built-in language client (=eglot=). 
+I am using Microsoft =pyright= for the language server. To install, =pip install pyright=.
+
+Automatically turn on =eglot=
+#+begin_src emacs-lisp
+  (add-hook 'python-mode-hook 'eglot-ensure)
+  (add-hook 'python-ts-mode-hook 'eglot-ensure)
+#+end_src
 
 ** Python mode
 To evoke the "Python shell", =M-x run-python=.
 
 This required =lsp-mode=, so check the LSP section. 
-#+begin_src emacs-lisp
++begin_src emacs-lisp
   (use-package python-mode
     :ensure nil
     :hook (python-mode . lsp-deferred)
     )
-#+end_src
-
-* Programming: Python (old)
-
-I used to use [[http://tkf.github.io/emacs-jedi/latest/][jedi]], but since 2021, I decided to use a setup based on LSP (following the System Crafter [[https://www.youtube.com/watch?v=jPXIP46BnNA][video]].
-
-I tried [[https://elpy.readthedocs.io/en/latest/][elpy]] and [[https://melpa.org/#/anaconda-mode][annaconda-mode]], but couldn't get them to work. [[http://tkf.github.io/emacs-jedi/latest/][jedi]] seems to do what I need to do.
-
-Jedi doesn't work without `virtualenv`. I installed it, although I am already using conda. This might create problems in the future. I will investigate further.
-
-I installed jedi manually. Following the instruction, I did:
-#+begin_src sh
-  M-x package-install RET company-jedi
-  M-x jedi:install-server
-#+end_src
-
-+begin_src emacs-lisp
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
-#+end_src
-
-Roam is a minor mode. It's turned on after loading a .org file, but it's not turned off afterwards. This is a hack to turn it off, if I load a python file. There must be better ways to do this.
-+begin_src emacs-lisp
-(add-hook 'python-mode-hook (lambda () (org-roam-mode -1)))
-#+end_src
++end_src
 
 * Programming: R
 This [[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-R.html][document]] explains how to use R code blocks. The ESS (Emacs Speaks Statistics) package is needed.
@@ -844,7 +806,7 @@ Disabled because it seems to conflict with LSP
     :init (require 'ess-site))
 #+end_src
 * Programming: Misc
-** Check code comments on the fly
+** Spell-check code comments on the fly
 #+begin_src emacs-lisp
   (dolist (hook '(common-lisp-lisp-mode-hook
                   emacs-lisp-mode-hook
@@ -979,7 +941,7 @@ change_focus() {
 if [[ $socket_file == "" ]]; then
     echo "starting Emacs server..."
     # I am not sure why I need --chdir $PWD for emacs to load the file from the working directory. But if I didn't add it, emacs starts with $HOME
-    $emacs --chdir $PWD --execute "(server-start)" $@ &
+    $emacs --chdir $PWD --execute "(progn (server-start) (hhyu-big))" $@ &
 else
     $emacsclient -n $@ --socket-name $socket_file
 fi
@@ -998,6 +960,23 @@ fi
     (defun hhyu-wide ()
         (interactive)
         (set-frame-width (selected-frame) 200))
+    (defun hhyu-big ()
+        (interactive)
+        (set-frame-width (selected-frame) 180)
+        (set-frame-height (selected-frame) 60)
+        (my/frame-recenter))
+  #+end_src
+
+  Place a frame (i.e. window) to the center of the monitor. Taken from https://christiantietze.de/posts/2022/04/emacs-center-window-current-monitor-simplified/
+  #+begin_src emacs-lisp
+    (defun my/frame-recenter (&optional frame)
+      "Center FRAME on the screen.
+    FRAME can be a frame name, a terminal name, or a frame.
+    If FRAME is omitted or nil, use currently selected frame."
+      (interactive)
+      (unless (eq 'maximised (frame-parameter nil 'fullscreen))
+        (modify-frame-parameters
+         frame '((user-position . t) (top . 0.5) (left . 0.5)))))
   #+end_src
 
 * References
