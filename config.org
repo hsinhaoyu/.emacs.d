@@ -751,7 +751,7 @@ For org-roam daily entries, we eneed some templates.
 #+end_src
 * Writing
 
-Use [[https://github.com/PillFall/languagetool.el][languagetool]] to check grammar.
+Use [[https://github.com/PillFall/languagetool.el][languagetool]] to check grammar. Currently, to check grammar, =M-x languagetool-check=
 
 #+begin_src emacs-lisp
 (use-package languagetool
