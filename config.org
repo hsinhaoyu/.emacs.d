@@ -800,6 +800,12 @@ Automatically turn on =eglot=
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
 #+end_src
 
+Reformat python code with =ruff=. Try =M-x ruff-format-region=.
+#+begin_src emacs-lisp
+  (use-package ruff-format
+    :ensure t)
+#+end_src
+
 * Programming: R
 This [[https://orgmode.org/worg/org-contrib/babel/languages/ob-doc-R.html][document]] explains how to use R code blocks. The ESS (Emacs Speaks Statistics) package is needed.
 
