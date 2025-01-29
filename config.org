@@ -750,26 +750,16 @@ For org-roam daily entries, we eneed some templates.
      ("C-c n r" . consult-org-roam-search))
 #+end_src
 * Writing
-
-Use [[https://github.com/PillFall/languagetool.el][languagetool]] to check grammar. Currently, to check grammar, =M-x languagetool-check=
+Use flycheck to check grammar. To start, =M-x flycheck-mode=.
 
 #+begin_src emacs-lisp
-(use-package languagetool
-  :ensure t
-  :defer t
-  :commands (languagetool-check
-             languagetool-clear-suggestions
-             languagetool-correct-at-point
-             languagetool-correct-buffer
-             languagetool-set-language
-             languagetool-server-mode
-             languagetool-server-start
-             languagetool-server-stop)
-  :config
-  (setq languagetool-java-arguments '("-Dfile.encoding=UTF-8")
-        languagetool-console-command "~/bin/langtool/LanguageTool-6.5/languagetool-commandline.jar"
-        languagetool-server-command "~/bin/langtool/LanguageTool-6.5/languagetool-server.jar"))
+  (use-package flycheck-languagetool
+    :ensure t
+    :hook (text-mode . flycheck-languagetool-setup)
+    :init
+    (setq flycheck-languagetool-server-jar "/Users/hhyu/bin/langtool/LanguageTool-6.5/languagetool-server.jar"))
 #+end_src
+
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
 #+begin_src emacs-lisp

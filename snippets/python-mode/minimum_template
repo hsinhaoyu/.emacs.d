@@ -1,0 +1,10 @@
+# -*- mode: snippet -*-
+# name: <py-start
+# key: <py-start
+# --
+def main() -> int:
+    """Run main program."""
+    return 1
+
+if __name__ == "__main__":
+    main()
