@@ -1,1 +1,1 @@
-("~/projects/why_functional/" "~/.emacs.d/" "~/learn/test_projectile/")
+("~/dev/learn/numbers/numbers/" "~/dev/learn/numbers/" "~/.emacs.d/" "~/dev/resources/" "~/dev/wubba/")
