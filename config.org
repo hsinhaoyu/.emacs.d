@@ -750,12 +750,14 @@ For org-roam daily entries, we eneed some templates.
      ("C-c n r" . consult-org-roam-search))
 #+end_src
 * Writing
-Use flycheck to check grammar. To start, =M-x flycheck-mode=.
+Use [[https://www.flycheck.org/en/latest/][flycheck]] to check grammar. To manually start checking a buffer, =M-x flycheck-mode=.
+However, since I have =(global-flycheck-mode)= turned on, it should happen automatically.
 
 #+begin_src emacs-lisp
   (use-package flycheck-languagetool
     :ensure t
-    :hook (text-mode . flycheck-languagetool-setup)
+    :hook ((text-mode . flycheck-languagetool-setup)
+  	 (org-mode  . flycheck-languagetool-setup))
     :init
     (setq flycheck-languagetool-server-jar "/Users/hhyu/bin/langtool/LanguageTool-6.5/languagetool-server.jar"))
 #+end_src
@@ -780,6 +782,16 @@ Lilypond comes with a lilypond-mode, but I have to add it to the load path mysel
         (setq projectile-switch-project-action #'projectile-dired))
 
 #+end_src
+* Programming: [[https://www.flycheck.org/en/latest/][Flycheck]]
+Flycheck is an modern alternative to =flymake=.  It is used to check code, but I also use it for English grammar.
+
+All I am doing here is turning it on automatically.  To disable flycheck, =M-x flycheck-mode=.
+
+#+begin_src emacs-lisp
+(use-package flycheck
+  :config (global-flycheck-mode))
+#+end_src
+
 * Programming: Python
 I am using Emacs' built-in language client (=eglot=). 
 I am using Microsoft =pyright= for the language server. To install, =pip install pyright=.
