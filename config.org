@@ -109,6 +109,12 @@ Organize undo as a tree. The most useful command is =undo-tree-visualize=.
     :init
      (global-undo-tree-mode))
 #+end_src
+** Winner mode
+To restore the previous arrangement of windows, =M-x winner-undo=
+
+#+begin_src emacs-lisp
+  (winner-mode 1)
+#+end_src
 ** Unix setting
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
