@@ -799,6 +799,7 @@ All I am doing here is turning it on automatically.  To disable flycheck, =M-x f
 #+end_src
 
 * Programming: Python
+** Language Server (=eglot=)
 I am using Emacs' built-in language client (=eglot=). 
 I am using Microsoft =pyright= for the language server. To install, =pip install pyright=.
 
@@ -808,6 +809,19 @@ Automatically turn on =eglot=
   (add-hook 'python-ts-mode-hook 'eglot-ensure)
 #+end_src
 
+** Virtual environment
+I use [[https://github.com/jorgenschaefer/pyvenv][pyvenv]] to switch between Python virtual environments. Run =M-x pyvenv= to select a virtual env (Anconda is in =~/anaconda3/envs=).  There is a environment variable to set it automatically but I haven't done it.
+
+Note that there is another Emacs package called [[https://github.com/pythonic-emacs/pyenv-mode][pvenv-mode]]. It might also do the same thing, but I couldn't get it to work.
+
+#+begin_src emacs-lisp
+  (use-package pyvenv
+    :ensure t
+    :config
+    (pyvenv-mode t))
+#+end_src
+
+** Reformat
 Reformat python code with =ruff=. Try =M-x ruff-format-region=.
 #+begin_src emacs-lisp
   (use-package ruff-format
