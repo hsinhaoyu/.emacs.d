@@ -890,12 +890,27 @@ The package's README recommends installing [[https://github.com/ggreer/the_silve
 (use-package go-mode
  :ensure t)
 #+end_src
-* Programming: Common LISP
+* Programming: Common LISP and Scheme
 For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
 #+begin_src emacs-lisp
 (load (expand-file-name "~/quicklisp/slime-helper.el"))
 (setq inferior-lisp-program "/opt/homebrew/bin/sbcl")
 #+end_src
+
+I use paredit for structured editing of LISP/Scheme code.
+#+begin_src emacs-lisp
+  (use-package paredit
+    :ensure t)
+
+  (autoload 'enable-paredit-mode "paredit"
+    "Turn on pseudo-structural editing of Lisp code."
+    t)
+  (add-hook 'emacs-lisp-mode-hook       'enable-paredit-mode)
+  (add-hook 'lisp-mode-hook             'enable-paredit-mode)
+  (add-hook 'lisp-interaction-mode-hook 'enable-paredit-mode)
+  (add-hook 'scheme-mode-hook           'enable-paredit-mode)
+#+end_src
+
 * Shell commands, client/server
 ** Shell commands for running emacs without the daemon
 I used the shell command =emacs= to evoke the non-client/server emacs in GUI mode. Similarly, =emacsnw= runs emacs in the terminal. These two commands are defined in =.zshrc=.
