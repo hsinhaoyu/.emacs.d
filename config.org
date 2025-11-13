@@ -897,8 +897,8 @@ For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/lea
 (setq inferior-lisp-program "/opt/homebrew/bin/sbcl")
 #+end_src
 
-I use paredit for structured editing of LISP/Scheme code.
-#+begin_src emacs-lisp
+I tried paredit for structured editing of LISP/Scheme code, but I decided to disable it
+#+begin_src emacs-lisp :tangle no
   (use-package paredit
     :ensure t)
 
