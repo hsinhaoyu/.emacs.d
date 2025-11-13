@@ -4,6 +4,11 @@
 
 This is my Emacs configuration file, in literate programming style (based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]]).
 
+* Loading
+I use this directory for my personal elisp code.
+  #+begin_src emacs-lisp
+    (add-to-list 'load-path "~/.emacs.d/lisp/")
+  #+end_src
 * Package management
 ** Use [[https://melpa.org/#/][MELPA]] for package archive
 
@@ -754,6 +759,11 @@ For org-roam daily entries, we eneed some templates.
      ("C-c n b" . consult-org-roam-backlinks)
      ("C-c n l" . consult-org-roam-forward-links)
      ("C-c n r" . consult-org-roam-search))
+#+end_src
+** browsing
+My custom function
+#+begin_src emacs-lisp
+  (require 'org-roam-dailies-feed)
 #+end_src
 * Writing
 Use [[https://www.flycheck.org/en/latest/][flycheck]] to check grammar. To manually start checking a buffer, =M-x flycheck-mode=.
