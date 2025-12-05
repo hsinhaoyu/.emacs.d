@@ -1,3 +1,4 @@
+
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 #+STARTUP: overview
@@ -293,11 +294,21 @@ Hide ownership details:
   (add-hook 'dired-mode-hook 'xah-dired-mode-setup)
 #+end_src
 
-Use the same buffer for viewing directory:
+Use the same buffer for viewing directory.
+Press "a" to open a dir in the same buffer.
+Press "^" to go up a dir in the same buffer.
 #+begin_src emacs-lisp
-;;  (define-key dired-mode-map (kbd "RET") 'dired-find-alternate-file) ; was dired-advertised-find-file
-;;
-;;  (define-key dired-mode-map (kbd "^") (lambda () (interactive) (find-alternate-file "..")))  ; was dired-up-directory
+  (put 'dired-find-alternate-file 'disabled nil)
+
+  (with-eval-after-load 'dired
+    ;; "a" = open dir in same buffer
+    (define-key dired-mode-map (kbd "a") #'dired-find-alternate-file)
+
+    ;; "^" = go up in same buffer
+    (define-key dired-mode-map (kbd "^")
+      (lambda ()
+        (interactive)
+        (find-alternate-file ".."))))
 #+end_src
 
 * Deft: For searching documents
