@@ -472,6 +472,8 @@ Added this =org-babel-tangle-append= command, so that tangling appends to existi
 Integration with deft: Use everything under deft to build agenda.
 Since I save all Roam dailies under the /daily directory under the deft directory, I also included that directory.
 I thought that org-agenda-files is by default recursive, but if I didn't include the daily subdirectory, agenda doesn't see TODO's in dailies.
+
+Note: I decided to not to set =org-agenda-files= because it causes performance problems. I don't use agenda for the time being
   #+begin_src emacs-lisp
     ;; if ORG_PATH is not defined, use the default DEFT path
     (defun get_agenda_path ()
@@ -479,10 +481,9 @@ I thought that org-agenda-files is by default recursive, but if I didn't include
         (if org_agenda_path org_agenda_path "~/.deft")))
 
     ;;(setq org-agenda-files '("~/.deft"))
-    (setq org-agenda-files
-          (list (get_agenda_path)
-                (concat (get_agenda_path) "/daily")))
-      
+    ;;(setq org-agenda-files
+    ;;      (list (get_agenda_path)
+    ;;            (concat (get_agenda_path) "/daily")))
   #+end_src
 
 This defines my todo workflow
@@ -788,7 +789,15 @@ However, since I have =(global-flycheck-mode)= turned on, it should happen autom
     :init
     (setq flycheck-languagetool-server-jar "/Users/hhyu/bin/langtool/LanguageTool-6.5/languagetool-server.jar"))
 #+end_src
+* Blogging with Hugo
 
+Install =ox-hugo=
+#+begin_src emacs-lisp
+  (use-package ox-hugo
+    :ensure t   ;Auto-install the package from Melpa
+    :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
+    :after ox)
+#+end_src
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
 #+begin_src emacs-lisp
