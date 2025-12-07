@@ -1,4 +1,3 @@
-
 #+TITLE: Hsin-Hao's Emacs configuration
 #+AUTHOR: Hsin-Hao Yu
 #+STARTUP: overview
@@ -491,6 +490,11 @@ This defines my todo workflow
   (setq org-todo-keywords
       '((sequence "NEXT(n)" "TODO(t)" "WAITING(w)" "SOMEDAY(s)" "PROJ(p)" "|" "DONE(d)" "CANCELED(c)")))
   #+end_src
+
+Log the time of done
+#+begin_src emacs-lisp
+(setq org-log-done 'time)
+#+end_src
 ** Agenda UX
 
   #+begin_src emacs-lisp
@@ -778,26 +782,106 @@ My custom function
   (require 'org-roam-dailies-feed)
 #+end_src
 * Writing
-Use [[https://www.flycheck.org/en/latest/][flycheck]] to check grammar. To manually start checking a buffer, =M-x flycheck-mode=.
-However, since I have =(global-flycheck-mode)= turned on, it should happen automatically.
+
+I used to use =flycheck-languagetool=, but I have replaced it with =lsp-ltex=.
 
 #+begin_src emacs-lisp
-  (use-package flycheck-languagetool
+    ;; Make Emacs use the same PATH as your shell (including Homebrew's Java)
+    (use-package exec-path-from-shell
+      :ensure t
+      :config
+      (exec-path-from-shell-initialize))
+
+    ;; Explicitly set JAVA_HOME and exec-path for Java
+    (setenv "JAVA_HOME" "/opt/homebrew/opt/openjdk")
+    (add-to-list 'exec-path "/opt/homebrew/opt/openjdk/bin")
+
+  ;; Make sure Emacs passes this JVM option to ltex-ls (and other Java tools)
+  (let ((opt "-Djdk.xml.totalEntitySizeLimit=0"))
+    (setenv "JAVA_TOOL_OPTIONS"
+            (string-join
+             (seq-filter #'identity
+                         (list (getenv "JAVA_TOOL_OPTIONS") opt))
+             " ")))
+#+end_src
+
+#+begin_src emacs-lisp
+  (setq lsp-auto-guess-root nil)
+
+  (use-package lsp-ltex
     :ensure t
-    :hook ((text-mode . flycheck-languagetool-setup)
-  	 (org-mode  . flycheck-languagetool-setup))
+    :hook ((text-mode org-mode markdown-mode)
+           . (lambda ()
+               (require 'lsp-ltex)
+               (lsp)))            ; or (lsp-deferred)
     :init
-    (setq flycheck-languagetool-server-jar "/Users/hhyu/bin/langtool/LanguageTool-6.5/languagetool-server.jar"))
+    ;; Language for grammar checking
+    (setq lsp-ltex-language "en-AU")
+    ;; Tell lsp-ltex where the LS lives (NOTE the name: lsp-ltex-ls-path)
+    (setq lsp-ltex-ls-path "/Applications/ltex-ls-16.0.0"))
 #+end_src
 * Blogging with Hugo
 
 Install =ox-hugo=
+
 #+begin_src emacs-lisp
   (use-package ox-hugo
     :ensure t   ;Auto-install the package from Melpa
     :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
     :after ox)
 #+end_src
+
++begin_src emacs-lisp
+(with-eval-after-load 'org-capture
+
+  ;; 1. Target function: open the org file and move point to the *top*
+  ;;    of the posts list, so capture PREPENDS.
+  (defun my/org-hugo-micro-prepend-target ()
+    "Capture target for Hugo micro-posts, prepending under a heading."
+    (find-file "~/Library/Mobile Documents/com~apple~CloudDocs/sites/try_ox_hugo/quickstart/content-org/app-posts.org")
+    ;; Go to the heading under which you store the micro posts.
+    (goto-char (point-min))
+    (unless (re-search-forward "^\\* +Micro posts\\b" nil t)
+      ;; If it doesn't exist, create it at end of file.
+      (goto-char (point-max))
+      (insert "\n* Micro posts\n"))
+    ;; Go to that heading and place point just after it, before any children.
+    (org-back-to-heading t)
+    (org-show-subtree)
+    (forward-line 1))  ;; insertion point = first line after heading → prepend
+
+  ;; 2. Template function: builds the subtree text with the properties you want.
+  (defun my/org-hugo-micro-post-template ()
+    "Return an org subtree string for a new Hugo micro post."
+    (let* ((title (read-from-minibuffer "Micro post title: "))
+           (slug  (org-hugo-slug title))
+           ;; YYYYMMDDHHMM
+           (ts    (format-time-string "%Y%m%d%H%M"))
+           (fname (format "%s_%s" ts slug)))
+      (mapconcat
+       #'identity
+       (list
+        (concat "* TODO " title)
+        ":PROPERTIES:"
+        (concat ":EXPORT_FILE_NAME: " fname)
+        ":EXPORT_HUGO_SECTION: micro"
+        ;; You asked for `"tag1" "tag2"`. ox-hugo is fine with this format
+        ;; for multi-word tags; you can change these strings as you like.
+        ":EXPORT_HUGO_TAGS: \"tag1\" \"tag2\""
+        ":EXPORT_DATE: CLOSED"
+        ":END:"
+        ""
+        "%?")   ;; cursor ends up here
+       "\n")))
+
+  ;; 3. Capture template using the target + template above.
+  (add-to-list 'org-capture-templates
+               '("m" "Hugo micro post (prepend)"
+                 entry
+                 (function my/org-hugo-micro-prepend-target)
+                 (function my/org-hugo-micro-post-template))))
+#+end_src
+
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
 #+begin_src emacs-lisp
@@ -809,7 +893,7 @@ Lilypond comes with a lilypond-mode, but I have to add it to the load path mysel
   (add-hook 'LilyPond-mode-hook (lambda () (turn-on-font-lock)))
 #+end_src
 * Project management: Projectile
-#+begin_src emacs-lisp
++begin_src emacs-lisp
   (use-package projectile
     :ensure t
     :config (projectile-mode)
@@ -817,7 +901,7 @@ Lilypond comes with a lilypond-mode, but I have to add it to the load path mysel
     :init
         (setq projectile-switch-project-action #'projectile-dired))
 
-#+end_src
++end_src
 * Programming: [[https://www.flycheck.org/en/latest/][Flycheck]]
 Flycheck is an modern alternative to =flymake=.  It is used to check code, but I also use it for English grammar.
 
