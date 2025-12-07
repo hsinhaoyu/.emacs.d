@@ -9,7 +9,7 @@
  '(org-agenda-files '("~/.deft/learn_org.org"))
  '(org-babel-lilypond-commands '("lilypond" "open" "open"))
  '(package-selected-packages
-   '(lsp-ltex ox-hugo avy paredit pyvenv pyenv-mode pyvenv-mode transpose-frame flycheck-languagetool ruff-format languagetool eglot dumb-jump casual-avy casual-dired casual-bookmarks extempore-mode undo-tree orderless marginalia consult-org-roam vertico consult geiser-guile geiser yasnippet flymake-grammarly flycheck-grammarly lsp-mode zenburn which-key projectile org-tree-slide visual-fill-column counsel doom-modeline ivy ess zenburn-theme company-jedi anaconda-mode one-themes nofrils-acme-theme smartparens smartparens-mode smartparen-mode company-org-roam olivetti org-roam go-mode exec-path-from-shell dockerfile-mode org-mode htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ use-package company spacemacs-theme)))
+   '(lsp-ui lsp-ltex ox-hugo avy paredit pyvenv pyenv-mode pyvenv-mode transpose-frame flycheck-languagetool ruff-format languagetool eglot dumb-jump casual-avy casual-dired casual-bookmarks extempore-mode undo-tree orderless marginalia consult-org-roam vertico consult geiser-guile geiser yasnippet flymake-grammarly flycheck-grammarly lsp-mode zenburn which-key projectile org-tree-slide visual-fill-column counsel doom-modeline ivy ess zenburn-theme company-jedi anaconda-mode one-themes nofrils-acme-theme smartparens smartparens-mode smartparen-mode company-org-roam olivetti org-roam go-mode exec-path-from-shell dockerfile-mode org-mode htmlize org-bullets org-journal org-super-agenda deft markdown-mode taskpaper-mode elpy ido-completing-read+ use-package company spacemacs-theme)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.

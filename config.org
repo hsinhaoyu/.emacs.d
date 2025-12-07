@@ -781,51 +781,93 @@ My custom function
 #+begin_src emacs-lisp
   (require 'org-roam-dailies-feed)
 #+end_src
-* Writing
+* Writing - =languagetool= and =LSP=
 
 I used to use =flycheck-languagetool=, but I have replaced it with =lsp-ltex=.
 
 This block forces emacs to use the homebrew Java, not the Java that comes with macOS.
 Also, Java has some limits on XML entity size. Disable that check.
 #+begin_src emacs-lisp
-    ;; Make Emacs use the same PATH as your shell (including Homebrew's Java)
-    (use-package exec-path-from-shell
-      :ensure t
-      :config
-      (exec-path-from-shell-initialize))
+  ;; Make Emacs use the same PATH as your shell (including Homebrew's Java)
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize))
 
-    ;; Explicitly set JAVA_HOME and exec-path for Java
-    (setenv "JAVA_HOME" "/opt/homebrew/opt/openjdk")
-    (add-to-list 'exec-path "/opt/homebrew/opt/openjdk/bin")
+  ;; Explicitly set JAVA_HOME and exec-path for Java
+  (setenv "JAVA_HOME" "/opt/homebrew/opt/openjdk")
+  (add-to-list 'exec-path "/opt/homebrew/opt/openjdk/bin")
 
-    ;; Make sure Emacs passes this JVM option to ltex-ls (and other Java tools)
-    (let ((opt "-Djdk.xml.totalEntitySizeLimit=0"))
-      (setenv "JAVA_TOOL_OPTIONS"
-            (string-join
-             (seq-filter #'identity
-                         (list (getenv "JAVA_TOOL_OPTIONS") opt))
-             " ")))
+  ;; Make sure Emacs passes this JVM option to ltex-ls (and other Java tools)
+  (let ((opt "-Djdk.xml.totalEntitySizeLimit=0"))
+    (setenv "JAVA_TOOL_OPTIONS"
+          (string-join
+           (seq-filter #'identity
+                       (list (getenv "JAVA_TOOL_OPTIONS") opt))
+           " ")))
 #+end_src
 
 #+begin_src emacs-lisp
-  (setq lsp-auto-guess-root nil)
+  ;; Use Flycheck for LSP diagnostics (instead of Flymake)
+  (with-eval-after-load 'lsp-mode
+    (setq lsp-diagnostics-provider :flycheck))
+
+  (defun my/lsp-ltex-maybe-start ()
+    "Start lsp-ltex only in real file-visiting Org/Text/Markdown buffers."
+    (when buffer-file-name
+      (require 'lsp-ltex)
+      (lsp-deferred)))  ;; non-blocking
 
   (use-package lsp-ltex
     :ensure t
     :hook ((text-mode org-mode markdown-mode)
-           . (lambda ()
-               (require 'lsp-ltex)
-               (lsp)))            ; or (lsp-deferred)
+           . my/lsp-ltex-maybe-start)
     :init
-    ;; Language for grammar checking
     (setq lsp-ltex-language "en-AU")
-    ;; Tell lsp-ltex where the LS lives (NOTE the name: lsp-ltex-ls-path)
     (setq lsp-ltex-ls-path "/Applications/ltex-ls-16.0.0"))
 #+end_src
 
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :config
+    (global-flycheck-mode))
+
+  (with-eval-after-load 'flycheck
+    ;; In Org/Text/Markdown, only use the LSP checker.
+    (dolist (hook '(org-mode-hook markdown-mode-hook text-mode-hook))
+      (add-hook
+       hook
+       (lambda ()
+         (flycheck-mode 1)
+         (setq-local flycheck-checkers '(lsp)))))
+
+    ;; If you ever had flycheck-languagetool, keep it disabled for safety.
+    (add-to-list 'flycheck-disabled-checkers 'languagetool))
+#+end_src
+
+
+#+begin_comment
+#+begin_src emacs-lisp
+(use-package lsp-ui
+  :ensure t
+  :after lsp-mode
+  :hook (lsp-mode . lsp-ui-mode)
+  :custom
+  ;; Show a small popup with info / diagnostics at point
+  (lsp-ui-doc-enable t)
+  (lsp-ui-doc-show-with-cursor t)  ;; show when you move cursor
+  (lsp-ui-doc-show-with-mouse t)   ;; and/or when you hover with mouse
+
+  ;; Show diagnostics in the sideline (optional, but handy)
+  (lsp-ui-sideline-enable t)
+  (lsp-ui-sideline-show-diagnostics t)
+  (lsp-ui-sideline-show-hover nil)) ;; don’t spam hover text in sideline
+#+end_src
+#+end_comment
+
 * Blogging with Hugo
 
-Install =ox-hugo=
+Install =ox-hugo= because I want to automate Hugo posting with =org=.
 
 #+begin_src emacs-lisp
   (use-package ox-hugo
@@ -833,58 +875,6 @@ Install =ox-hugo=
     :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
     :after ox)
 #+end_src
-
-+begin_src emacs-lisp
-(with-eval-after-load 'org-capture
-
-  ;; 1. Target function: open the org file and move point to the *top*
-  ;;    of the posts list, so capture PREPENDS.
-  (defun my/org-hugo-micro-prepend-target ()
-    "Capture target for Hugo micro-posts, prepending under a heading."
-    (find-file "~/Library/Mobile Documents/com~apple~CloudDocs/sites/try_ox_hugo/quickstart/content-org/app-posts.org")
-    ;; Go to the heading under which you store the micro posts.
-    (goto-char (point-min))
-    (unless (re-search-forward "^\\* +Micro posts\\b" nil t)
-      ;; If it doesn't exist, create it at end of file.
-      (goto-char (point-max))
-      (insert "\n* Micro posts\n"))
-    ;; Go to that heading and place point just after it, before any children.
-    (org-back-to-heading t)
-    (org-show-subtree)
-    (forward-line 1))  ;; insertion point = first line after heading → prepend
-
-  ;; 2. Template function: builds the subtree text with the properties you want.
-  (defun my/org-hugo-micro-post-template ()
-    "Return an org subtree string for a new Hugo micro post."
-    (let* ((title (read-from-minibuffer "Micro post title: "))
-           (slug  (org-hugo-slug title))
-           ;; YYYYMMDDHHMM
-           (ts    (format-time-string "%Y%m%d%H%M"))
-           (fname (format "%s_%s" ts slug)))
-      (mapconcat
-       #'identity
-       (list
-        (concat "* TODO " title)
-        ":PROPERTIES:"
-        (concat ":EXPORT_FILE_NAME: " fname)
-        ":EXPORT_HUGO_SECTION: micro"
-        ;; You asked for `"tag1" "tag2"`. ox-hugo is fine with this format
-        ;; for multi-word tags; you can change these strings as you like.
-        ":EXPORT_HUGO_TAGS: \"tag1\" \"tag2\""
-        ":EXPORT_DATE: CLOSED"
-        ":END:"
-        ""
-        "%?")   ;; cursor ends up here
-       "\n")))
-
-  ;; 3. Capture template using the target + template above.
-  (add-to-list 'org-capture-templates
-               '("m" "Hugo micro post (prepend)"
-                 entry
-                 (function my/org-hugo-micro-prepend-target)
-                 (function my/org-hugo-micro-post-template))))
-#+end_src
-
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
 #+begin_src emacs-lisp
@@ -905,16 +895,6 @@ Lilypond comes with a lilypond-mode, but I have to add it to the load path mysel
         (setq projectile-switch-project-action #'projectile-dired))
 
 +end_src
-* Programming: [[https://www.flycheck.org/en/latest/][Flycheck]]
-Flycheck is an modern alternative to =flymake=.  It is used to check code, but I also use it for English grammar.
-
-All I am doing here is turning it on automatically.  To disable flycheck, =M-x flycheck-mode=.
-
-#+begin_src emacs-lisp
-(use-package flycheck
-  :config (global-flycheck-mode))
-#+end_src
-
 * Programming: Python
 ** Language Server (=eglot=)
 I am using Emacs' built-in language client (=eglot=). 
