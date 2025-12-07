@@ -785,6 +785,15 @@ My custom function
 
 I used to use =flycheck-languagetool=, but I have replaced it with =lsp-ltex=.
 
+Components of this setup:
+-  Language server (LSP): [[https://github.com/valentjn/ltex-ls][LTEX LS]]:
+  I downloaded it from the project's github. It's in =/Applications/ltex-ls-16.0.0/bin/ltex-ls=
+  =lsp-ltex= maintains its own version of LanguagetTool. It's not the same one used in the LanguageTool for Desktop app.
+- The emacs [[https://github.com/emacs-languagetool/lsp-ltex][lsp-ltex]] package
+  Sends the diagnostics (via the LSP) to Flycheck
+- Flycheck
+  The UI element to displaying the checks
+
 This block forces emacs to use the homebrew Java, not the Java that comes with macOS.
 Also, Java has some limits on XML entity size. Disable that check.
 #+begin_src emacs-lisp
