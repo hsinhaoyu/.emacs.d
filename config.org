@@ -782,7 +782,6 @@ My custom function
   (require 'org-roam-dailies-feed)
 #+end_src
 * Writing - =languagetool= and =LSP=
-
 I used to use =flycheck-languagetool=, but I have replaced it with =lsp-ltex=.
 
 Components of this setup:
@@ -793,7 +792,8 @@ Components of this setup:
   Sends the diagnostics (via the LSP) to Flycheck
 - Flycheck
   The UI element to displaying the checks
-
+  
+** Setting up =lsp-ltex=
 This block forces emacs to use the homebrew Java, not the Java that comes with macOS.
 Also, Java has some limits on XML entity size. Disable that check.
 #+begin_src emacs-lisp
@@ -836,6 +836,7 @@ Also, Java has some limits on XML entity size. Disable that check.
     (setq lsp-ltex-ls-path "/Applications/ltex-ls-16.0.0"))
 #+end_src
 
+** Setting up =flycheck=
 #+begin_src emacs-lisp
   (use-package flycheck
     :config
@@ -854,7 +855,7 @@ Also, Java has some limits on XML entity size. Disable that check.
     (add-to-list 'flycheck-disabled-checkers 'languagetool))
 #+end_src
 
-
+** User experience (disabled)
 #+begin_comment
 #+begin_src emacs-lisp
 (use-package lsp-ui
@@ -883,6 +884,56 @@ Install =ox-hugo= because I want to automate Hugo posting with =org=.
     :ensure t   ;Auto-install the package from Melpa
     :pin melpa  ;`package-archives' should already have ("melpa" . "https://melpa.org/packages/")
     :after ox)
+#+end_src
+
+** Custom Functions
+#+begin_src emacs-lisp
+  (defun my-hugo-slug (s)
+    "Generate a simple Hugo slug from S."
+    (let* ((s (downcase s))
+           (s (replace-regexp-in-string "[^a-z0-9]+" "-" s))
+           (s (replace-regexp-in-string "^-\\|-+$" "" s)))
+      s))
+
+  (defun my-hugo-generate-fname (title)
+    "Generate a timestamped Hugo filename from TITLE.
+  If TITLE is empty, return only the timestamp."
+    (let ((ts (format-time-string "%Y%m%d%H%M")))
+      (if (or (null title) (string-empty-p title))
+          ts
+        (format "%s_%s" ts (my-hugo-slug title)))))
+
+  (defun hhyu-hugo-insert-post ()
+    "Insert a new Hugo post subtree at point.
+
+  Prompts for:
+    • Hugo section (\"micro\" or \"post\")
+    • Post title (optional)
+
+  If title is empty:
+    - Heading title becomes \"untitled\"
+    - EXPORT_FILE_NAME = timestamp only."
+    (interactive)
+    (let* ((section (completing-read
+                     "Hugo section: "
+                     '("micro" "post")
+                     nil t nil nil "micro"))
+           (raw-title (read-from-minibuffer "Post title (optional): "))
+           (title     (if (string-empty-p raw-title)
+                          "untitled"
+                        raw-title))
+           (fname     (my-hugo-generate-fname raw-title))) ;; use raw title here for filename rule
+      (insert
+       (format "** TODO %s
+  :PROPERTIES:
+  :EXPORT_FILE_NAME: %s
+  :EXPORT_HUGO_SECTION: %s
+  :EXPORT_HUGO_TAGS: \"tag1\" \"tag2\"
+  :EXPORT_DATE: CLOSED
+  :END:
+
+  "
+               title fname section))))
 #+end_src
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
