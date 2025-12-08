@@ -886,7 +886,7 @@ Install =ox-hugo= because I want to automate Hugo posting with =org=.
     :after ox)
 #+end_src
 
-** Custom Functions
+** Custom Functions for posting
 #+begin_src emacs-lisp
   (defun my-hugo-slug (s)
     "Generate a simple Hugo slug from S."
@@ -934,6 +934,53 @@ Install =ox-hugo= because I want to automate Hugo posting with =org=.
 
   "
                title fname section))))
+#+end_src
+** Image insertion 
+#+begin_src emacs-lisp
+
+  (defun hhyu/hugo-resize-image (filename)
+    "Resize image FILENAME to at most 1600px on the long side.
+  Does nothing if ImageMagick 'mogrify' is not available."
+    (when (and (executable-find "mogrify")
+               (string-match-p (image-file-name-regexp) filename))
+      (call-process "mogrify" nil nil nil
+                    "-resize" "1600x1600>"  ;; shrink only, never enlarge
+                    "-strip"                ;; remove metadata
+                    "-quality" "85"         ;; JPEG quality
+                    filename)))
+
+  (defun hhyu-hugo-insert-image (file)
+    "Copy an image FILE into ./images next to the current Org file,
+  resize it, and insert an Org link suitable for ox-hugo.
+
+  Resulting link looks like [[file:images/NAME.ext]].
+
+  When exported with ox-hugo (with #+hugo_base_dir: ../),
+  Hugo will see the image under static/images/NAME.ext and serve it
+  at /images/NAME.ext."
+    (interactive
+     (list (read-file-name "Image file: " "~/Desktop/" nil t)))
+    (unless (and buffer-file-name (derived-mode-p 'org-mode))
+      (user-error "This command must be run in an Org buffer visiting a file"))
+    (let* ((org-dir     (file-name-directory buffer-file-name))
+           (images-dir  (expand-file-name "images" org-dir))
+           (ext         (downcase (or (file-name-extension file) "")))
+           (base        (file-name-base file))
+           ;; timestamp + cleaned base name, to avoid collisions
+           (ts          (format-time-string "%Y%m%d-%H%M%S_"))
+           (safe-base   (replace-regexp-in-string "[^a-zA-Z0-9_-]" "-" base))
+           (new-name    (if (string-empty-p ext)
+                            (concat ts safe-base)
+                          (format "%s%s.%s" ts safe-base ext)))
+           (target      (expand-file-name new-name images-dir)))
+      ;; Ensure ./images exists
+      (make-directory images-dir t)
+      ;; Copy the file
+      (copy-file file target t)
+      ;; Resize in-place (if mogrify is available)
+      (hhyu/hugo-resize-image target)
+      ;; Insert Org link relative to the Org file
+      (insert (format "[[file:images/%s]]" new-name))))
 #+end_src
 * Music (lilypond)
 Lilypond comes with a lilypond-mode, but I have to add it to the load path myself. I took the instructions from http://www.danielhensel.de/www.danielhensel.de_en/styled-19/styled-22/styled-23/
