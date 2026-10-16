@@ -788,12 +788,29 @@ My custom function
 #+end_src
 ** Automatically open back links
 #+begin_src emacs-lisp
+  (defun my/org-roam-file-has-backlinks-p ()
+    "Return non-nil if any node in the current file has backlinks."
+    (when-let ((file (buffer-file-name)))
+      (org-roam-db-query
+       [:select links:source
+        :from links
+        :inner-join nodes :on (= links:dest nodes:id)
+        :where (and (= nodes:file $s1)
+                    (= links:type "id"))
+        :limit 1]
+       (expand-file-name file))))
+
   (defun my/org-roam-show-backlinks ()
-    (unless (eq 'visible (org-roam-buffer--visibility))
-      (org-roam-buffer-toggle)))
+    "Show the backlinks panel only for notes that have backlinks."
+    (let ((visible (eq 'visible (org-roam-buffer--visibility)))
+          (has-links (my/org-roam-file-has-backlinks-p)))
+      (cond
+       ((and has-links (not visible)) (org-roam-buffer-toggle))
+       ((and (not has-links) visible) (org-roam-buffer-toggle)))))
 
   (add-hook 'org-roam-find-file-hook #'my/org-roam-show-backlinks)
 
+  ;; Show the backlinks buffer as a side panel on the right
   (add-to-list 'display-buffer-alist
                '("\\*org-roam\\*"
                  (display-buffer-in-side-window)
