@@ -4,6 +4,11 @@
 
 This is my Emacs configuration file, in literate programming style (based on [[https://blog.thomasheartman.com/posts/configuring-emacs-with-org-mode-and-literate-programming][this tutorial]]).
 
+* First block
+This is needed to avoid lexical binding warnings.
+#+begin_src emacs-lisp
+;;; -*- lexical-binding: t -*-
+#+end_src
 * Loading
 I use this directory for my personal elisp code.
   #+begin_src emacs-lisp
@@ -1111,10 +1116,13 @@ The package's README recommends installing [[https://github.com/ggreer/the_silve
  :ensure t)
 #+end_src
 * Programming: Common LISP and Scheme
-For editing Common LISP code with the SLIME mode (ref: https://lisp-lang.org/learn/getting-started/)
+For editing Common LISP code, I used to use SLIME mode (ref: https://lisp-lang.org/learn/getting-started/) by loading "~/quicklisp/slime-helper.el", but that generated some warnings. I believe I can use SLY instead.
+
 #+begin_src emacs-lisp
-(load (expand-file-name "~/quicklisp/slime-helper.el"))
-(setq inferior-lisp-program "/opt/homebrew/bin/sbcl")
+  (use-package sly
+    :ensure t
+    :init
+    (setq inferior-lisp-program "/opt/homebrew/bin/sbcl"))
 #+end_src
 
 I tried paredit for structured editing of LISP/Scheme code, but I decided to disable it
