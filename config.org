@@ -129,7 +129,7 @@ To restore the previous arrangement of windows, =M-x winner-undo=
 In =.zshrc=, remember to export three environment variables
 #+begin_src sh
 export DEFT_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
-export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
+export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/agenda'
 #+end_src
 ** [[https://github.com/kickingvegas/casual-bookmarks][Causal Bookmarks]] - user-friendly bookmarks
 
@@ -381,7 +381,7 @@ I use Org mode for my todos, note taking, and journaling.
 
 I used to use "org journal" for journal keeping, but I have since replaced it with org-roam's dailies. So I have removed the org-journal section.
 
-I have also removed the section on capture templates. This is because I use org-roam for capruring.
+I have also removed the section on capture templates. This is because I use org-roam for capturing.
 
 ** Basics UX
 
@@ -484,10 +484,11 @@ Note: I decided to not to set =org-agenda-files= because it causes performance p
       (let ((org_agenda_path (getenv "ORG_AGENDA_PATH")))
         (if org_agenda_path org_agenda_path "~/.deft")))
 
-    ;;(setq org-agenda-files '("~/.deft"))
-    ;;(setq org-agenda-files
-    ;;      (list (get_agenda_path)
-    ;;            (concat (get_agenda_path) "/daily")))
+    (setq org-agenda-files
+          (list (get_agenda_path)))
+
+    (setq org-default-notes-file (expand-file-name "inbox.org" org-directory))
+
   #+end_src
 
 This defines my todo workflow

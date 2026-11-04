@@ -10,11 +10,11 @@
      "fa2b58bb98b62c3b8cf3b6f02f058ef7827a8e497125de0254f56e373abee088"
      "bffa9739ce0752a37d9b1eee78fc00ba159748f50dc328af4be661484848e476"
      default))
- '(org-agenda-files '("~/.deft/learn_org.org"))
+ '(org-agenda-files nil)
  '(org-babel-lilypond-commands '("lilypond" "open" "open"))
  '(package-selected-packages
-   '(anaconda-mode avy casual-avy casual-bookmarks casual-dired company
-		   company-jedi company-org-roam consult
+   '(anaconda-mode avy binder casual-avy casual-bookmarks casual-dired
+		   company company-jedi company-org-roam consult
 		   consult-org-roam counsel deft dockerfile-mode
 		   doom-modeline dumb-jump eglot elpy ess
 		   exec-path-from-shell extempore-mode
