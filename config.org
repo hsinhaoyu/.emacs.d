@@ -131,39 +131,19 @@ In =.zshrc=, remember to export three environment variables
 export DEFT_PATH='/Users/hhyu/Documents/emacs_docs/deft_docs'
 export ORG_AGENDA_PATH='/Users/hhyu/Documents/emacs_docs/agenda'
 #+end_src
-** [[https://github.com/kickingvegas/casual-bookmarks][Causal Bookmarks]] - user-friendly bookmarks
+** Casual suite
+[[https://github.com/kickingvegas/casual][Casual]] - user-friendly Transient menus for built-in modes
+Press =C-o= in Dired, the bookmark list, etc. to open the Casual menu.
 
 #+begin_src emacs-lisp
-(use-package bookmark
-  :ensure nil
-  :defer t)
-(use-package casual-bookmarks
+(use-package casual-suite
   :ensure t
-  :bind (:map bookmark-bmenu-mode-map
-              ("C-o" . casual-bookmarks-tmenu)
-              ("S" . casual-bookmarks-sortby-tmenu)
-              ("J" . bookmark-jump))
-  :after (bookmark))
-#+end_src
-
-Add a menu item for easy access.
-#+begin_src emacs-lisp
-(require 'casual-bookmarks)
-(easy-menu-add-item global-map '(menu-bar)
-                    casual-bookmarks-main-menu
-                    "Tools")
-#+end_src
-
-** [[https://github.com/kickingvegas/casual-dired][Casual Dired]] - user-friendly Dired
-Invoke =M-x= dired to launch =Dired=, then =C-o=.
-
-#+begin_src emacs-lisp
-(use-package casual-dired
-  :ensure t
-  :bind (:map dired-mode-map
-              ("C-o" . #'casual-dired-tmenu)
-              ("s" . #'casual-dired-sort-by-tmenu)
-              ("/" . #'casual-dired-search-replace-tmenu)))
+  :config
+  (casual-suite-init)
+  (require 'casual-bookmarks)
+  (easy-menu-add-item global-map '(menu-bar)
+                      casual-bookmarks-main-menu
+                      "Tools"))
 #+end_src
 ** [[https://github.com/kickingvegas/casual-avy][Casual Avy]] - User-friendly Avy
 Quickly move to any where in the visible area by searching. 
@@ -1207,7 +1187,7 @@ export PATH=$HOME/bin:$PATH
 
 Here is the shell script:
 #+begin_src sh :tangle emacsserver
-lsof -c Emacs | grep server | tr -s " " | cut -d' ' -f8
+lsof -c Emacs -a -U | awk '$5=="unix" {print $NF}'
 #+end_src
 
 [[https://en.wikipedia.org/wiki/Lsof][lsof]] is the unix command that lists all the files opened by a process.

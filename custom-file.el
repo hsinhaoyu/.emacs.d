@@ -14,10 +14,10 @@
  '(org-babel-lilypond-commands '("lilypond" "open" "open"))
  '(package-selected-packages
    '(anaconda-mode avy binder casual-avy casual-bookmarks casual-dired
-		   company company-jedi company-org-roam consult
-		   consult-org-roam counsel deft dockerfile-mode
-		   doom-modeline dumb-jump eglot elpy ess
-		   exec-path-from-shell extempore-mode
+		   casual-suite company company-jedi company-org-roam
+		   consult consult-org-roam counsel deft
+		   dockerfile-mode doom-modeline dumb-jump eglot elpy
+		   ess exec-path-from-shell extempore-mode
 		   flycheck-grammarly flycheck-languagetool
 		   flymake-grammarly geiser geiser-guile go-mode
 		   htmlize ido-completing-read+ ivy languagetool
